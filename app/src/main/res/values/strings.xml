@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">米拓技师端</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_search">搜索</string>
+    <string name="order_num">订单编号：%1$s</string>
+    <string name="car_num">车牌号码：</string>
+    <string name="data_time">预约时间：%1$s</string>
+    <string name="video_state">录像上传状态：</string>
+    <string name="password_hint">请输入密码</string>
+    <string name="password">密码</string>
+    <string name="phone_hint">请输入手机号</string>
+    <string name="phone">手机号</string>
+    <string name="car_onwer">车主姓名：</string>
+    <string name="telephone">联系方式：</string>
+    <string name="card_num">车牌号码：</string>
+    <string name="car_type">车辆型号：</string>
+    <string name="car_num2">车架号码</string>
+    <string name="hint_car_num2">请输入车架号码</string>
+    <string name="engine_num">发动机编号</string>
+    <string name="hint_engine_num">请输入发动机编号</string>
+    <string name="mileage">行驶里程（km）</string>
+    <string name="hint_mileage">请输入行驶里程</string>
+    <string name="next_care_km">下次保养里程（km）</string>
+    <string name="hint_next_care_km">请输入下次保养里程</string>
+    <string name="next_care_time">下次保养时间</string>
+    <string name="storage">%1$sG可用,共%2$sG</string>
+    <string name="back">返回</string>
+
+    <string name="data_address">预约地址：%1$s</string>
+    <string name="car_num_edit">车架号码：%1$s</string>
+    <string name="engine_num_edit">发动机编号：%1$s</string>
+    <string name="mileage_edit">行驶里程：%1$s</string>
+    <string name="next_care_time_edit">下次保养时间：%1$s</string>
+    <string name="next_care_km_edit">下次保养里程：%1$s</string>
+    <string name="video_name">文件名：%1$s</string>
+    <string name="video_time">录像时长：%1$s</string>
+    <string name="video_size">文件大小：%1$s</string>
+    <string name="video_state2">上传状态：%1$s</string>
+</resources>

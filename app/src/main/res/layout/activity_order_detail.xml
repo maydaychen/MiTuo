@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="mituo.wshoto.com.mituo.ui.activity.OrderDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="8dp"
+            android:theme="?attr/actionBarTheme"
+            app:titleTextColor="@color/font_33">
+
+        </android.support.v7.widget.Toolbar>
+
+        <mituo.wshoto.com.mituo.ui.widget.MyAffair_detail
+            android:id="@+id/detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </mituo.wshoto.com.mituo.ui.widget.MyAffair_detail>
+
+
+        <mituo.wshoto.com.mituo.ui.widget.MyAffair_car_info
+            android:id="@+id/car_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </mituo.wshoto.com.mituo.ui.widget.MyAffair_car_info>
+
+        <mituo.wshoto.com.mituo.ui.widget.MyAffair_repaor_objs
+            android:id="@+id/repair_objs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </mituo.wshoto.com.mituo.ui.widget.MyAffair_repaor_objs>
+
+        <mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_video
+            android:id="@+id/repair_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_video>
+
+        <mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_photos
+            android:id="@+id/repair_photos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_photos>
+
+        <mituo.wshoto.com.mituo.ui.widget.MyAffair_check_report
+            android:id="@+id/check_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </mituo.wshoto.com.mituo.ui.widget.MyAffair_check_report>
+
+        <mituo.wshoto.com.mituo.ui.widget.MyAffair_gather
+            android:id="@+id/gather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </mituo.wshoto.com.mituo.ui.widget.MyAffair_gather>
+    </LinearLayout>
+
+</ScrollView>
