@@ -1,86 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="8dp">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_margin="8dp"
+             android:layout_marginTop="-1dp"
+             android:background="@drawable/boder_shadow"
+             android:elevation="2dp"
+             android:paddingTop="2dp">
 
-    <RelativeLayout
-        android:id="@+id/affair_title_rl"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/boder_shadow">
 
         <RelativeLayout
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/affair_direction_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:padding="8dp"
-                android:src="@drawable/order_details_icon_jiancebaogao"/>
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/affair_direction_iv"
-                android:padding="8dp"
-                android:text="检测报告"/>
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/affair_info_rl"
+            android:id="@+id/affair_title_rl"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:padding="8dp"
-            android:layout_below="@+id/title"
-            android:orientation="vertical"
-            android:scaleY="0"
-            android:visibility="gone">
+            android:background="@drawable/boder_white">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+
+            <RelativeLayout
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="100px">
+
+                <ImageView
+                    android:id="@+id/affair_direction_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="8dp"
+                    android:src="@drawable/order_details_icon_jiancebaogao"/>
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/affair_direction_iv"
+                    android:padding="8dp"
+                    android:text="检测报告"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/affair_info_rl"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/order_num"/>
+                android:layout_below="@+id/title"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:scaleY="0"
+                android:visibility="gone">
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/data_time"/>
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/order_num"/>
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/data_address"/>
-            <Button
-                android:id="@+id/check_report_edit"
-                android:layout_width="600px"
-                android:layout_height="72px"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="24px"
-                android:background="@drawable/boder_blue"
-                android:text="编辑"
-                android:textColor="@color/white"/>
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/data_time"/>
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="24dp"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/data_address"/>
 
-    </RelativeLayout>
+                <Button
+                    android:id="@+id/check_report_edit"
+                    android:layout_width="600px"
+                    android:layout_height="72px"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/boder_blue"
+                    android:text="编辑"
+                    android:textColor="@color/white"/>
 
+            </LinearLayout>
 
-</android.support.v7.widget.CardView>
+        </RelativeLayout>
+
+    </FrameLayout>
+</FrameLayout>

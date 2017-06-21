@@ -60,9 +60,12 @@ public class MyAffair_repaor_objs extends RelativeLayout {
         edit = (Button) baseV.findViewById(R.id.repair_objs_edit);
         titleRl.setOnClickListener(v -> {
             if (!animatorLock) {
-                getObjectAnimator().start();
-                OrderMessage msg = new OrderMessage(2,isOpened);
-                EventBus.getDefault().post(msg);
+                if (!isOpened) {
+                    getObjectAnimator().start();
+                    OrderMessage msg = new OrderMessage(2,isOpened);
+                    EventBus.getDefault().post(msg);
+                }
+
             }
         });
         edit.setOnClickListener(v -> mContext.startActivity(new Intent(mContext, RepairObjectsActivity.class)));
@@ -74,9 +77,9 @@ public class MyAffair_repaor_objs extends RelativeLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 animatorLock = true;
-                if(!isOpened){
-                    infoRl.setVisibility(View.VISIBLE);
-                }
+//                if (!isOpened) {
+                infoRl.setVisibility(View.VISIBLE);
+//                }
             }
 
             @Override
@@ -85,9 +88,9 @@ public class MyAffair_repaor_objs extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(isOpened){
-                    infoRl.setVisibility(View.GONE);
-                }
+//                if (isOpened) {
+//                    infoRl.setVisibility(View.GONE);
+//                }
                 isOpened = true;
                 animatorLock = false;
             }
@@ -97,13 +100,12 @@ public class MyAffair_repaor_objs extends RelativeLayout {
             }
         };
         ObjectAnimator result = null;
-        if(!isOpened){
-            result = ObjectAnimator.ofFloat(infoRl, "scaleY", 0, 1f);
-        }
-        else {
-            result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
-        }
-        result.setDuration(500);
+//        if (!isOpened) {
+        result = ObjectAnimator.ofFloat(infoRl, "scaleY", 0, 1f);
+//        } else {
+//            result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
+//        }
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }
@@ -135,7 +137,7 @@ public class MyAffair_repaor_objs extends RelativeLayout {
         };
         ObjectAnimator result = null;
         result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }

@@ -30,6 +30,11 @@
     <string name="storage">%1$sG可用,共%2$sG</string>
     <string name="back">返回</string>
 
+
+    <string name="car_onwer_edit">车主姓名：%1$s</string>
+    <string name="telephone_edit">联系方式：%1$s</string>
+    <string name="card_num_edit">车牌号码：%1$s</string>
+    <string name="car_type_edit">车辆型号：%1$s</string>
     <string name="data_address">预约地址：%1$s</string>
     <string name="car_num_edit">车架号码：%1$s</string>
     <string name="engine_num_edit">发动机编号：%1$s</string>

@@ -67,9 +67,11 @@ public class MyAffair_repair_video extends RelativeLayout {
         isFileExist = fileIsExists("");
         titleRl.setOnClickListener(v -> {
             if (!animatorLock) {
-                getObjectAnimator().start();
-                OrderMessage msg = new OrderMessage(3,isOpened);
-                EventBus.getDefault().post(msg);
+                if (!isOpened) {
+                    getObjectAnimator().start();
+                    OrderMessage msg = new OrderMessage(3,isOpened);
+                    EventBus.getDefault().post(msg);
+                }
             }
         });
         edit.setOnClickListener(v -> mContext.startActivity(new Intent(mContext, RecordActivity.class)));
@@ -131,7 +133,7 @@ public class MyAffair_repair_video extends RelativeLayout {
             }
         }
 
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }
@@ -174,7 +176,7 @@ public class MyAffair_repair_video extends RelativeLayout {
             result = ObjectAnimator.ofFloat(edit, "scaleY", 1f, 0);
         }
 
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }

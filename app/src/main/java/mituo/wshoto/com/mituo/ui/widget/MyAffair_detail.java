@@ -4,6 +4,9 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +17,19 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
 
 public class MyAffair_detail extends RelativeLayout {
 
+    @BindView(R.id.textView2)
+    TextView order_num;
+    @BindView(R.id.textView3)
+    TextView data_time;
+    @BindView(R.id.textView4)
+    TextView data_address;
     private Context mContext;
 
     private RelativeLayout titleRl;
@@ -26,9 +37,6 @@ public class MyAffair_detail extends RelativeLayout {
     private LinearLayout infoRl;
 
     private ImageView directionIv;
-    private TextView order_num;
-    private TextView data_time;
-    private TextView data_address;
     private View baseV;
 
     private boolean isOpened = false;
@@ -51,18 +59,18 @@ public class MyAffair_detail extends RelativeLayout {
 
     private void init() {
         baseV = LayoutInflater.from(mContext).inflate(R.layout.affair_detail, this);
+        ButterKnife.bind(this);
         titleRl = (RelativeLayout) baseV.findViewById(R.id.affair_title_rl);
         infoRl = (LinearLayout) baseV.findViewById(R.id.affair_info_rl);
         directionIv = (ImageView) baseV.findViewById(R.id.affair_direction_iv);
-        order_num = (TextView) baseV.findViewById(R.id.textView2);
-        data_time = (TextView) baseV.findViewById(R.id.textView3);
-        data_address = (TextView) baseV.findViewById(R.id.textView4);
-//        directionIv.setBackgroundResource(R.drawable.p7_2_001);
+
         titleRl.setOnClickListener(v -> {
             if (!animatorLock) {
-                getObjectAnimator().start();
-                OrderMessage msg = new OrderMessage(0,isOpened);
-                EventBus.getDefault().post(msg);
+                if (!isOpened) {
+                    getObjectAnimator().start();
+                    OrderMessage msg = new OrderMessage(0, isOpened);
+                    EventBus.getDefault().post(msg);
+                }
             }
         });
     }
@@ -101,13 +109,13 @@ public class MyAffair_detail extends RelativeLayout {
         } else {
             result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
         }
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }
 
     public ObjectAnimator close() {
-        Animator.AnimatorListener changeStatusListener = new Animator.AnimatorListener() {
+        AnimatorListener changeStatusListener = new AnimatorListener() {
 
             @Override
             public void onAnimationStart(Animator animation) {
@@ -133,15 +141,25 @@ public class MyAffair_detail extends RelativeLayout {
         };
         ObjectAnimator result = null;
         result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }
 
-    public void setInfo(String a){
+    public void setInfo(String a) {
         order_num.setText(String.format(getResources().getString(R.string.order_num), a));
         data_time.setText(String.format(getResources().getString(R.string.data_time), a));
         data_address.setText(String.format(getResources().getString(R.string.data_address), a));
+        SpannableStringBuilder builder1 = new SpannableStringBuilder(order_num.getText().toString());
+        SpannableStringBuilder builder2 = new SpannableStringBuilder(data_time.getText().toString());
+        SpannableStringBuilder builder3 = new SpannableStringBuilder(data_address.getText().toString());
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_99));
+        builder1.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder2.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder3.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        order_num.setText(builder1);
+        data_time.setText(builder2);
+        data_address.setText(builder3);
     }
 
 }

@@ -1,7 +1,10 @@
 package mituo.wshoto.com.mituo;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -28,6 +31,9 @@ import mituo.wshoto.com.mituo.ui.fragment.OrderFinishedFragment;
 import mituo.wshoto.com.mituo.ui.fragment.OrderUnfinishedFragment;
 import mituo.wshoto.com.mituo.ui.widget.CustomViewPager;
 
+import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class MainActivity extends InitActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,6 +44,7 @@ public class MainActivity extends InitActivity
 
     private List<String> tabIndicators;
     private List<Fragment> tabFragments;
+    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -62,7 +69,14 @@ public class MainActivity extends InitActivity
 
     @Override
     public void initData() {
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(
+                    WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO},
+                        MY_PERMISSIONS_REQUEST_CALL_PHONE);
+            }
+        }
     }
 
     @Override

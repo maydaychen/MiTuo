@@ -36,7 +36,7 @@ public class MyAffair_gather extends RelativeLayout {
 
     private View baseV;
 
-    private boolean isOpened = false;
+    private boolean isOpened = true;
 
     private boolean animatorLock = false;
 
@@ -65,9 +65,11 @@ public class MyAffair_gather extends RelativeLayout {
 //        directionIv.setBackgroundResource(R.drawable.p7_2_001);
         titleRl.setOnClickListener(v -> {
             if (!animatorLock) {
-                getObjectAnimator().start();
-                OrderMessage msg = new OrderMessage(6,isOpened);
-                EventBus.getDefault().post(msg);
+                if (!isOpened) {
+                    getObjectAnimator().start();
+                    OrderMessage msg = new OrderMessage(6,isOpened);
+                    EventBus.getDefault().post(msg);
+                }
             }
         });
         edit.setOnClickListener(v -> mContext.startActivity(new Intent(mContext, GatherActivity.class)));
@@ -108,7 +110,7 @@ public class MyAffair_gather extends RelativeLayout {
         else {
             result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
         }
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }
@@ -153,7 +155,7 @@ public class MyAffair_gather extends RelativeLayout {
         };
         ObjectAnimator result = null;
         result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }

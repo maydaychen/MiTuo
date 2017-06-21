@@ -62,9 +62,11 @@ public class MyAffair_check_report extends RelativeLayout {
         titleRl.setOnClickListener(v -> {
             if (!animatorLock) {
                 if (!isOpened) {
-                    getObjectAnimator().start();
-                    OrderMessage msg = new OrderMessage(5, isOpened);
-                    EventBus.getDefault().post(msg);
+                    if (!isOpened) {
+                        getObjectAnimator().start();
+                        OrderMessage msg = new OrderMessage(5,isOpened);
+                        EventBus.getDefault().post(msg);
+                    }
                 }
             }
         });
@@ -105,7 +107,7 @@ public class MyAffair_check_report extends RelativeLayout {
 //        } else {
 //            result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
 //        }
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }
@@ -137,7 +139,7 @@ public class MyAffair_check_report extends RelativeLayout {
         };
         ObjectAnimator result = null;
         result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }

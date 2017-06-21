@@ -4,6 +4,9 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,8 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.ui.activity.CarInfoActivity;
@@ -25,6 +30,24 @@ import mituo.wshoto.com.mituo.ui.activity.CarInfoActivity;
 
 public class MyAffair_car_info extends RelativeLayout {
 
+    @BindView(R.id.owner_name)
+    TextView mOwnerName;
+    @BindView(R.id.owner_telephone)
+    TextView mOwnerTelephone;
+    @BindView(R.id.text2)
+    TextView mText2;
+    @BindView(R.id.telephone)
+    TextView mTelephone;
+    @BindView(R.id.engine_num)
+    TextView mEngineNum;
+    @BindView(R.id.total_mileage)
+    TextView mTotalMileage;
+    @BindView(R.id.next_care_time)
+    TextView mNextCareTime;
+    @BindView(R.id.next_care_mileage)
+    TextView mNextCareMileage;
+    @BindView(R.id.tv_car_model_num)
+    TextView mTvCarModelNum;
     private Context mContext;
 
     private RelativeLayout title;
@@ -56,18 +79,51 @@ public class MyAffair_car_info extends RelativeLayout {
 
     private void init() {
         baseV = LayoutInflater.from(mContext).inflate(R.layout.affair_car_info, this);
+        ButterKnife.bind(this);
         title = (RelativeLayout) baseV.findViewById(R.id.title);
         infoRl = (LinearLayout) baseV.findViewById(R.id.affair_info_rl);
         directionIv = (ImageView) baseV.findViewById(R.id.affair_direction_iv);
         iv_remind = (ImageView) baseV.findViewById(R.id.iv_remind);
         tv_remind = (TextView) baseV.findViewById(R.id.tv_remind);
         edit = (Button) baseV.findViewById(R.id.car_info_edit);
+
+        SpannableStringBuilder builder1 = new SpannableStringBuilder(mOwnerName.getText().toString());
+        SpannableStringBuilder builder2 = new SpannableStringBuilder(mOwnerTelephone.getText().toString());
+        SpannableStringBuilder builder3 = new SpannableStringBuilder(mText2.getText().toString());
+        SpannableStringBuilder builder4 = new SpannableStringBuilder(mTelephone.getText().toString());
+        SpannableStringBuilder builder5 = new SpannableStringBuilder(mEngineNum.getText().toString());
+        SpannableStringBuilder builder6 = new SpannableStringBuilder(mTotalMileage.getText().toString());
+        SpannableStringBuilder builder7 = new SpannableStringBuilder(mNextCareTime.getText().toString());
+        SpannableStringBuilder builder8 = new SpannableStringBuilder(mNextCareMileage.getText().toString());
+        SpannableStringBuilder builder9 = new SpannableStringBuilder(mTvCarModelNum.getText().toString());
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_99));
+        builder1.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder2.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder3.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder4.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder5.setSpan(redSpan, 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder6.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder7.setSpan(redSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder8.setSpan(redSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder9.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mOwnerName.setText(builder1);
+        mOwnerTelephone.setText(builder2);
+        mText2.setText(builder3);
+        mTelephone.setText(builder4);
+        mEngineNum.setText(builder5);
+        mTotalMileage.setText(builder6);
+        mNextCareTime.setText(builder7);
+        mNextCareMileage.setText(builder8);
+        mTvCarModelNum.setText(builder9);
+
 //        directionIv.setBackgroundResource(R.drawable.p7_2_001);
         title.setOnClickListener(v -> {
             if (!animatorLock) {
-                getObjectAnimator().start();
-                OrderMessage msg = new OrderMessage(1, isOpened);
-                EventBus.getDefault().post(msg);
+                if (!isOpened) {
+                    getObjectAnimator().start();
+                    OrderMessage msg = new OrderMessage(1, isOpened);
+                    EventBus.getDefault().post(msg);
+                }
             }
         });
         edit.setOnClickListener(v -> mContext.startActivity(new Intent(mContext, CarInfoActivity.class)));
@@ -107,7 +163,7 @@ public class MyAffair_car_info extends RelativeLayout {
         } else {
             result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
         }
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }
@@ -139,7 +195,7 @@ public class MyAffair_car_info extends RelativeLayout {
         };
         ObjectAnimator result = null;
         result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
-        result.setDuration(500);
+        result.setDuration(300);
         result.addListener(changeStatusListener);
         return result;
     }

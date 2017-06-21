@@ -9,6 +9,7 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.io.IOException;
 
 import mituo.wshoto.com.mituo.R;
 
+import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -64,10 +66,8 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         public void onClick(View v) {
             if (v == start) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkSelfPermission(
-                            WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO},
+                    if (checkSelfPermission(CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO},
                                 MY_PERMISSIONS_REQUEST_CALL_PHONE);
                     } else {
                         record();
@@ -109,7 +109,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         mediarecorder = null;
     }
 
-    private void record(){
+    private void record() {
 
         mediarecorder = new MediaRecorder();// 创建mediarecorder对象
         // 设置录制视频源为Camera(相机)
@@ -125,8 +125,8 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         mediarecorder.setVideoFrameRate(20);
         mediarecorder.setPreviewDisplay(surfaceHolder.getSurface());
         // 设置视频文件输出的路径
-        String test = Environment.getExternalStorageDirectory().getPath();
-        mediarecorder.setOutputFile(Environment.getExternalStorageDirectory().getPath()+"/love.mp4");
+        Log.d("video", "record: " + Environment.getExternalStorageDirectory().getPath());
+        mediarecorder.setOutputFile(Environment.getExternalStorageDirectory().getPath() + "/love.mp4");
         try {
             // 准备录制
             mediarecorder.prepare();
@@ -143,12 +143,12 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE){
+        if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE) {
             if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    &&grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //用户同意使用write
                 record();
-            }else{
+            } else {
                 //用户不同意，自行处理即可
                 finish();
             }
