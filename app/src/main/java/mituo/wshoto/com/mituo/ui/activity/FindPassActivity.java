@@ -14,6 +14,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.bean.EmsBean;
+import mituo.wshoto.com.mituo.http.HttpMethods;
+import mituo.wshoto.com.mituo.http.ProgressSubscriber;
+import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 
 public class FindPassActivity extends AppCompatActivity {
     @BindView(R.id.toolbar2)
@@ -26,6 +30,8 @@ public class FindPassActivity extends AppCompatActivity {
     Button mButton3;
     private boolean flag = true;
     private int recLen = 60;
+    private SubscriberOnNextListener<EmsBean> getLatestOnNext;
+    private String ems,phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,10 @@ public class FindPassActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mToolbar2.setTitle("找回密码");
         setSupportActionBar(mToolbar2);
+
+        getLatestOnNext = resultBean -> {
+            ems = resultBean.getResultData().getVcode()+"";
+        };
     }
 
 
@@ -62,15 +72,24 @@ public class FindPassActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button3:
+                phone =mEtTelephone.getText().toString();
                 if (flag && !mEtTelephone.getText().toString().equals("")) {
                     flag = false;
                     handler.post(runnable);
+                    HttpMethods.getInstance().getEms(
+                            new ProgressSubscriber<>(getLatestOnNext, this), mEtTelephone.getText().toString());
                 } else {
                     Toast.makeText(this, "请填写手机号！", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.bt_next:
-                startActivity(new Intent(FindPassActivity.this, FindPass2Activity.class));
+                if (mEtNum.getText().toString().equals(ems)){
+                    Intent intent = new Intent(FindPassActivity.this, FindPass2Activity.class);
+                    intent.putExtra("phone", phone);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(this, "验证码输入有误！", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

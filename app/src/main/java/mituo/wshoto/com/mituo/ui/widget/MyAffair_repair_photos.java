@@ -3,17 +3,20 @@ package mituo.wshoto.com.mituo.ui.widget;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.adapter.PhotosAdapter;
+import mituo.wshoto.com.mituo.bean.PicBean;
 
 /**
  * Created by Weshine on 2017/6/19.
@@ -25,7 +28,7 @@ public class MyAffair_repair_photos extends RelativeLayout {
 
     private RelativeLayout titleRl;
 
-    private LinearLayout infoRl;
+    private RecyclerView infoRl;
 
     private ImageView directionIv;
 
@@ -34,6 +37,7 @@ public class MyAffair_repair_photos extends RelativeLayout {
     private boolean isOpened = false;
 
     private boolean animatorLock = false;
+    private PhotosAdapter mPhotosAdapter;
 
     public MyAffair_repair_photos(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -52,19 +56,15 @@ public class MyAffair_repair_photos extends RelativeLayout {
     private void init() {
         baseV = LayoutInflater.from(mContext).inflate(R.layout.affair_repair_photos, this);
         titleRl = (RelativeLayout) baseV.findViewById(R.id.affair_title_rl);
-        infoRl = (LinearLayout) baseV.findViewById(R.id.affair_info_rl);
+        infoRl = (RecyclerView) baseV.findViewById(R.id.affair_info_rl);
         directionIv = (ImageView) baseV.findViewById(R.id.affair_direction_iv);
-//        directionIv.setBackgroundResource(R.drawable.p7_2_001);
-        titleRl.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                if (!animatorLock) {
-                    if (!isOpened) {
-                        getObjectAnimator().start();
-                        OrderMessage msg = new OrderMessage(4,isOpened);
-                        EventBus.getDefault().post(msg);
-                    }
+        titleRl.setOnClickListener(v -> {
+            if (!animatorLock) {
+                if (!isOpened) {
+                    getObjectAnimator().start();
+                    OrderMessage msg = new OrderMessage(4, isOpened);
+                    EventBus.getDefault().post(msg);
                 }
             }
         });
@@ -76,7 +76,7 @@ public class MyAffair_repair_photos extends RelativeLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 animatorLock = true;
-                if(!isOpened){
+                if (!isOpened) {
                     infoRl.setVisibility(View.VISIBLE);
                 }
             }
@@ -87,7 +87,7 @@ public class MyAffair_repair_photos extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(isOpened){
+                if (isOpened) {
                     infoRl.setVisibility(View.GONE);
                 }
                 isOpened = true;
@@ -99,10 +99,9 @@ public class MyAffair_repair_photos extends RelativeLayout {
             }
         };
         ObjectAnimator result = null;
-        if(!isOpened){
+        if (!isOpened) {
             result = ObjectAnimator.ofFloat(infoRl, "scaleY", 0, 1f);
-        }
-        else {
+        } else {
             result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
         }
         result.setDuration(300);
@@ -141,5 +140,14 @@ public class MyAffair_repair_photos extends RelativeLayout {
         result.addListener(changeStatusListener);
         return result;
     }
+
+    public void setInfo(PicBean mResultBean){
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+        infoRl.setLayoutManager(new GridLayoutManager(mContext,3));
+//        infoRl.setLayoutManager(layoutManager);
+        mPhotosAdapter = new PhotosAdapter(mResultBean.getResultData());
+        infoRl.setAdapter(mPhotosAdapter);
+    }
+
 
 }

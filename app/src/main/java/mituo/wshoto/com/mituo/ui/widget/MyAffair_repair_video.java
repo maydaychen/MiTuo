@@ -36,7 +36,7 @@ public class MyAffair_repair_video extends RelativeLayout {
     private ImageView directionIv;
     private Button edit;
     private View baseV;
-
+    private String orderNum;
     private boolean isOpened = false;
     private boolean isFileExist = false;
     private boolean animatorLock = false;
@@ -69,12 +69,16 @@ public class MyAffair_repair_video extends RelativeLayout {
             if (!animatorLock) {
                 if (!isOpened) {
                     getObjectAnimator().start();
-                    OrderMessage msg = new OrderMessage(3,isOpened);
+                    OrderMessage msg = new OrderMessage(3, isOpened);
                     EventBus.getDefault().post(msg);
                 }
             }
         });
-        edit.setOnClickListener(v -> mContext.startActivity(new Intent(mContext, RecordActivity.class)));
+        edit.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, RecordActivity.class);
+            intent.putExtra("oid", orderNum);
+            mContext.startActivity(intent);
+        });
     }
 
     private ObjectAnimator getObjectAnimator() {
@@ -197,6 +201,14 @@ public class MyAffair_repair_video extends RelativeLayout {
                 tv_remind.setTextColor(getResources().getColor(R.color.yellow));
                 break;
         }
+    }
+
+    public void setInfo(int status, String oid) {
+        orderNum = oid;
+        if (status == 1) {
+            edit.setVisibility(GONE);
+        }
+
     }
 
 }

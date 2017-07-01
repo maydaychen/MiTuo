@@ -1,10 +1,14 @@
 package mituo.wshoto.com.mituo.ui.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.suru.myp.MonthYearPicker;
 
@@ -12,6 +16,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.bean.CarInfoBean;
+import mituo.wshoto.com.mituo.bean.ResultBean;
+import mituo.wshoto.com.mituo.http.HttpMethods;
+import mituo.wshoto.com.mituo.http.ProgressSubscriber;
+import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 
 public class CarInfoActivity extends InitActivity {
 
@@ -19,8 +28,26 @@ public class CarInfoActivity extends InitActivity {
     Toolbar mToolbar;
     @BindView(R.id.tv_care_next_time)
     TextView mTvCareNextTime;
+    @BindView(R.id.owner_name)
+    TextView ownerName;
+    @BindView(R.id.owner_telephone)
+    TextView ownerTelephone;
+    @BindView(R.id.tv_car_num)
+    TextView tvCarNum;
+    @BindView(R.id.tv_car_type)
+    TextView tvCarType;
+    @BindView(R.id.et_car_model_num)
+    EditText etCarModelNum;
+    @BindView(R.id.et_enginee_num)
+    EditText etEngineeNum;
+    @BindView(R.id.et_mile)
+    EditText etMile;
+    @BindView(R.id.et_next_care_mile)
+    EditText etNextCareMile;
 
     private MonthYearPicker myp;
+    private CarInfoBean.ResultDataBean mResultDataBean;
+    private SubscriberOnNextListener<ResultBean> gatherOnNext;
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -31,13 +58,30 @@ public class CarInfoActivity extends InitActivity {
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());
 
+        mResultDataBean = (CarInfoBean.ResultDataBean) getIntent().getSerializableExtra("objs");
         myp = new MonthYearPicker(this);
         myp.build((dialog, which) -> mTvCareNextTime.setText(myp.getSelectedYear() + " - " + myp.getSelectedMonthName()), null);
     }
 
     @Override
     public void initData() {
+        ownerName.setText(mResultDataBean.getContactName());
+        ownerTelephone.setText(mResultDataBean.getContactPhone());
+        tvCarNum.setText(mResultDataBean.getCarNo());
+        tvCarType.setText(mResultDataBean.getCarXh());
+        etCarModelNum.setText(mResultDataBean.getCarCjh());
+        etEngineeNum.setText(mResultDataBean.getCarFdjbh());
+        etMile.setText(mResultDataBean.getCarXslc());
+        mTvCareNextTime.setText(mResultDataBean.getXcbyDate());
+        etNextCareMile.setText(mResultDataBean.getXcbylc());
 
+        gatherOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
+                Toast.makeText(this, "修改成功！", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 
     @OnClick(R.id.tv_care_next_time)
@@ -60,11 +104,15 @@ public class CarInfoActivity extends InitActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
             finish();
+            HttpMethods.getInstance().save_car_info(
+                    new ProgressSubscriber<>(gatherOnNext, this), getIntent().getStringExtra("oid"),
+                    preferences.getString("token", ""), etCarModelNum.getText().toString(),
+                    etEngineeNum.getText().toString(), etMile.getText().toString(),
+                    etNextCareMile.getText().toString(), mTvCareNextTime.getText().toString());
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

@@ -19,65 +19,40 @@
             android:layout_height="wrap_content"
             android:background="@drawable/boder_white">
 
-        <RelativeLayout
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="100px">
+            <RelativeLayout
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="100px">
 
-            <ImageView
-                android:id="@+id/affair_direction_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:padding="8dp"
-                android:src="@drawable/order_details_icon_weixiuzhaopian"/>
+                <ImageView
+                    android:id="@+id/affair_direction_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="8dp"
+                    android:src="@drawable/order_details_icon_weixiuzhaopian"/>
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/affair_direction_iv"
-                android:padding="8dp"
-                android:text="维修照片"/>
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/affair_direction_iv"
+                    android:padding="8dp"
+                    android:text="维修照片"/>
+            </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/affair_info_rl"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:padding="8dp"
-            android:layout_below="@+id/title"
-            android:orientation="vertical"
-            android:scaleY="0"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/affair_info_rl"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/order_num"/>
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/data_time"/>
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/data_address"/>
-
-        </LinearLayout>
+                android:layout_below="@+id/title"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:layout_marginBottom="20dp"
+                android:scaleY="0"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

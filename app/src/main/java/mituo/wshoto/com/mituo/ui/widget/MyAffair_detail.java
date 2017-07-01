@@ -146,10 +146,10 @@ public class MyAffair_detail extends RelativeLayout {
         return result;
     }
 
-    public void setInfo(String a) {
+    public void setInfo(String a, String b, String c) {
         order_num.setText(String.format(getResources().getString(R.string.order_num), a));
-        data_time.setText(String.format(getResources().getString(R.string.data_time), a));
-        data_address.setText(String.format(getResources().getString(R.string.data_address), a));
+        data_time.setText(String.format(getResources().getString(R.string.data_time), b));
+        data_address.setText(String.format(getResources().getString(R.string.data_address), c));
         SpannableStringBuilder builder1 = new SpannableStringBuilder(order_num.getText().toString());
         SpannableStringBuilder builder2 = new SpannableStringBuilder(data_time.getText().toString());
         SpannableStringBuilder builder3 = new SpannableStringBuilder(data_address.getText().toString());

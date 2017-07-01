@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">米拓技师端</string>
+    <string name="app_name">米拓车服</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -9,6 +9,7 @@
     <string name="order_num">订单编号：%1$s</string>
     <string name="car_num">车牌号码：</string>
     <string name="data_time">预约时间：%1$s</string>
+    <string name="finish_time">服务完成时间：%1$s</string>
     <string name="video_state">录像上传状态：</string>
     <string name="password_hint">请输入密码</string>
     <string name="password">密码</string>
@@ -45,4 +46,5 @@
     <string name="video_time">录像时长：%1$s</string>
     <string name="video_size">文件大小：%1$s</string>
     <string name="video_state2">上传状态：%1$s</string>
+    <string name="money">￥：%1$s</string>
 </resources>

@@ -1,40 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    app:cardCornerRadius="0dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/ll_unfinished"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="8dp"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:padding="20px"
+              app:cardCornerRadius="0dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_finished_num"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="@string/order_num"
+        android:textColor="@color/font_33"/>
 
-        <TextView
-            android:id="@+id/tv_finished_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/order_num"/>
+    <View
+        android:id="@+id/dotted_line"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="10px"
+        android:background="@drawable/bg_dotted_line"
+        android:layerType="software"/>
 
-        <View
-            android:id="@+id/dotted_line"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp"
-            android:background="@drawable/bg_dotted_line"/>
+    <TextView
+        android:id="@+id/tv_finished_car_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8px"
+        android:text="@string/card_num_edit"
+        android:textColor="@color/font_33"/>
 
-        <TextView
-            android:id="@+id/tv_finished_car_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/car_num"/>
+    <TextView
+        android:id="@+id/tv_finished_data_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8px"
+        android:text="@string/finish_time"
+        android:textColor="@color/font_33"/>
+</LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_finished_data_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/video_state"/>
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>

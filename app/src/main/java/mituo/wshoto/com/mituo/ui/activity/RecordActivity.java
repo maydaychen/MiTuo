@@ -2,6 +2,8 @@ package mituo.wshoto.com.mituo.ui.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
@@ -12,14 +14,24 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import mituo.wshoto.com.mituo.Config;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.bean.ResultBean;
+import mituo.wshoto.com.mituo.bean.TimeBean;
+import mituo.wshoto.com.mituo.http.HttpMethods;
+import mituo.wshoto.com.mituo.http.ProgressSubscriber;
+import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -27,8 +39,16 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
-    private Button start;// 开始录制按钮
-    private Button stop;// 停止录制按钮
+    @BindView(R.id.iv_start)
+    ImageButton mIvStart;
+    private SubscriberOnNextListener<TimeBean> picOnNext;
+    private SubscriberOnNextListener<ResultBean> startOnNext;
+    private SubscriberOnNextListener<ResultBean> endOnNext;
+    private String orderNumm;
+    //    private Button start;// 开始录制按钮
+//    private Button stop;// 停止录制按钮
+    private boolean IS_RECORDING = false;
+    private SharedPreferences preferences;
     private MediaRecorder mediarecorder;// 录制视频的类
     private SurfaceView surfaceview;// 显示视频的控件
     // 用来显示视频的一个接口，我靠不用还不行，也就是说用mediarecorder录制视频还得给个界面看
@@ -45,26 +65,40 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         // 选择支持半透明模式,在有surfaceview的activity中使用。
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.activity_record);
+        ButterKnife.bind(this);
         init();
     }
 
     private void init() {
-        start = (Button) this.findViewById(R.id.start);
-        stop = (Button) this.findViewById(R.id.stop);
-        start.setOnClickListener(new TestVideoListener());
-        stop.setOnClickListener(new TestVideoListener());
+//        start = (Button) this.findViewById(R.id.start);
+//        stop = (Button) this.findViewById(R.id.stop);
+//        start.setOnClickListener(new TestVideoListener());
+//        stop.setOnClickListener(new TestVideoListener());
+        orderNumm = getIntent().getStringExtra("oid");
+        preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         surfaceview = (SurfaceView) this.findViewById(R.id.surfaceview);
         SurfaceHolder holder = surfaceview.getHolder();// 取得holder
         holder.addCallback(this); // holder加入回调接口
         // setType必须设置，要不出错.
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-    }
+        picOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
+                if (!IS_RECORDING) {
+                    HttpMethods.getInstance().start_record(
+                            new ProgressSubscriber<>(startOnNext, this), preferences.getString("token", ""),
+                            getIntent().getStringExtra("oid"), resultBean.getResultData().getTime());
+                } else {
+                    HttpMethods.getInstance().end_record(
+                            new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
+                            getIntent().getStringExtra("oid"), resultBean.getResultData().getTime());
+                }
+            } else {
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+            }
+        };
 
-    class TestVideoListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            if (v == start) {
+        startOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkSelfPermission(CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO},
@@ -73,8 +107,14 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                         record();
                     }
                 } else record();
+            } else {
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
-            if (v == stop) {
+        };
+        endOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
+                IS_RECORDING = false;
+                mIvStart.setImageResource(R.drawable.ic_play_arrow_white_24dp);
                 if (mediarecorder != null) {
                     // 停止录制
                     mediarecorder.stop();
@@ -82,10 +122,16 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                     mediarecorder.release();
                     mediarecorder = null;
                 }
+            } else {
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
+        };
+    }
 
-        }
-
+    @OnClick(R.id.iv_start)
+    public void onViewClicked() {
+        HttpMethods.getInstance().get_time(
+                new ProgressSubscriber<>(picOnNext, this), preferences.getString("token", ""));
     }
 
     @Override
@@ -110,7 +156,8 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     }
 
     private void record() {
-
+        IS_RECORDING = true;
+        mIvStart.setImageResource(R.drawable.ic_pause_white_24dp);
         mediarecorder = new MediaRecorder();// 创建mediarecorder对象
         // 设置录制视频源为Camera(相机)
         mediarecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
@@ -126,7 +173,11 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         mediarecorder.setPreviewDisplay(surfaceHolder.getSurface());
         // 设置视频文件输出的路径
         Log.d("video", "record: " + Environment.getExternalStorageDirectory().getPath());
-        mediarecorder.setOutputFile(Environment.getExternalStorageDirectory().getPath() + "/love.mp4");
+        File destDir = new File(Config.PATH_MOBILE);
+        if (!destDir.exists()) {
+            destDir.mkdirs();
+        }
+        mediarecorder.setOutputFile(Config.PATH_MOBILE + "/" + orderNumm + ".mp4");
         try {
             // 准备录制
             mediarecorder.prepare();

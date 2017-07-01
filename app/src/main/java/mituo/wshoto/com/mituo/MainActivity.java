@@ -1,8 +1,10 @@
 package mituo.wshoto.com.mituo;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,9 +25,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mituo.wshoto.com.mituo.ui.activity.ChangePassActivity;
 import mituo.wshoto.com.mituo.ui.activity.InitActivity;
 import mituo.wshoto.com.mituo.ui.activity.LoginActivity;
-import mituo.wshoto.com.mituo.ui.activity.OrderDetailActivity;
 import mituo.wshoto.com.mituo.ui.activity.StorageActivity;
 import mituo.wshoto.com.mituo.ui.fragment.OrderFinishedFragment;
 import mituo.wshoto.com.mituo.ui.fragment.OrderUnfinishedFragment;
@@ -118,7 +120,7 @@ public class MainActivity extends InitActivity
         if (id == R.id.nav_camera) {
             startActivity(new Intent(MainActivity.this, StorageActivity.class));
         } else if (id == R.id.nav_gallery) {
-            startActivity(new Intent(MainActivity.this, OrderDetailActivity.class));
+            startActivity(new Intent(MainActivity.this, ChangePassActivity.class));
         } else if (id == R.id.nav_slideshow) {
             show();
         }
@@ -173,16 +175,17 @@ public class MainActivity extends InitActivity
         builder.setTitle(R.string.app_name);
 
         builder.setPositiveButton("确认", (dialog, which) -> {
-//            SharedPreferences mySharedPreferences = getSharedPreferences("user",
-//                    Activity.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = mySharedPreferences.edit();
-//            editor.putBoolean("autoLog", false);
-//            if (editor.commit()) {
+            SharedPreferences mySharedPreferences = getSharedPreferences("user",
+                    Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = mySharedPreferences.edit();
+            editor.putBoolean("autoLog", false);
+            editor.putString("token", "");
+            if (editor.commit()) {
                 finish();
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                 dialog.dismiss();
-//            }
+            }
         });
 
         builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());

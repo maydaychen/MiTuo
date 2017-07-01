@@ -1,6 +1,8 @@
 package mituo.wshoto.com.mituo.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,16 +39,16 @@ public class WelcomeActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             /* Create an Intent that will start the Main WordPress Activity. */
-//            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-//            if (preferences.getBoolean("autoLog", false)) {
-            Intent mainIntent = new Intent(WelcomeActivity.this, MainActivity.class);
-            WelcomeActivity.this.startActivity(mainIntent);
-            WelcomeActivity.this.finish();
-//            } else {
-//                Intent mainIntent = new Intent(StartActivity.this, LoginActivity.class);
-//                StartActivity.this.startActivity(mainIntent);
-//                StartActivity.this.finish();
-//            }
+            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+            if (preferences.getBoolean("autoLog", false)) {
+                Intent mainIntent = new Intent(WelcomeActivity.this, MainActivity.class);
+                WelcomeActivity.this.startActivity(mainIntent);
+                WelcomeActivity.this.finish();
+            } else {
+                Intent mainIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
+                WelcomeActivity.this.startActivity(mainIntent);
+                WelcomeActivity.this.finish();
+            }
         }, 1500);
     }
 }

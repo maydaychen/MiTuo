@@ -144,4 +144,11 @@ public class MyAffair_check_report extends RelativeLayout {
         return result;
     }
 
+    public void setInfo(int status) {
+        if (status==1) {
+            edit.setVisibility(GONE);
+        }
+
+    }
+
 }
