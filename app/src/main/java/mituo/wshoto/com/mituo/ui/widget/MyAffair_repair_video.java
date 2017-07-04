@@ -4,6 +4,10 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +19,34 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import mituo.wshoto.com.mituo.Config;
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.ui.activity.RecordActivity;
 
 import static mituo.wshoto.com.mituo.MemorySpaceCheck.fileIsExists;
+import static mituo.wshoto.com.mituo.Utils.changeTime;
 
 /**
  * Created by Weshine on 2017/6/19.
  */
 
 public class MyAffair_repair_video extends RelativeLayout {
+    @BindView(R.id.textView2)
+    TextView mTextView2;
+    @BindView(R.id.textView3)
+    TextView mTextView3;
+    @BindView(R.id.textView4)
+    TextView mTextView4;
+    @BindView(R.id.textView5)
+    TextView mTextView5;
     private Context mContext;
 
     private RelativeLayout titleRl;
@@ -57,6 +78,7 @@ public class MyAffair_repair_video extends RelativeLayout {
 
     private void init() {
         baseV = LayoutInflater.from(mContext).inflate(R.layout.affair_repair_video, this);
+        ButterKnife.bind(this);
         titleRl = (RelativeLayout) baseV.findViewById(R.id.title);
         infoRl = (LinearLayout) baseV.findViewById(R.id.affair_info_rl);
         directionIv = (ImageView) baseV.findViewById(R.id.affair_direction_iv);
@@ -64,7 +86,6 @@ public class MyAffair_repair_video extends RelativeLayout {
         tv_remind = (TextView) baseV.findViewById(R.id.tv_remind);
         edit = (Button) baseV.findViewById(R.id.video_edit);
 //        directionIv.setBackgroundResource(R.drawable.p7_2_001);
-        isFileExist = fileIsExists("");
         titleRl.setOnClickListener(v -> {
             if (!animatorLock) {
                 if (!isOpened) {
@@ -208,7 +229,60 @@ public class MyAffair_repair_video extends RelativeLayout {
         if (status == 1) {
             edit.setVisibility(GONE);
         }
+        if (isFileExist = fileIsExists(Config.PATH_MOBILE + "/" + orderNum + ".mp4")) {
+            edit.setVisibility(GONE);
+            mTextView2.setText(String.format(getResources().getString(R.string.video_name), orderNum + ".mp4"));
+            SpannableStringBuilder builder1 = new SpannableStringBuilder(mTextView2.getText().toString());
+            ForegroundColorSpan redSpan = new ForegroundColorSpan(getResources().getColor(R.color.blue));
+            builder1.setSpan(redSpan, 4, (orderNum + ".mp4").length() + 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mTextView2.setText(builder1);
+            try {
+                mTextView5.setText(String.format(getResources().getString(R.string.video_state2), "未上传"));
+                SpannableStringBuilder builder = new SpannableStringBuilder(mTextView5.getText().toString());
+                ForegroundColorSpan Span = new ForegroundColorSpan(getResources().getColor(R.color.font_red));
+                builder.setSpan(Span, 5, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                mTextView5.setText(builder);
+                mTextView3.setText(String.format(getResources().getString(R.string.video_time), changeTime(test())));
+                mTextView4.setText(String.format(getResources().getString(R.string.video_size), getsizeize(Config.PATH_MOBILE + "/" + orderNum + ".mp4")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
 
     }
+
+    private int test() throws IOException {
+        String url = Config.PATH_MOBILE + "/" + orderNum + ".mp4";
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setDataSource(url);
+        mediaPlayer.prepare();
+        int a = mediaPlayer.getDuration();
+        return a;
+    }
+
+
+    private static String getsizeize(String filePath) throws Exception {
+        File file = new File(filePath);
+        long size = 0;
+        FileInputStream fis = null;
+        fis = new FileInputStream(file);
+        size = fis.available();
+        DecimalFormat df = new DecimalFormat("#.00");
+        String sizeizeString = "";
+        if (size < 1024) {
+            sizeizeString = df.format((double) size) + "B";
+        } else if (size < 1048576) {
+            sizeizeString = df.format((double) size / 1024) + "KB";
+        } else if (size < 1073741824) {
+            sizeizeString = df.format((double) size / 1048576) + "MB";
+        } else {
+            sizeizeString = df.format((double) size / 1073741824) + "GB";
+        }
+        return sizeizeString;
+    }
+
 
 }

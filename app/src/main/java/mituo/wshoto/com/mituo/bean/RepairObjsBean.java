@@ -81,17 +81,17 @@ public class RepairObjsBean {
              * isBzdjm : 0
              */
 
-            private Object tcPrice;
+            private String tcPrice;
             private int tcJmfy;
             private String tcName;
             private String isBzdjm;
             private List<TcxmListBean> tcxmList;
 
-            public Object getTcPrice() {
+            public String getTcPrice() {
                 return tcPrice;
             }
 
-            public void setTcPrice(Object tcPrice) {
+            public void setTcPrice(String tcPrice) {
                 this.tcPrice = tcPrice;
             }
 
@@ -190,7 +190,7 @@ public class RepairObjsBean {
                     this.isZd = isZd;
                 }
 
-                public Object getXmprice() {
+                public String getXmprice() {
                     return xmprice;
                 }
 
@@ -238,7 +238,7 @@ public class RepairObjsBean {
              * pjlb : 空调滤芯
              */
 
-            private Object pjName;
+            private String pjName;
             private int pjNum;
             private String pjCode;
             private String xmName;
@@ -249,7 +249,7 @@ public class RepairObjsBean {
             private String pjpp;
             private String pjlb;
 
-            public Object getPjName() {
+            public String getPjName() {
                 return pjName;
             }
 
@@ -289,7 +289,7 @@ public class RepairObjsBean {
                 this.isZd = isZd;
             }
 
-            public Object getXmprice() {
+            public String getXmprice() {
                 return xmprice;
             }
 
@@ -305,7 +305,7 @@ public class RepairObjsBean {
                 this.pjPrice = pjPrice;
             }
 
-            public Object getTcName() {
+            public String getTcName() {
                 return tcName;
             }
 

@@ -11,6 +11,7 @@ import mituo.wshoto.com.mituo.bean.OrderBean;
 import mituo.wshoto.com.mituo.bean.OrderInfoBean;
 import mituo.wshoto.com.mituo.bean.PicBean;
 import mituo.wshoto.com.mituo.bean.RepairObjsBean;
+import mituo.wshoto.com.mituo.bean.ReportBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
 import mituo.wshoto.com.mituo.bean.TimeBean;
 import okhttp3.OkHttpClient;
@@ -209,4 +210,31 @@ public class HttpMethods {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
+    public void save_pay(Subscriber<ResultBean> subscriber, String token, String orderCode, String paySum, String couponCode, String payType, String khqm) {
+        movieService.save_pay(token, orderCode, paySum, couponCode, payType, khqm)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void all_check(Subscriber<ReportBean> subscriber, String token, String orderCode) {
+        movieService.all_check(token, orderCode)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+//    public void save_pay(Subscriber<ResultBean> subscriber, String token, String orderCode, String paySum, String couponCode, String payType, String khqm) {
+//        movieService.save_pay(token, orderCode, paySum,couponCode,payType,khqm)
+////                .map(new HttpResultFunc<>())
+//                .subscribeOn(Schedulers.io())
+//                .unsubscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(subscriber);
+//    }
 }

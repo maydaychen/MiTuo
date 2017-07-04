@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.adapter.RepairObjLeftAdapter;
+import mituo.wshoto.com.mituo.adapter.RepairObjsDownAdapter;
 import mituo.wshoto.com.mituo.bean.RepairObjsBean;
 import mituo.wshoto.com.mituo.ui.activity.RepairObjectsActivity;
 
@@ -165,12 +166,12 @@ public class MyAffair_repair_objs extends RelativeLayout {
         return result;
     }
 
-    public void setInfo(RepairObjsBean.ResultDataBean bean, int status) throws NullPointerException{
+    public void setInfo(RepairObjsBean.ResultDataBean bean, int status) throws NullPointerException {
         mResultDataBean = bean;
         if (status == 1) {
             edit.setVisibility(GONE);
         }
-        if (bean.getTcList().size() == 0) {
+        if (bean.getTcList().size() == 0 && bean.getXmList().size() == 0) {
             mLlTaocan.setVisibility(GONE);
         } else {
             mTvTcName.setText(bean.getTcList().get(0).getTcName());
@@ -179,6 +180,11 @@ public class MyAffair_repair_objs extends RelativeLayout {
             mRvTaocan.setLayoutManager(layoutManager);
             mRepairObjLeftAdapter = new RepairObjLeftAdapter(bean.getTcList().get(0).getTcxmList());
             mRvTaocan.setAdapter(mRepairObjLeftAdapter);
+
+            RepairObjsDownAdapter repairObjsDownAdapter = new RepairObjsDownAdapter(bean.getXmList());
+//            mRvRepairObjs.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL));
+            mRvRepairObjs.setLayoutManager(new LinearLayoutManager(mContext));
+            mRvRepairObjs.setAdapter(repairObjsDownAdapter);
         }
 
 

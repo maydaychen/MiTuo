@@ -11,6 +11,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,6 +24,7 @@ import mituo.wshoto.com.mituo.bean.GatherBean;
 import mituo.wshoto.com.mituo.bean.OrderInfoBean;
 import mituo.wshoto.com.mituo.bean.PicBean;
 import mituo.wshoto.com.mituo.bean.RepairObjsBean;
+import mituo.wshoto.com.mituo.bean.ReportBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
@@ -33,12 +37,11 @@ import mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_objs;
 import mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_photos;
 import mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_video;
 
-import static mituo.wshoto.com.mituo.R.id.detail;
-
 public class OrderDetailActivity extends InitActivity {
     private SubscriberOnNextListener<OrderInfoBean> getOrderInfoOnNext;
     private SubscriberOnNextListener<CarInfoBean> getCarInfoOnNext;
     private SubscriberOnNextListener<RepairObjsBean> getObjsOnNext;
+    private SubscriberOnNextListener<ReportBean> getChecksOnNext;
     private SubscriberOnNextListener<GatherBean> gatherOnNext;
     private SubscriberOnNextListener<PicBean> picOnNext;
     private SubscriberOnNextListener<ResultBean> finishOnNext;
@@ -48,7 +51,7 @@ public class OrderDetailActivity extends InitActivity {
 
     @BindView(R.id.tb_order)
     Toolbar mTbOrder;
-    @BindView(detail)
+    @BindView(R.id.detail)
     MyAffair_detail mDetail;
     @BindView(R.id.car_info)
     MyAffair_car_info mCarInfo;
@@ -114,7 +117,7 @@ public class OrderDetailActivity extends InitActivity {
         };
         picOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
-                mRepairPhotos.setInfo(resultBean);
+                mRepairPhotos.setInfo(status,resultBean);
             } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
@@ -122,6 +125,17 @@ public class OrderDetailActivity extends InitActivity {
         finishOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 finish();
+            } else {
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+            }
+        };
+        getChecksOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
+                List<String> list = new ArrayList<>();
+                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : resultBean.getResultData().getStep2().getList()) {
+                    list.add(listBean.getTypeName());
+                }
+                mCheckReport.setInfo(status, list);
             } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
@@ -204,12 +218,15 @@ public class OrderDetailActivity extends InitActivity {
                 new ProgressSubscriber<>(getOrderInfoOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
         HttpMethods.getInstance().car_info(
                 new ProgressSubscriber<>(getCarInfoOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
+        HttpMethods.getInstance().all_check(
+                new ProgressSubscriber<>(getChecksOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
         HttpMethods.getInstance().repair_objs(
                 new ProgressSubscriber<>(getObjsOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
         HttpMethods.getInstance().gather(
                 new ProgressSubscriber<>(gatherOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
         HttpMethods.getInstance().get_pic(
                 new ProgressSubscriber<>(picOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
+
     }
 
 

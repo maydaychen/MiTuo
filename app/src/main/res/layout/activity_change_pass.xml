@@ -88,6 +88,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText4"/>
+        app:layout_constraintTop_toBottomOf="@+id/et_new_pass_again"/>
 
 </android.support.constraint.ConstraintLayout>

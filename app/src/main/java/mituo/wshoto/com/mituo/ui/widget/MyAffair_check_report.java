@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +16,13 @@ import android.widget.RelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.adapter.ReportAdapter;
 import mituo.wshoto.com.mituo.ui.activity.CheckReportActivity;
 
 /**
@@ -24,6 +31,8 @@ import mituo.wshoto.com.mituo.ui.activity.CheckReportActivity;
 
 public class MyAffair_check_report extends RelativeLayout {
 
+    @BindView(R.id.lv_report)
+    RecyclerView mLvReport;
     private Context mContext;
 
     private RelativeLayout titleRl;
@@ -54,6 +63,7 @@ public class MyAffair_check_report extends RelativeLayout {
 
     private void init() {
         baseV = LayoutInflater.from(mContext).inflate(R.layout.affair_check_report, this);
+        ButterKnife.bind(this);
         titleRl = (RelativeLayout) baseV.findViewById(R.id.title);
         infoRl = (LinearLayout) baseV.findViewById(R.id.affair_info_rl);
         directionIv = (ImageView) baseV.findViewById(R.id.affair_direction_iv);
@@ -64,7 +74,7 @@ public class MyAffair_check_report extends RelativeLayout {
                 if (!isOpened) {
                     if (!isOpened) {
                         getObjectAnimator().start();
-                        OrderMessage msg = new OrderMessage(5,isOpened);
+                        OrderMessage msg = new OrderMessage(5, isOpened);
                         EventBus.getDefault().post(msg);
                     }
                 }
@@ -80,7 +90,7 @@ public class MyAffair_check_report extends RelativeLayout {
             public void onAnimationStart(Animator animation) {
                 animatorLock = true;
 //                if (!isOpened) {
-                    infoRl.setVisibility(View.VISIBLE);
+                infoRl.setVisibility(View.VISIBLE);
 //                }
             }
 
@@ -103,7 +113,7 @@ public class MyAffair_check_report extends RelativeLayout {
         };
         ObjectAnimator result = null;
 //        if (!isOpened) {
-            result = ObjectAnimator.ofFloat(infoRl, "scaleY", 0, 1f);
+        result = ObjectAnimator.ofFloat(infoRl, "scaleY", 0, 1f);
 //        } else {
 //            result = ObjectAnimator.ofFloat(infoRl, "scaleY", 1f, 0);
 //        }
@@ -144,10 +154,13 @@ public class MyAffair_check_report extends RelativeLayout {
         return result;
     }
 
-    public void setInfo(int status) {
-        if (status==1) {
+    public void setInfo(int status, List<String> list) {
+        if (status == 1) {
             edit.setVisibility(GONE);
         }
+        mLvReport.setLayoutManager(new LinearLayoutManager(mContext));
+        ReportAdapter reportAdapter = new ReportAdapter(list);
+        mLvReport.setAdapter(reportAdapter);
 
     }
 

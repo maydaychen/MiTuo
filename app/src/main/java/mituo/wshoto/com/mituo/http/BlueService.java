@@ -9,6 +9,7 @@ import mituo.wshoto.com.mituo.bean.OrderBean;
 import mituo.wshoto.com.mituo.bean.OrderInfoBean;
 import mituo.wshoto.com.mituo.bean.PicBean;
 import mituo.wshoto.com.mituo.bean.RepairObjsBean;
+import mituo.wshoto.com.mituo.bean.ReportBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
 import mituo.wshoto.com.mituo.bean.TimeBean;
 import retrofit2.http.Field;
@@ -80,7 +81,7 @@ public interface BlueService {
                                          @Field("time") String time);
 
     @GET("/api/js/order/getAllBgxm")
-    rx.Observable<ResultBean> all_check(@Query("token") String token);
+    rx.Observable<ReportBean> all_check(@Query("token") String token,@Query("orderCode") String orderCode);
 
     @GET("/api/js/order/getSysTime")
     rx.Observable<TimeBean> sync_time(@Query("token") String token);
@@ -95,4 +96,13 @@ public interface BlueService {
     @GET("/api/js/order/checkCouponCode")
     rx.Observable<CouponBean> check_coupon(@Query("token") String token, @Query("orderCode") String orderCode,
                                            @Query("couponCode") String couponCode);
+
+    @FormUrlEncoded
+    @POST("/api/js/order/savePay")
+    rx.Observable<ResultBean> save_pay(@Field("token") String token, @Field("orderCode") String orderCode,
+                                         @Field("paySum") String paySum,@Field("couponCode") String couponCode,
+                                         @Field("payType") String payType,@Field("khqm") String khqm);
+
+    @GET("/api/js/wxPay/nativePay")
+    rx.Observable<CouponBean> wechat_sao(@Query("token") String token, @Query("orderCode") String orderCode);
 }

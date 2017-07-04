@@ -35,10 +35,13 @@ import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.adapter.GatherAdapter;
 import mituo.wshoto.com.mituo.bean.CouponBean;
 import mituo.wshoto.com.mituo.bean.GatherBean;
+import mituo.wshoto.com.mituo.bean.ResultBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 import mituo.wshoto.com.mituo.ui.widget.RecycleViewDivider;
+
+import static mituo.wshoto.com.mituo.Utils.bitmaptoString;
 
 public class GatherActivity extends InitActivity {
     @BindView(R.id.toolbar4)
@@ -60,8 +63,12 @@ public class GatherActivity extends InitActivity {
 
     private GatherBean.ResultDataBean mResultBean;
     private static final int SHOW_SUBACTIVITY = 1;
-    private SubscriberOnNextListener<CouponBean> picOnNext;
+    private SubscriberOnNextListener<CouponBean> CheckCounOnNext;
+    private SubscriberOnNextListener<ResultBean> GatherOnNext;
     private SharedPreferences preferences;
+    private Bitmap mBitmap;
+    private String coupon = "";
+    private String payType = "0";
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -77,14 +84,17 @@ public class GatherActivity extends InitActivity {
                                        int pos, long id) {
                 switch (pos) {
                     case 0:
+                        payType = "0";
                         mCashPay.setVisibility(View.VISIBLE);
                         mLlMobilePay.setVisibility(View.GONE);
                         break;
                     case 1:
+                        payType = "2";
                         mCashPay.setVisibility(View.GONE);
                         mLlMobilePay.setVisibility(View.VISIBLE);
                         break;
                     case 2:
+                        payType = "1";
                         mCashPay.setVisibility(View.GONE);
                         mLlMobilePay.setVisibility(View.VISIBLE);
                         break;
@@ -98,10 +108,17 @@ public class GatherActivity extends InitActivity {
             }
         });
 
-        picOnNext = resultBean -> {
+        CheckCounOnNext = resultBean -> {
             if (resultBean.isResult()) {
                 String a = "该代金券价值" + resultBean.getResultData().getCouponPrice() + "元，仅限一次使用，是否确认使用？";
                 show(a);
+            } else {
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+            }
+        };
+        GatherOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
+                Toast.makeText(this, "支付成功！", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
@@ -152,6 +169,7 @@ public class GatherActivity extends InitActivity {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 2;
                 Bitmap bm = BitmapFactory.decodeFile(path, options);
+                mBitmap = bm;
                 mImageView2.setImageBitmap(bm);
                 break;
         }
@@ -169,7 +187,7 @@ public class GatherActivity extends InitActivity {
                     Toast.makeText(this, "请填写代金券券码！", Toast.LENGTH_SHORT).show();
                 } else {
                     HttpMethods.getInstance().check_coupon(
-                            new ProgressSubscriber<>(picOnNext, this), preferences.getString("token", ""),
+                            new ProgressSubscriber<>(CheckCounOnNext, this), preferences.getString("token", ""),
                             getIntent().getStringExtra("oid"), mEtNum.getText().toString());
                 }
                 break;
@@ -178,7 +196,9 @@ public class GatherActivity extends InitActivity {
                 startActivityForResult(intent10, SHOW_SUBACTIVITY);
                 break;
             case R.id.cash_pay:
-                finish();
+                HttpMethods.getInstance().save_pay(
+                        new ProgressSubscriber<>(GatherOnNext, this), preferences.getString("token", ""),
+                        getIntent().getStringExtra("oid"), mResultBean.getHj(),coupon ,payType , bitmaptoString(mBitmap));
                 break;
             case R.id.bt_mobile_pay_1:
                 break;

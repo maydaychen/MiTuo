@@ -141,11 +141,11 @@ public class MyAffair_repair_photos extends RelativeLayout {
         return result;
     }
 
-    public void setInfo(PicBean mResultBean){
+    public void setInfo(int status, PicBean mResultBean) {
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
-        infoRl.setLayoutManager(new GridLayoutManager(mContext,3));
+        infoRl.setLayoutManager(new GridLayoutManager(mContext, 3));
 //        infoRl.setLayoutManager(layoutManager);
-        mPhotosAdapter = new PhotosAdapter(mResultBean.getResultData());
+        mPhotosAdapter = new PhotosAdapter(mResultBean.getResultData(), status);
         infoRl.setAdapter(mPhotosAdapter);
     }
 
