@@ -3,6 +3,7 @@ package mituo.wshoto.com.mituo.http;
 import android.content.Context;
 import android.widget.Toast;
 
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import rx.Subscriber;
@@ -33,7 +34,8 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     public void onError(Throwable e) {
         if (e instanceof UnknownHostException) {
             Toast.makeText(context, "服务器未响应，请稍后重试", Toast.LENGTH_SHORT).show();
-        } else if (e instanceof UnknownHostException) {
+        } else if (e instanceof SocketTimeoutException) {
+            Toast.makeText(context, "无法连接服务器，请稍后重试", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
