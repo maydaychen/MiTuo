@@ -11,10 +11,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,18 +37,15 @@ public class MyAffair_repair_objs extends RelativeLayout {
     RecyclerView mRvRepairObjs;
     @BindView(R.id.ll_taocan)
     LinearLayout mLlTaocan;
-    @BindView(R.id.tv_tc_name)
-    TextView mTvTcName;
     private Context mContext;
     private RepairObjLeftAdapter mRepairObjLeftAdapter;
     private RelativeLayout titleRl;
     private Button edit;
     private LinearLayout infoRl;
     private RepairObjsBean.ResultDataBean mResultDataBean;
-    private ImageView directionIv;
 
     private View baseV;
-
+    private String orderNum;
     private boolean isOpened = false;
 
     private boolean animatorLock = false;
@@ -74,7 +69,6 @@ public class MyAffair_repair_objs extends RelativeLayout {
         ButterKnife.bind(this);
         titleRl = (RelativeLayout) baseV.findViewById(R.id.title);
         infoRl = (LinearLayout) baseV.findViewById(R.id.affair_info_rl);
-        directionIv = (ImageView) baseV.findViewById(R.id.affair_direction_iv);
         edit = (Button) baseV.findViewById(R.id.repair_objs_edit);
         titleRl.setOnClickListener(v -> {
             if (!animatorLock) {
@@ -91,6 +85,7 @@ public class MyAffair_repair_objs extends RelativeLayout {
             Bundle bundle = new Bundle();
             bundle.putSerializable("objs", mResultDataBean);
             intent.putExtras(bundle);
+            intent.putExtra("oid", orderNum);
             mContext.startActivity(intent);
         });
     }
@@ -166,7 +161,8 @@ public class MyAffair_repair_objs extends RelativeLayout {
         return result;
     }
 
-    public void setInfo(RepairObjsBean.ResultDataBean bean, int status) throws NullPointerException {
+    public void setInfo(RepairObjsBean.ResultDataBean bean, int status, String num) throws NullPointerException {
+        orderNum = num;
         mResultDataBean = bean;
         if (status == 1) {
             edit.setVisibility(GONE);
@@ -174,11 +170,15 @@ public class MyAffair_repair_objs extends RelativeLayout {
         if (bean.getTcList().size() == 0 && bean.getXmList().size() == 0) {
             mLlTaocan.setVisibility(GONE);
         } else {
-            mTvTcName.setText(bean.getTcList().get(0).getTcName());
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext) {
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            };
             mRvTaocan.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL));
             mRvTaocan.setLayoutManager(layoutManager);
-            mRepairObjLeftAdapter = new RepairObjLeftAdapter(bean.getTcList().get(0).getTcxmList());
+            mRepairObjLeftAdapter = new RepairObjLeftAdapter(bean.getTcList(), mContext);
             mRvTaocan.setAdapter(mRepairObjLeftAdapter);
 
             RepairObjsDownAdapter repairObjsDownAdapter = new RepairObjsDownAdapter(bean.getXmList());

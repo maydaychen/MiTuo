@@ -3,6 +3,7 @@ package mituo.wshoto.com.mituo;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ import butterknife.ButterKnife;
 import mituo.wshoto.com.mituo.ui.activity.ChangePassActivity;
 import mituo.wshoto.com.mituo.ui.activity.InitActivity;
 import mituo.wshoto.com.mituo.ui.activity.LoginActivity;
+import mituo.wshoto.com.mituo.ui.activity.SearchActivity;
 import mituo.wshoto.com.mituo.ui.activity.StorageActivity;
 import mituo.wshoto.com.mituo.ui.fragment.OrderFinishedFragment;
 import mituo.wshoto.com.mituo.ui.fragment.OrderUnfinishedFragment;
@@ -46,6 +49,8 @@ public class MainActivity extends InitActivity
 
     private List<String> tabIndicators;
     private List<Fragment> tabFragments;
+    private SearchView searchView;
+    private SharedPreferences preferences;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
 
     @Override
@@ -53,6 +58,7 @@ public class MainActivity extends InitActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         toolbar.setTitle("我的订单");
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -63,6 +69,7 @@ public class MainActivity extends InitActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         mVpContent.setOffscreenPageLimit(2);
         initContent();
@@ -95,6 +102,21 @@ public class MainActivity extends InitActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+//        MenuItem menuItem = menu.findItem(R.id.action_settings);//
+//        searchView = (SearchView) MenuItemCompat.getActionView(menuItem);//加载searchview
+//        searchView.setOnQueryTextListener(this);//为搜索框设置监听事件
+//        data = new ArrayList<>();
+//        adapter = new SearchAdapter(this, data);
+//        int completeTextId = searchView.getResources().getIdentifier("android:id/search_src_text", null, null);
+//        AutoCompleteTextView completeText = (AutoCompleteTextView) searchView
+//                .findViewById(completeTextId);
+//        completeText.setAdapter(adapter);
+//        completeText.setThreshold(0);
+//        completeText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            }
+//        });
         return true;
     }
 
@@ -106,7 +128,8 @@ public class MainActivity extends InitActivity
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            startActivity(new Intent(MainActivity.this, SearchActivity.class));
+            return false;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -9,12 +9,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mituo.wshoto.com.mituo.ui.widget.LinePathView;
+import butterknife.OnClick;
+import mituo.wshoto.com.mituo.Config;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.ui.widget.LinePathView;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -51,7 +54,6 @@ public class HandWriteActivity extends AppCompatActivity {
                     }
                 } else save();
             } else {
-
                 Toast.makeText(HandWriteActivity.this, "您没有签名~", Toast.LENGTH_SHORT).show();
             }
         });
@@ -64,9 +66,14 @@ public class HandWriteActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void save(){
+    private void save() {
         try {
-            mPathView.save("/sdcard/qm.png", true, 10);
+            File destDir = new File(Config.PATH_MOBILE);
+            if (!destDir.exists()) {
+                destDir.mkdirs();
+            }
+//            mPathView.save("/sdcard/qm.png", true, 10);
+            mPathView.save(Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
             setResult(100);
             finish();
         } catch (IOException e) {
@@ -76,15 +83,20 @@ public class HandWriteActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE){
+        if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE) {
             if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    &&grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //用户同意使用write
                 save();
-            }else{
+            } else {
                 //用户不同意，自行处理即可
                 finish();
             }
         }
+    }
+
+    @OnClick(R.id.back)
+    public void onViewClicked() {
+        finish();
     }
 }

@@ -1,13 +1,17 @@
 package mituo.wshoto.com.mituo.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
+import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.Utils;
 import mituo.wshoto.com.mituo.bean.PicBean;
@@ -20,13 +24,15 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private List<PicBean.ResultDataBean> mData;
     private int status;
+    private Context mContext;
 
     //define interface
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int data);
     }
 
-    public PhotosAdapter(List<PicBean.ResultDataBean> mData, int status) {
+    public PhotosAdapter(List<PicBean.ResultDataBean> mData, int status, Context context) {
+        this.mContext = context;
         this.mData = mData;
         this.status = status;
     }
@@ -54,6 +60,13 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         } else {
             viewHolder.name.setImageBitmap(Utils.stringtoBitmap(mData.get(position).getBase64()));
         }
+        viewHolder.name.setOnClickListener(v -> {
+            if (position == mData.size()) {
+                OrderMessage msg = new OrderMessage(10,false);
+                EventBus.getDefault().post(msg);
+
+            }
+        });
         viewHolder.itemView.setTag(position);
     }
 

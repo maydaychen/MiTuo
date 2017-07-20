@@ -40,8 +40,7 @@ public class MyAffair_car_info extends RelativeLayout {
     TextView mText2;
     @BindView(R.id.car_type)
     TextView car_type;
-    @BindView(R.id.engine_num)
-    TextView mEngineNum;
+
     @BindView(R.id.total_mileage)
     TextView mTotalMileage;
     @BindView(R.id.next_care_time)
@@ -57,13 +56,12 @@ public class MyAffair_car_info extends RelativeLayout {
     private TextView tv_remind;
     private LinearLayout infoRl;
     private CarInfoBean.ResultDataBean mResultDataBean;
-    private ImageView directionIv;
     private Button edit;
     private View baseV;
     private String orderNum;
 
     private boolean isOpened = false;
-
+    public boolean IS_OK = true;
     private boolean animatorLock = false;
 
     public MyAffair_car_info(Context context, AttributeSet attrs, int defStyle) {
@@ -85,7 +83,6 @@ public class MyAffair_car_info extends RelativeLayout {
         ButterKnife.bind(this);
         title = (RelativeLayout) baseV.findViewById(R.id.title);
         infoRl = (LinearLayout) baseV.findViewById(R.id.affair_info_rl);
-        directionIv = (ImageView) baseV.findViewById(R.id.affair_direction_iv);
         iv_remind = (ImageView) baseV.findViewById(R.id.iv_remind);
         tv_remind = (TextView) baseV.findViewById(R.id.tv_remind);
         edit = (Button) baseV.findViewById(R.id.car_info_edit);
@@ -182,61 +179,67 @@ public class MyAffair_car_info extends RelativeLayout {
     }
 
 
-    public void setRemind(int i) {
-        switch (i) {
-            case 0:
-                iv_remind.setVisibility(GONE);
-                tv_remind.setVisibility(GONE);
-                break;
-            case 1:
-                iv_remind.setImageResource(R.drawable.order_details_icon_remind);
-                tv_remind.setText("尚未完善");
-                break;
-        }
+    private void setRemind() {
+        iv_remind.setImageResource(R.drawable.order_details_icon_remind);
+        tv_remind.setText("尚未完善");
+        IS_OK = false;
     }
 
     public void setInfo(CarInfoBean.ResultDataBean resultBean, int status, String num) {
         orderNum = num;
         mResultDataBean = resultBean;
-        mOwnerName.setText(String.format(getResources().getString(R.string.car_onwer_edit), resultBean.getContactName()));
-        mOwnerTelephone.setText(String.format(getResources().getString(R.string.telephone_edit), resultBean.getContactPhone()));
-        mText2.setText(String.format(getResources().getString(R.string.card_num_edit), resultBean.getCarNo()));
-        car_type.setText(String.format(getResources().getString(R.string.car_type_edit), resultBean.getCarXh()));
-        mEngineNum.setText(String.format(getResources().getString(R.string.engine_num_edit), resultBean.getCarFdjbh()));
-        mTotalMileage.setText(String.format(getResources().getString(R.string.mileage_edit), resultBean.getCarXslc()));
-        mNextCareTime.setText(String.format(getResources().getString(R.string.next_care_time_edit), resultBean.getXcbyDate()));
-        mNextCareMileage.setText(String.format(getResources().getString(R.string.next_care_km_edit), resultBean.getXcbylc()));
-        mTvCarModelNum.setText(String.format(getResources().getString(R.string.car_num_edit), resultBean.getCarCjh()));
-
-
-        SpannableStringBuilder builder1 = new SpannableStringBuilder(mOwnerName.getText().toString());
-        SpannableStringBuilder builder2 = new SpannableStringBuilder(mOwnerTelephone.getText().toString());
-        SpannableStringBuilder builder3 = new SpannableStringBuilder(mText2.getText().toString());
-        SpannableStringBuilder builder4 = new SpannableStringBuilder(car_type.getText().toString());
-        SpannableStringBuilder builder5 = new SpannableStringBuilder(mEngineNum.getText().toString());
-        SpannableStringBuilder builder6 = new SpannableStringBuilder(mTotalMileage.getText().toString());
-        SpannableStringBuilder builder7 = new SpannableStringBuilder(mNextCareTime.getText().toString());
-        SpannableStringBuilder builder8 = new SpannableStringBuilder(mNextCareMileage.getText().toString());
-        SpannableStringBuilder builder9 = new SpannableStringBuilder(mTvCarModelNum.getText().toString());
         ForegroundColorSpan redSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_99));
-        builder1.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder2.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder3.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder4.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder5.setSpan(redSpan, 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder6.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder7.setSpan(redSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder8.setSpan(redSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder9.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mOwnerName.setText(builder1);
-        mOwnerTelephone.setText(builder2);
-        mText2.setText(builder3);
-        car_type.setText(builder4);
-        mEngineNum.setText(builder5);
-        mTotalMileage.setText(builder6);
-        mNextCareTime.setText(builder7);
-        mNextCareMileage.setText(builder8);
-        mTvCarModelNum.setText(builder9);
+        if (!(null == resultBean.getContactName())) {
+            mOwnerName.setText(String.format(getResources().getString(R.string.car_onwer_edit), resultBean.getContactName()));
+            SpannableStringBuilder builder1 = new SpannableStringBuilder(mOwnerName.getText().toString());
+            builder1.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mOwnerName.setText(builder1);
+        } else
+            setRemind();
+        if (!(null == resultBean.getContactPhone())) {
+            mOwnerTelephone.setText(String.format(getResources().getString(R.string.telephone_edit), resultBean.getContactPhone()));
+            SpannableStringBuilder builder2 = new SpannableStringBuilder(mOwnerTelephone.getText().toString());
+            builder2.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mOwnerTelephone.setText(builder2);
+        } else
+            setRemind();
+        if (!(null == resultBean.getCarNo())) {
+            mText2.setText(String.format(getResources().getString(R.string.card_num_edit), resultBean.getCarNo()));
+            SpannableStringBuilder builder3 = new SpannableStringBuilder(mText2.getText().toString());
+            builder3.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mText2.setText(builder3);
+        } else setRemind();
+        if (!(null == resultBean.getCarXh())) {
+            car_type.setText(String.format(getResources().getString(R.string.car_type_edit), resultBean.getCarXh()));
+            SpannableStringBuilder builder4 = new SpannableStringBuilder(car_type.getText().toString());
+            builder4.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            car_type.setText(builder4);
+        } else setRemind();
+        if (!(null == resultBean.getCarXslc())) {
+            mTotalMileage.setText(String.format(getResources().getString(R.string.mileage_edit), resultBean.getCarXslc()));
+            SpannableStringBuilder builder6 = new SpannableStringBuilder(mTotalMileage.getText().toString());
+            builder6.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mTotalMileage.setText(builder6);
+        } else setRemind();
+        if (!(null == resultBean.getXcbyDate())) {
+            mNextCareTime.setText(String.format(getResources().getString(R.string.next_care_time_edit), resultBean.getXcbyDate()));
+            SpannableStringBuilder builder7 = new SpannableStringBuilder(mNextCareTime.getText().toString());
+            builder7.setSpan(redSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mNextCareTime.setText(builder7);
+        } else setRemind();
+        if (!(null == resultBean.getXcbylc())) {
+            mNextCareMileage.setText(String.format(getResources().getString(R.string.next_care_km_edit), resultBean.getXcbylc()));
+            SpannableStringBuilder builder8 = new SpannableStringBuilder(mNextCareMileage.getText().toString());
+            builder8.setSpan(redSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mNextCareMileage.setText(builder8);
+        } else setRemind();
+        if (!(null == resultBean.getCarCjh())) {
+            mTvCarModelNum.setText(String.format(getResources().getString(R.string.car_num_edit), resultBean.getCarCjh()));
+            SpannableStringBuilder builder9 = new SpannableStringBuilder(mTvCarModelNum.getText().toString());
+            builder9.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mTvCarModelNum.setText(builder9);
+        } else setRemind();
+
         if (status == 1) {
             edit.setVisibility(GONE);
         }

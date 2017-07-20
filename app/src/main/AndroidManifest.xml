@@ -37,7 +37,9 @@
         <activity android:name=".ui.activity.FindPassActivity"/>
         <activity android:name=".ui.activity.StorageActivity">
         </activity>
-        <activity android:name=".ui.activity.OrderDetailActivity">
+        <activity
+            android:name=".ui.activity.OrderDetailActivity"
+            android:launchMode="singleTask">
         </activity>
         <activity android:name=".ui.activity.RecordActivity">
         </activity>
@@ -62,6 +64,12 @@
         <activity android:name=".ui.activity.CaptureActivity">
         </activity>
         <activity android:name=".ui.activity.AddRepairObjsActivity">
+        </activity>
+        <activity android:name=".ui.activity.SaoPayActivity">
+        </activity>
+        <activity android:name=".ui.activity.CheckReport3Activity">
+        </activity>
+        <activity android:name=".ui.activity.SearchActivity">
         </activity>
     </application>
 

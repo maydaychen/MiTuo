@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.adapter.PhotosAdapter;
@@ -29,7 +31,7 @@ public class MyAffair_repair_photos extends RelativeLayout {
     private RelativeLayout titleRl;
 
     private RecyclerView infoRl;
-
+    private List<PicBean.ResultDataBean> list;
     private ImageView directionIv;
 
     private View baseV;
@@ -142,11 +144,20 @@ public class MyAffair_repair_photos extends RelativeLayout {
     }
 
     public void setInfo(int status, PicBean mResultBean) {
+        list = mResultBean.getResultData();
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
         infoRl.setLayoutManager(new GridLayoutManager(mContext, 3));
 //        infoRl.setLayoutManager(layoutManager);
-        mPhotosAdapter = new PhotosAdapter(mResultBean.getResultData(), status);
+        mPhotosAdapter = new PhotosAdapter(mResultBean.getResultData(), status, mContext);
         infoRl.setAdapter(mPhotosAdapter);
+    }
+
+    public void addPic(String base, String name) {
+        PicBean.ResultDataBean resultDataBean = new PicBean.ResultDataBean();
+        resultDataBean.setBase64(base);
+        resultDataBean.setPicName(name);
+        list.add(resultDataBean);
+        mPhotosAdapter.notifyDataSetChanged();
     }
 
 

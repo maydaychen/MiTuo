@@ -110,19 +110,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="@string/engine_num"/>
-
-        <EditText
-            android:id="@+id/et_enginee_num"
-            style="@style/edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_engine_num"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
             android:text="@string/mileage"/>
 
         <EditText

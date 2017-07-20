@@ -1,12 +1,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal">
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:orientation="horizontal">
 
     <SurfaceView
         android:id="@+id/surfaceview"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -15,14 +15,41 @@
 
         <ImageButton
             android:id="@+id/iv_start"
-            android:layout_marginRight="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
             android:padding="16dp"
-            android:src="@drawable/ic_play_arrow_white_24dp" />
+            android:src="@drawable/ic_play_arrow_white_24dp"/>
 
+        <LinearLayout
+            android:id="@+id/ll_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/iv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:padding="16dp"
+                android:src="@drawable/ic_clear_white_24dp"/>
+
+            <ImageButton
+                android:id="@+id/iv_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:padding="16dp"
+                android:src="@drawable/ic_done_white_24dp"/>
+        </LinearLayout>
     </RelativeLayout>
 
 </FrameLayout>

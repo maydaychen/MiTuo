@@ -14,10 +14,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import mituo.wshoto.com.mituo.R;
-import mituo.wshoto.com.mituo.bean.RepairObjsBean;
+import mituo.wshoto.com.mituo.bean.ResultBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
+
+import static mituo.wshoto.com.mituo.Utils.logout;
 
 public class ChangePassActivity extends AppCompatActivity {
     @BindView(R.id.toolbar2)
@@ -29,7 +31,7 @@ public class ChangePassActivity extends AppCompatActivity {
     @BindView(R.id.et_new_pass_again)
     EditText mNewPass2;
 
-    private SubscriberOnNextListener<RepairObjsBean> ChangePassOnNext;
+    private SubscriberOnNextListener<ResultBean> ChangePassOnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,9 @@ public class ChangePassActivity extends AppCompatActivity {
         ChangePassOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 startActivity(new Intent(ChangePassActivity.this, ChangePassSuccessActivity.class));
-            } else {
+            } else if (resultBean.getCode().equals("401")){
+                logout(ChangePassActivity.this);
+            } else{
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };

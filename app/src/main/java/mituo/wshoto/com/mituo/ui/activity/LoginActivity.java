@@ -68,7 +68,6 @@ public class LoginActivity extends InitActivity {
             if (!charSequence.toString().equals("")) {
                 mTvPhoneMsg.setVisibility(View.INVISIBLE);
             }
-
         });
 
     }

@@ -45,8 +45,6 @@ public class MyAffair_repair_video extends RelativeLayout {
     TextView mTextView3;
     @BindView(R.id.textView4)
     TextView mTextView4;
-    @BindView(R.id.textView5)
-    TextView mTextView5;
     private Context mContext;
 
     private RelativeLayout titleRl;
@@ -58,9 +56,11 @@ public class MyAffair_repair_video extends RelativeLayout {
     private Button edit;
     private View baseV;
     private String orderNum;
+    private int orderStatus;
     private boolean isOpened = false;
     private boolean isFileExist = false;
     private boolean animatorLock = false;
+    public boolean IS_OK = true;
 
     public MyAffair_repair_video(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -113,8 +113,10 @@ public class MyAffair_repair_video extends RelativeLayout {
                         infoRl.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    if (!isOpened) {
-                        edit.setVisibility(View.VISIBLE);
+                    if (orderStatus!=1){
+                        if (!isOpened) {
+                            edit.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
 
@@ -206,25 +208,8 @@ public class MyAffair_repair_video extends RelativeLayout {
         return result;
     }
 
-    public void setRemind(int i) {
-        switch (i) {
-            case 0:
-                iv_remind.setVisibility(GONE);
-                tv_remind.setVisibility(GONE);
-                break;
-            case 1:
-                iv_remind.setImageResource(R.drawable.order_details_icon_remind);
-                tv_remind.setText("上传失败");
-                break;
-            case 2:
-                iv_remind.setImageResource(R.drawable.icon_yellow);
-                tv_remind.setText("尚未上传");
-                tv_remind.setTextColor(getResources().getColor(R.color.yellow));
-                break;
-        }
-    }
-
     public void setInfo(int status, String oid) {
+        orderStatus = status;
         orderNum = oid;
         if (status == 1) {
             edit.setVisibility(GONE);
@@ -237,18 +222,19 @@ public class MyAffair_repair_video extends RelativeLayout {
             builder1.setSpan(redSpan, 4, (orderNum + ".mp4").length() + 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mTextView2.setText(builder1);
             try {
-                mTextView5.setText(String.format(getResources().getString(R.string.video_state2), "未上传"));
-                SpannableStringBuilder builder = new SpannableStringBuilder(mTextView5.getText().toString());
-                ForegroundColorSpan Span = new ForegroundColorSpan(getResources().getColor(R.color.font_red));
-                builder.setSpan(Span, 5, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                mTextView5.setText(builder);
                 mTextView3.setText(String.format(getResources().getString(R.string.video_time), changeTime(test())));
                 mTextView4.setText(String.format(getResources().getString(R.string.video_size), getsizeize(Config.PATH_MOBILE + "/" + orderNum + ".mp4")));
+                iv_remind.setVisibility(GONE);
+                tv_remind.setVisibility(GONE);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }else {
+            IS_OK = false;
+            iv_remind.setVisibility(VISIBLE);
+            tv_remind.setVisibility(VISIBLE);
         }
 
 

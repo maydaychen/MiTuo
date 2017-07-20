@@ -7,11 +7,18 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import mituo.wshoto.com.mituo.Config;
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.ui.widget.CircleProgressViewEasy;
 
@@ -30,6 +37,8 @@ public class StorageActivity extends InitActivity {
     CheckBox mCbStarageSd;
 
     private boolean IS_INNER = true;
+    private String path;//默认存储路径
+    private boolean HAS_SD = false;//是否拥有外置SD
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -58,6 +67,9 @@ public class StorageActivity extends InitActivity {
     public void onViewClicked() {
         mCbStarageSd.setChecked(!IS_INNER);
         IS_INNER = !IS_INNER;
+        if (IS_INNER) {
+            path = Config.PATH_MOBILE;
+        }
     }
 
     @Override
@@ -79,5 +91,30 @@ public class StorageActivity extends InitActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public List<String> getExtSDCardPath() {
+        List<String> lResult = new ArrayList<String>();
+        try {
+            Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec("mount");
+            InputStream is = proc.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.contains("extSdCard")) {
+                    String[] arr = line.split(" ");
+                    String path = arr[1];
+                    File file = new File(path);
+                    if (file.isDirectory()) {
+                        lResult.add(path);
+                    }
+                }
+            }
+            isr.close();
+        } catch (Exception e) {
+        }
+        return lResult;
     }
 }

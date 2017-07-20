@@ -7,33 +7,44 @@
     android:layout_height="match_parent"
     tools:context="mituo.wshoto.com.mituo.ui.activity.OrderDetailActivity">
 
-    <ScrollView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_order"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="8dp"
+        android:theme="?attr/actionBarTheme"
+        app:titleTextColor="@color/font_33">
+
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tv_finish_order"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="完成服务"
+        android:textColor="@color/white"/>
+
+    <ScrollView
+        android:layout_above="@id/tv_finish_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tb_order">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="30dp"
             android:orientation="vertical">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/tb_order"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:elevation="8dp"
-                android:theme="?attr/actionBarTheme"
-                app:titleTextColor="@color/font_33">
-
-            </android.support.v7.widget.Toolbar>
 
             <mituo.wshoto.com.mituo.ui.widget.MyAffair_detail
                 android:id="@+id/detail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tb_order">
+                android:layout_height="wrap_content">
             </mituo.wshoto.com.mituo.ui.widget.MyAffair_detail>
-
 
             <mituo.wshoto.com.mituo.ui.widget.MyAffair_car_info
                 android:id="@+id/car_info"
@@ -84,16 +95,6 @@
             </mituo.wshoto.com.mituo.ui.widget.MyAffair_gather>
         </RelativeLayout>
     </ScrollView>
-
-    <TextView
-        android:id="@+id/tv_finish_order"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:text="完成服务"
-        android:textColor="@color/white"/>
 
 
 </RelativeLayout>

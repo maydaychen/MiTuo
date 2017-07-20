@@ -1,27 +1,32 @@
 package mituo.wshoto.com.mituo.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import mituo.wshoto.com.mituo.Config;
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.Utils;
 import mituo.wshoto.com.mituo.bean.CarInfoBean;
 import mituo.wshoto.com.mituo.bean.GatherBean;
 import mituo.wshoto.com.mituo.bean.OrderInfoBean;
+import mituo.wshoto.com.mituo.bean.PayStatusBean;
 import mituo.wshoto.com.mituo.bean.PicBean;
 import mituo.wshoto.com.mituo.bean.RepairObjsBean;
 import mituo.wshoto.com.mituo.bean.ReportBean;
@@ -37,7 +42,10 @@ import mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_objs;
 import mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_photos;
 import mituo.wshoto.com.mituo.ui.widget.MyAffair_repair_video;
 
+import static mituo.wshoto.com.mituo.Utils.logout;
+
 public class OrderDetailActivity extends InitActivity {
+
     private SubscriberOnNextListener<OrderInfoBean> getOrderInfoOnNext;
     private SubscriberOnNextListener<CarInfoBean> getCarInfoOnNext;
     private SubscriberOnNextListener<RepairObjsBean> getObjsOnNext;
@@ -45,9 +53,13 @@ public class OrderDetailActivity extends InitActivity {
     private SubscriberOnNextListener<GatherBean> gatherOnNext;
     private SubscriberOnNextListener<PicBean> picOnNext;
     private SubscriberOnNextListener<ResultBean> finishOnNext;
+    private SubscriberOnNextListener<ResultBean> UploadPicOnNext;
+    private SubscriberOnNextListener<PayStatusBean> checkPayOnNext;
 
+    private int num = 1;
     private int status;
     private SharedPreferences preferences;
+    private Bitmap mBitmap;
 
     @BindView(R.id.tb_order)
     Toolbar mTbOrder;
@@ -65,6 +77,8 @@ public class OrderDetailActivity extends InitActivity {
     MyAffair_check_report mCheckReport;
     @BindView(R.id.gather)
     MyAffair_gather mGather;
+    @BindView(R.id.tv_finish_order)
+    TextView mTvFinishOrder;
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -76,6 +90,7 @@ public class OrderDetailActivity extends InitActivity {
             mTbOrder.setTitle("订单明细（进行中）");
         } else {
             mTbOrder.setTitle("订单明细");
+            mTvFinishOrder.setVisibility(View.GONE);
         }
         setSupportActionBar(mTbOrder);
 
@@ -90,58 +105,101 @@ public class OrderDetailActivity extends InitActivity {
             if (resultBean.getCode().equals("200")) {
                 mDetail.setInfo(resultBean.getResultData().getOrderCode(), resultBean.getResultData().getYyTime(),
                         resultBean.getResultData().getYyAddress());
-            } else {
+            } else if (resultBean.getCode().equals("401")){
+                logout(OrderDetailActivity.this);
+            } else{
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         getCarInfoOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 mCarInfo.setInfo(resultBean.getResultData(), status, getIntent().getStringExtra("oid"));
-            } else {
+            } else if (resultBean.getCode().equals("401")){
+                logout(OrderDetailActivity.this);
+            } else{
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         getObjsOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
-                mRepairObjs.setInfo(resultBean.getResultData(), status);
-            } else {
+                mRepairObjs.setInfo(resultBean.getResultData(), status, getIntent().getStringExtra("oid"));
+            }else if (resultBean.getCode().equals("401")){
+                logout(OrderDetailActivity.this);
+            } else{
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         gatherOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 mGather.setInfo(resultBean.getResultData(), status, getIntent().getStringExtra("oid"));
-            } else {
+            } else if (resultBean.getCode().equals("401")){
+                logout(OrderDetailActivity.this);
+            } else{
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         picOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
-                mRepairPhotos.setInfo(status,resultBean);
-            } else {
+                mRepairPhotos.setInfo(status, resultBean);
+            } else if (resultBean.getCode().equals("401")){
+                logout(OrderDetailActivity.this);
+            } else{
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         finishOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 finish();
-            } else {
+            }else if (resultBean.getCode().equals("401")){
+                logout(OrderDetailActivity.this);
+            } else{
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         getChecksOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
-                List<String> list = new ArrayList<>();
-                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : resultBean.getResultData().getStep2().getList()) {
-                    list.add(listBean.getTypeName());
-                }
-                mCheckReport.setInfo(status, list);
-            } else {
+                mCheckReport.setInfo(status, resultBean, getIntent().getStringExtra("oid"));
+            }else if (resultBean.getCode().equals("401")){
+                logout(OrderDetailActivity.this);
+            } else{
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
+        checkPayOnNext = resultBean -> {
+            if (resultBean.getResultData().isPayStatus()) {
+                mGather.setPayInfo(resultBean.getResultData());
+            }
+        };
+        UploadPicOnNext = resultBean -> {
+            if (resultBean.isResult()) {
+                mRepairPhotos.addPic(Utils.bitmaptoString(mBitmap), Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + num++ + ".png");
+            } else if (resultBean.getCode().equals("401")){
+                logout(OrderDetailActivity.this);
+            } else{
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+            }
+        };
+        HttpMethods.getInstance().get_pic(
+                new ProgressSubscriber<>(picOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
+    }
 
-        mRepairVideo.setInfo(status, getIntent().getStringExtra("oid"));
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 处理结果
+        if (requestCode == 10) {
+            try {
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    mBitmap = extras.getParcelable("data");
+                    HttpMethods.getInstance().upload_img(
+                            new ProgressSubscriber<>(UploadPicOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"),
+                            Utils.bitmaptoString(mBitmap), Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + num++ + ".png");
+                }
+            }catch (NullPointerException ignored){
+
+            }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -204,6 +262,11 @@ public class OrderDetailActivity extends InitActivity {
                     mCheckReport.close().start();
                     mRepairObjs.close().start();
                     break;
+                case 10:
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, 10);
+
+                    break;
             }
         }
     }
@@ -214,6 +277,7 @@ public class OrderDetailActivity extends InitActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         super.onResume();
+        mRepairVideo.setInfo(status, getIntent().getStringExtra("oid"));
         HttpMethods.getInstance().order_detail(
                 new ProgressSubscriber<>(getOrderInfoOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
         HttpMethods.getInstance().car_info(
@@ -224,15 +288,35 @@ public class OrderDetailActivity extends InitActivity {
                 new ProgressSubscriber<>(getObjsOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
         HttpMethods.getInstance().gather(
                 new ProgressSubscriber<>(gatherOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
-        HttpMethods.getInstance().get_pic(
-                new ProgressSubscriber<>(picOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
+        HttpMethods.getInstance().check_pay(
+                new ProgressSubscriber<>(checkPayOnNext, this), preferences.getString("token", ""),
+                getIntent().getStringExtra("oid"));
+//                "BY20170622000");
 
     }
 
 
     @OnClick(R.id.tv_finish_order)
     public void onViewClicked() {
+        if (mCarInfo.IS_OK) {
+            if (mRepairVideo.IS_OK) {
+                if (mCheckReport.IS_OK) {
+
+                } else {
+                    Toast.makeText(this, "检测报告尚未填写", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } else {
+                Toast.makeText(this, "尚未录制维修录像", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else {
+            Toast.makeText(this, "请补完车辆信息", Toast.LENGTH_SHORT).show();
+            return;
+        }
         HttpMethods.getInstance().finish_order(
                 new ProgressSubscriber<>(finishOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
+
     }
+
 }

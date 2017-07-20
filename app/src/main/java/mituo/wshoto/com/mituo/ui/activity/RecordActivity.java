@@ -14,9 +14,11 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -41,6 +43,8 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
     @BindView(R.id.iv_start)
     ImageButton mIvStart;
+    @BindView(R.id.ll_result)
+    LinearLayout mLlResult;
     private SubscriberOnNextListener<TimeBean> picOnNext;
     private SubscriberOnNextListener<ResultBean> startOnNext;
     private SubscriberOnNextListener<ResultBean> endOnNext;
@@ -113,6 +117,8 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         };
         endOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
+                mLlResult.setVisibility(View.VISIBLE);
+                mIvStart.setVisibility(View.GONE);
                 IS_RECORDING = false;
                 mIvStart.setImageResource(R.drawable.ic_play_arrow_white_24dp);
                 if (mediarecorder != null) {
@@ -126,12 +132,6 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
-    }
-
-    @OnClick(R.id.iv_start)
-    public void onViewClicked() {
-        HttpMethods.getInstance().get_time(
-                new ProgressSubscriber<>(picOnNext, this), preferences.getString("token", ""));
     }
 
     @Override
@@ -203,6 +203,22 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                 //用户不同意，自行处理即可
                 finish();
             }
+        }
+    }
+
+    @OnClick({R.id.iv_start, R.id.iv_cancel, R.id.iv_confirm})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_start:
+                HttpMethods.getInstance().get_time(
+                        new ProgressSubscriber<>(picOnNext, this), preferences.getString("token", ""));
+                break;
+            case R.id.iv_cancel:
+                finish();
+                break;
+            case R.id.iv_confirm:
+                finish();
+                break;
         }
     }
 }

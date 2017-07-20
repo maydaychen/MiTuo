@@ -1,16 +1,17 @@
 package mituo.wshoto.com.mituo.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by user on 2017/7/3.
  */
 
-public class ReportBean {
+public class ReportBean implements Serializable{
     /**
      * code : 200
      * result : true
-     * resultData : {"step2":{"typeName":"111","list":[{"id":2,"typeName":"111","bgxm_id":null,"bgxmName":"aaa","bgxmId":2,"bgxmValue":null,"inputType":"2","bgxm_type_id":2},{"id":2,"typeName":"111","bgxm_id":null,"bgxmName":"aaa","bgxmId":4,"bgxmValue":null,"inputType":"123","bgxm_type_id":2}]},"step1":{"typeName":"nihao","list":[{"id":1,"typeName":"nihao","bgxm_id":null,"bgxmName":"www","bgxmId":1,"bgxmValue":null,"inputType":"1","bgxm_type_id":1},{"id":1,"typeName":"nihao","bgxm_id":null,"bgxmName":"哈哈","bgxmId":3,"bgxmValue":null,"inputType":"1212","bgxm_type_id":1}]}}
+     * resultData : {"step2":[{"typeName":"易损","list":[{"bgxmName":"aaa","bgxmId":4,"bgxmValue":"0","inputType":"123"}]}],"step1":[{"typeName":"底盘","list":[{"bgxmName":"www","bgxmId":1,"bgxmValue":null,"inputType":"1"},{"bgxmName":"哈哈","bgxmId":3,"bgxmValue":"1","inputType":"1212"}]}]}
      * resultMsg : 请求成功
      */
 
@@ -51,35 +52,30 @@ public class ReportBean {
         this.resultMsg = resultMsg;
     }
 
-    public static class ResultDataBean {
-        /**
-         * step2 : {"typeName":"111","list":[{"id":2,"typeName":"111","bgxm_id":null,"bgxmName":"aaa","bgxmId":2,"bgxmValue":null,"inputType":"2","bgxm_type_id":2},{"id":2,"typeName":"111","bgxm_id":null,"bgxmName":"aaa","bgxmId":4,"bgxmValue":null,"inputType":"123","bgxm_type_id":2}]}
-         * step1 : {"typeName":"nihao","list":[{"id":1,"typeName":"nihao","bgxm_id":null,"bgxmName":"www","bgxmId":1,"bgxmValue":null,"inputType":"1","bgxm_type_id":1},{"id":1,"typeName":"nihao","bgxm_id":null,"bgxmName":"哈哈","bgxmId":3,"bgxmValue":null,"inputType":"1212","bgxm_type_id":1}]}
-         */
+    public static class ResultDataBean implements Serializable{
+        private List<Step2Bean> step2;
+        private List<Step1Bean> step1;
 
-        private Step2Bean step2;
-        private Step1Bean step1;
-
-        public Step2Bean getStep2() {
+        public List<Step2Bean> getStep2() {
             return step2;
         }
 
-        public void setStep2(Step2Bean step2) {
+        public void setStep2(List<Step2Bean> step2) {
             this.step2 = step2;
         }
 
-        public Step1Bean getStep1() {
+        public List<Step1Bean> getStep1() {
             return step1;
         }
 
-        public void setStep1(Step1Bean step1) {
+        public void setStep1(List<Step1Bean> step1) {
             this.step1 = step1;
         }
 
-        public static class Step2Bean {
+        public static class Step2Bean implements Serializable{
             /**
-             * typeName : 111
-             * list : [{"id":2,"typeName":"111","bgxm_id":null,"bgxmName":"aaa","bgxmId":2,"bgxmValue":null,"inputType":"2","bgxm_type_id":2},{"id":2,"typeName":"111","bgxm_id":null,"bgxmName":"aaa","bgxmId":4,"bgxmValue":null,"inputType":"123","bgxm_type_id":2}]
+             * typeName : 易损
+             * list : [{"bgxmName":"aaa","bgxmId":4,"bgxmValue":"0","inputType":"123"}]
              */
 
             private String typeName;
@@ -101,50 +97,18 @@ public class ReportBean {
                 this.list = list;
             }
 
-            public static class ListBean {
+            public static class ListBean implements Serializable{
                 /**
-                 * id : 2
-                 * typeName : 111
-                 * bgxm_id : null
                  * bgxmName : aaa
-                 * bgxmId : 2
-                 * bgxmValue : null
-                 * inputType : 2
-                 * bgxm_type_id : 2
+                 * bgxmId : 4
+                 * bgxmValue : 0
+                 * inputType : 123
                  */
 
-                private int id;
-                private String typeName;
-                private String bgxm_id;
                 private String bgxmName;
                 private int bgxmId;
                 private String bgxmValue;
                 private String inputType;
-                private int bgxm_type_id;
-
-                public int getId() {
-                    return id;
-                }
-
-                public void setId(int id) {
-                    this.id = id;
-                }
-
-                public String getTypeName() {
-                    return typeName;
-                }
-
-                public void setTypeName(String typeName) {
-                    this.typeName = typeName;
-                }
-
-                public String getBgxm_id() {
-                    return bgxm_id;
-                }
-
-                public void setBgxm_id(String bgxm_id) {
-                    this.bgxm_id = bgxm_id;
-                }
 
                 public String getBgxmName() {
                     return bgxmName;
@@ -177,21 +141,13 @@ public class ReportBean {
                 public void setInputType(String inputType) {
                     this.inputType = inputType;
                 }
-
-                public int getBgxm_type_id() {
-                    return bgxm_type_id;
-                }
-
-                public void setBgxm_type_id(int bgxm_type_id) {
-                    this.bgxm_type_id = bgxm_type_id;
-                }
             }
         }
 
-        public static class Step1Bean {
+        public static class Step1Bean implements Serializable{
             /**
-             * typeName : nihao
-             * list : [{"id":1,"typeName":"nihao","bgxm_id":null,"bgxmName":"www","bgxmId":1,"bgxmValue":null,"inputType":"1","bgxm_type_id":1},{"id":1,"typeName":"nihao","bgxm_id":null,"bgxmName":"哈哈","bgxmId":3,"bgxmValue":null,"inputType":"1212","bgxm_type_id":1}]
+             * typeName : 底盘
+             * list : [{"bgxmName":"www","bgxmId":1,"bgxmValue":null,"inputType":"1"},{"bgxmName":"哈哈","bgxmId":3,"bgxmValue":"1","inputType":"1212"}]
              */
 
             private String typeName;
@@ -213,50 +169,18 @@ public class ReportBean {
                 this.list = list;
             }
 
-            public static class ListBeanX {
+            public static class ListBeanX implements Serializable{
                 /**
-                 * id : 1
-                 * typeName : nihao
-                 * bgxm_id : null
                  * bgxmName : www
                  * bgxmId : 1
                  * bgxmValue : null
                  * inputType : 1
-                 * bgxm_type_id : 1
                  */
 
-                private int id;
-                private String typeName;
-                private String bgxm_id;
                 private String bgxmName;
                 private int bgxmId;
                 private String bgxmValue;
                 private String inputType;
-                private int bgxm_type_id;
-
-                public int getId() {
-                    return id;
-                }
-
-                public void setId(int id) {
-                    this.id = id;
-                }
-
-                public String getTypeName() {
-                    return typeName;
-                }
-
-                public void setTypeName(String typeName) {
-                    this.typeName = typeName;
-                }
-
-                public String getBgxm_id() {
-                    return bgxm_id;
-                }
-
-                public void setBgxm_id(String bgxm_id) {
-                    this.bgxm_id = bgxm_id;
-                }
 
                 public String getBgxmName() {
                     return bgxmName;
@@ -288,14 +212,6 @@ public class ReportBean {
 
                 public void setInputType(String inputType) {
                     this.inputType = inputType;
-                }
-
-                public int getBgxm_type_id() {
-                    return bgxm_type_id;
-                }
-
-                public void setBgxm_type_id(int bgxm_type_id) {
-                    this.bgxm_type_id = bgxm_type_id;
                 }
             }
         }

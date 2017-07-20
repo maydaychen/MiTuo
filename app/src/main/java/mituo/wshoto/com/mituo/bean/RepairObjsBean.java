@@ -141,13 +141,14 @@ public class RepairObjsBean {
                  */
 
                 private String pjName;
-                private int pjNum;
+                private String pjNum;
                 private String pjCode;
-                private String xmName;
-                private int isZd;
-                private String xmprice;
-                private int pjPrice;
+                private String pjPrice;
                 private String pjpp;
+
+                private String xmName;
+                private String isZd;
+                private String xmprice;
                 private String pjlb;
 
                 public String getPjName() {
@@ -158,11 +159,11 @@ public class RepairObjsBean {
                     this.pjName = pjName;
                 }
 
-                public int getPjNum() {
+                public String getPjNum() {
                     return pjNum;
                 }
 
-                public void setPjNum(int pjNum) {
+                public void setPjNum(String pjNum) {
                     this.pjNum = pjNum;
                 }
 
@@ -182,11 +183,11 @@ public class RepairObjsBean {
                     this.xmName = xmName;
                 }
 
-                public int getIsZd() {
+                public String getIsZd() {
                     return isZd;
                 }
 
-                public void setIsZd(int isZd) {
+                public void setIsZd(String isZd) {
                     this.isZd = isZd;
                 }
 
@@ -198,11 +199,11 @@ public class RepairObjsBean {
                     this.xmprice = xmprice;
                 }
 
-                public int getPjPrice() {
+                public String getPjPrice() {
                     return pjPrice;
                 }
 
-                public void setPjPrice(int pjPrice) {
+                public void setPjPrice(String pjPrice) {
                     this.pjPrice = pjPrice;
                 }
 
@@ -239,13 +240,12 @@ public class RepairObjsBean {
              */
 
             private String pjName;
-            private int pjNum;
+            private String pjNum;
             private String pjCode;
             private String xmName;
-            private int isZd;
+            private String isZd;
             private String xmprice;
-            private int pjPrice;
-            private String tcName;
+            private String pjPrice;
             private String pjpp;
             private String pjlb;
 
@@ -257,11 +257,11 @@ public class RepairObjsBean {
                 this.pjName = pjName;
             }
 
-            public int getPjNum() {
+            public String getPjNum() {
                 return pjNum;
             }
 
-            public void setPjNum(int pjNum) {
+            public void setPjNum(String pjNum) {
                 this.pjNum = pjNum;
             }
 
@@ -281,11 +281,11 @@ public class RepairObjsBean {
                 this.xmName = xmName;
             }
 
-            public int getIsZd() {
+            public String getIsZd() {
                 return isZd;
             }
 
-            public void setIsZd(int isZd) {
+            public void setIsZd(String isZd) {
                 this.isZd = isZd;
             }
 
@@ -297,20 +297,12 @@ public class RepairObjsBean {
                 this.xmprice = xmprice;
             }
 
-            public int getPjPrice() {
+            public String getPjPrice() {
                 return pjPrice;
             }
 
-            public void setPjPrice(int pjPrice) {
+            public void setPjPrice(String pjPrice) {
                 this.pjPrice = pjPrice;
-            }
-
-            public String getTcName() {
-                return tcName;
-            }
-
-            public void setTcName(String tcName) {
-                this.tcName = tcName;
             }
 
             public String getPjpp() {

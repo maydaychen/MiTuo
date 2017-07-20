@@ -47,4 +47,5 @@
     <string name="video_size">文件大小：%1$s</string>
     <string name="video_state2">上传状态：%1$s</string>
     <string name="money">￥：%1$s</string>
+    <string name="sao_money">向我支付￥：%1$s</string>
 </resources>

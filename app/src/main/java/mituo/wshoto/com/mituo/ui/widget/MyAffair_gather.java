@@ -27,8 +27,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.Utils;
 import mituo.wshoto.com.mituo.adapter.GatherAdapter;
 import mituo.wshoto.com.mituo.bean.GatherBean;
+import mituo.wshoto.com.mituo.bean.PayStatusBean;
 import mituo.wshoto.com.mituo.ui.activity.GatherActivity;
 
 /**
@@ -41,6 +43,26 @@ public class MyAffair_gather extends RelativeLayout {
     RecyclerView rvGather;
     @BindView(R.id.tv_gather_money)
     TextView tvGatherMoney;
+    @BindView(R.id.tv_gather_coupon)
+    TextView mTvGatherCoupon;
+    @BindView(R.id.ll_coupon)
+    LinearLayout mLlCoupon;
+    @BindView(R.id.tv_gather_real)
+    TextView mTvGatherReal;
+    @BindView(R.id.ll_real_pay)
+    LinearLayout mLlRealPay;
+    @BindView(R.id.tv_pay_kind)
+    TextView mTvPayKind;
+    @BindView(R.id.ll_pay_kind)
+    LinearLayout mLlPayKind;
+    @BindView(R.id.tv_pay_order)
+    TextView mTvPayOrder;
+    @BindView(R.id.ll_pay_order)
+    LinearLayout mLlPayOrder;
+    @BindView(R.id.iv_khqm)
+    ImageView mIvKhqm;
+    @BindView(R.id.ll_khqm)
+    LinearLayout mLlKhqm;
     private Context mContext;
     private ImageView iv_remind;
     private TextView tv_remind;
@@ -212,5 +234,21 @@ public class MyAffair_gather extends RelativeLayout {
         gatherAdapter = new GatherAdapter(list);
         rvGather.setAdapter(gatherAdapter);
         tvGatherMoney.setText(String.format(getResources().getString(R.string.money), mResultBean.getHj()));
+    }
+
+    public void setPayInfo(PayStatusBean.ResultDataBean mResultBean) {
+        mTvGatherReal.setText(String.format(getResources().getString(R.string.money), mResultBean.getPaySum()+""));
+        mTvGatherCoupon.setText(mResultBean.getCouponPrice());
+        mTvPayKind.setText(mResultBean.getPayType().equals("1") ? "微信支付" : "支付宝支付");
+        mTvPayOrder.setText(mResultBean.getPayCode());
+        if (mResultBean.isPayStatus()) {
+            edit.setVisibility(GONE);
+        }
+        mIvKhqm.setImageBitmap(Utils.stringtoBitmap(mResultBean.getKhqm()));
+        mLlCoupon.setVisibility(VISIBLE);
+        mLlRealPay.setVisibility(VISIBLE);
+        mLlPayKind.setVisibility(VISIBLE);
+        mLlPayOrder.setVisibility(VISIBLE);
+        mLlKhqm.setVisibility(VISIBLE);
     }
 }

@@ -72,7 +72,7 @@ public class LinePathView extends View {
     /**
      * 前景色
      */
-    private int mPenColor = Color.BLACK;
+    private int mPenColor = Color.DKGRAY;
 
     private int mBackColor = Color.TRANSPARENT;
 

@@ -3,6 +3,8 @@ package mituo.wshoto.com.mituo.http;
 import android.content.Context;
 import android.widget.Toast;
 
+import java.net.UnknownHostException;
+
 import rx.Subscriber;
 
 /**
@@ -29,10 +31,9 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
-        if (e.getMessage().equals("Failed to connect to /101.231.124.9:56678")) {
-            Toast.makeText(context, "网络连接错误，请稍后重试…", Toast.LENGTH_SHORT).show();
-        } else if (e.getMessage().equals("failed to connect to /101.231.124.9 (port 56678) after 5000ms")) {
-            Toast.makeText(context, "网络连接超时，请稍后重试…", Toast.LENGTH_SHORT).show();
+        if (e instanceof UnknownHostException) {
+            Toast.makeText(context, "服务器未响应，请稍后重试", Toast.LENGTH_SHORT).show();
+        } else if (e instanceof UnknownHostException) {
         } else {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }

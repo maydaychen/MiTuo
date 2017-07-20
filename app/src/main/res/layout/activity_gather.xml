@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="mituo.wshoto.com.mituo.ui.activity.GatherActivity">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="mituo.wshoto.com.mituo.ui.activity.GatherActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,10 +17,11 @@
             android:id="@+id/toolbar4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:background="@color/white"
             android:elevation="8dp"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+            android:theme="?attr/actionBarTheme"
+            app:titleTextColor="@color/font_33"/>
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -45,7 +46,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="维修项目"
-                android:textColor="@color/font_99" />
+                android:textColor="@color/font_99"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -54,7 +55,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="配件名称"
-                android:textColor="@color/font_99" />
+                android:textColor="@color/font_99"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -63,7 +64,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="使用数量"
-                android:textColor="@color/font_99" />
+                android:textColor="@color/font_99"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -72,7 +73,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="价格（元）"
-                android:textColor="@color/font_99" />
+                android:textColor="@color/font_99"/>
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -83,7 +84,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/boder_list" />
+            android:background="@drawable/boder_list"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -102,21 +103,21 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="合计：" />
+                android:text="合计："/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:padding="8dp" />
+                android:padding="8dp"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:padding="8dp" />
+                android:padding="8dp"/>
 
             <TextView
                 android:id="@+id/tv_gather_money"
@@ -127,7 +128,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="@string/money"
-                android:textColor="@color/font_red" />
+                android:textColor="@color/font_red"/>
         </LinearLayout>
 
         <RelativeLayout
@@ -147,7 +148,7 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="8dp"
-                android:src="@drawable/settlement_list_icon_scan_code" />
+                android:src="@drawable/settlement_list_icon_scan_code"/>
 
             <Button
                 android:id="@+id/button4"
@@ -158,7 +159,7 @@
                 android:layout_marginLeft="24dp"
                 android:background="@drawable/boder_blue"
                 android:text="验证券码"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/et_num"
@@ -170,7 +171,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_toLeftOf="@id/button4"
                 android:layout_toRightOf="@id/iv_gather_saoyisao"
-                android:hint="请输入代金券券码" />
+                android:hint="请输入代金券券码"/>
 
         </RelativeLayout>
 
@@ -188,7 +189,7 @@
             app:layout_constraintHorizontal_bias="0.015"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"/>
 
         <Spinner
             android:id="@+id/spinner"
@@ -203,7 +204,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/textView6"/>
 
         <TextView
             android:id="@+id/textView7"
@@ -215,7 +216,7 @@
             android:text="客户签名"
             android:textColor="@color/font_99"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/spinner"/>
 
         <ImageView
             android:id="@+id/imageView2"
@@ -230,18 +231,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView7"
-            app:srcCompat="@drawable/settlement_list_btn_sign" />
-
-
-        <Button
-            android:id="@+id/cash_pay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/boder_blue"
-            android:text="收款完成"
-            android:textColor="@color/white" />
+            app:srcCompat="@drawable/settlement_list_btn_sign"/>
 
         <LinearLayout
             android:id="@+id/ll_mobile_pay"
@@ -260,7 +250,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/boder_blue"
                 android:text="生成支付二维码"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"/>
 
             <Button
                 android:id="@+id/bt_mobile_pay_2"
@@ -270,7 +260,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/boder_blue"
                 android:text="扫描客户二维码"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"/>
         </LinearLayout>
     </LinearLayout>
 

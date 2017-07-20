@@ -2,6 +2,7 @@ package mituo.wshoto.com.mituo.http;
 
 import java.util.concurrent.TimeUnit;
 
+import mituo.wshoto.com.mituo.bean.AllRepairBean;
 import mituo.wshoto.com.mituo.bean.CarInfoBean;
 import mituo.wshoto.com.mituo.bean.CouponBean;
 import mituo.wshoto.com.mituo.bean.EmsBean;
@@ -9,11 +10,14 @@ import mituo.wshoto.com.mituo.bean.GatherBean;
 import mituo.wshoto.com.mituo.bean.LoginBean;
 import mituo.wshoto.com.mituo.bean.OrderBean;
 import mituo.wshoto.com.mituo.bean.OrderInfoBean;
+import mituo.wshoto.com.mituo.bean.PayStatusBean;
 import mituo.wshoto.com.mituo.bean.PicBean;
 import mituo.wshoto.com.mituo.bean.RepairObjsBean;
 import mituo.wshoto.com.mituo.bean.ReportBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
+import mituo.wshoto.com.mituo.bean.SearchBean;
 import mituo.wshoto.com.mituo.bean.TimeBean;
+import mituo.wshoto.com.mituo.bean.WeixinBean;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -28,9 +32,9 @@ import rx.schedulers.Schedulers;
  * 邮箱：2091320109@qq.com
  */
 public class HttpMethods {
-    public static final String BASE_URL = "http://admin.mtest.inf-technology.com";
-    //    public static final String BASE_URL = "http://admin.mauto.infinitsea.com";
-    private static final int DEFAULT_TIMEOUT = 5;
+//    public static final String BASE_URL = "http://admin.mtest.inf-technology.com";
+        public static final String BASE_URL = "http://admin.mauto.infinitsea.com";
+    private static final int DEFAULT_TIMEOUT = 2;
 
     private Retrofit retrofit;
     private BlueService movieService;
@@ -102,6 +106,15 @@ public class HttpMethods {
                 .subscribe(subscriber);
     }
 
+    public void search(Subscriber<SearchBean> subscriber, String toekn, String key) {
+        movieService.search(toekn, key)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
     public void check_order(Subscriber<OrderBean> subscriber, String token, int status, int pageSize, int pageNo) {
         movieService.order_list(token, status, pageSize, pageNo)
 //                .map(new HttpResultFunc<>())
@@ -130,8 +143,8 @@ public class HttpMethods {
     }
 
     public void save_car_info(Subscriber<ResultBean> subscriber, String orderCode, String token, String carCjh,
-                              String carFdjbh, String carXslc, String xcbylc, String xcbyDate) {
-        movieService.save_car_info(token, orderCode, carCjh, carFdjbh, carXslc, xcbylc, xcbyDate)
+                              String carXslc, String xcbylc, String xcbyDate) {
+        movieService.save_car_info(token, orderCode, carCjh, carXslc, xcbylc, xcbyDate)
 //                .map(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -229,12 +242,84 @@ public class HttpMethods {
                 .subscribe(subscriber);
     }
 
-//    public void save_pay(Subscriber<ResultBean> subscriber, String token, String orderCode, String paySum, String couponCode, String payType, String khqm) {
-//        movieService.save_pay(token, orderCode, paySum,couponCode,payType,khqm)
-////                .map(new HttpResultFunc<>())
-//                .subscribeOn(Schedulers.io())
-//                .unsubscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(subscriber);
-//    }
+    public void save_repair(Subscriber<ResultBean> subscriber, String token, String orderCode, String json) {
+        movieService.save_repair(token, orderCode, json)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void all_repair_objs(Subscriber<AllRepairBean> subscriber, String token) {
+        movieService.repair_objs(token)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void wechat_sao(Subscriber<WeixinBean> subscriber, String token, String orderCode) {
+        movieService.wechat_sao(token, orderCode)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void ali_sao(Subscriber<WeixinBean> subscriber, String token, String orderCode) {
+        movieService.ali_sao(token, orderCode)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void check_pay(Subscriber<PayStatusBean> subscriber, String token, String orderCode) {
+        movieService.check_pay(token, orderCode)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void wechat_pay(Subscriber<WeixinBean> subscriber, String token, String orderCode, String code) {
+        movieService.wechat_pay(token, orderCode, code)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void ali_pay(Subscriber<WeixinBean> subscriber, String token, String orderCode, String code) {
+        movieService.ali_pay(token, orderCode, code)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void upload_img(Subscriber<ResultBean> subscriber, String token, String orderCode, String base, String picName) {
+        movieService.upload_img(token, orderCode, base, picName)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void save_report(Subscriber<ResultBean> subscriber, String token, String orderCode, String jsonStr) {
+        movieService.save_report(token, orderCode, jsonStr)
+//                .map(new HttpResultFunc<>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 }

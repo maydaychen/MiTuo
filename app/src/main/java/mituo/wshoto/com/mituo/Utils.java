@@ -1,6 +1,10 @@
 package mituo.wshoto.com.mituo;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -11,8 +15,13 @@ import android.util.TypedValue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
+
+import mituo.wshoto.com.mituo.ui.activity.LoginActivity;
 
 /**
  * Created by Weshine on 2017/6/15.
@@ -79,5 +88,71 @@ public class Utils {
         formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
         String hms = formatter.format(ms);
         return hms;
+    }
+
+    public static void copy(Object source, Object target) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+
+        Class sourceClass = source.getClass();//得到对象的Class
+        Class targetClass = target.getClass();//得到对象的Class
+
+        Field[] sourceFields = sourceClass.getDeclaredFields();//得到Class对象的所有属性
+        Field[] targetFields = targetClass.getDeclaredFields();//得到Class对象的所有属性
+
+//        for (Field sourceField : sourceFields) {
+//            String name = sourceField.getName();//属性名
+//            Class type = sourceField.getType();//属性类型
+//
+//            String methodName = name.substring(0, 1).toUpperCase() + name.substring(1);
+//
+//            Method getMethod = sourceClass.getMethod("get" + methodName);//得到属性对应get方法
+//
+//            Object value = getMethod.invoke(source);//执行源对象的get方法得到属性值
+//
+//            for (Field targetField : targetFields) {
+//                String targetName = targetField.getName();//目标对象的属性名
+//
+//                if (targetName.equals(name)) {
+//                    Method setMethod = targetClass.getMethod("set" + methodName, type);//属性对应的set方法
+//
+//                    setMethod.invoke(target, value);//执行目标对象的set方法
+//                }
+//            }
+//        }
+        for (int i = 0; i < sourceFields.length - 2; i++) {
+            String name = sourceFields[i].getName();//属性名
+            Class type = sourceFields[i].getType();//属性类型
+
+            String methodName = name.substring(0, 1).toUpperCase() + name.substring(1);
+
+            Method getMethod = sourceClass.getMethod("get" + methodName);//得到属性对应get方法
+            Object value = getMethod.invoke(source);//执行源对象的get方法得到属性值
+            for (int y = 0; y < targetFields.length - 2; y++) {
+                String targetName = targetFields[y].getName();//目标对象的属性名
+
+                if (targetName.equals(name)) {
+                    Method setMethod = targetClass.getMethod("set" + methodName, type);//属性对应的set方法
+
+                    setMethod.invoke(target, value);//执行目标对象的set方法
+                }
+            }
+        }
+    }
+
+    public static void logout(Activity context){
+        new AlertDialog.Builder(context)
+                .setTitle("警告")
+                .setMessage("您的账号已在别处登录，请重新登录！")
+                .setPositiveButton("确定", (dialog, which) -> {
+                    SharedPreferences mySharedPreferences = context.getSharedPreferences("user",
+                            Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = mySharedPreferences.edit();
+                    editor.putBoolean("autoLog", false);
+                    if (editor.commit()) {
+                        context.finish();
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        context.startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                })
+                .show();
     }
 }

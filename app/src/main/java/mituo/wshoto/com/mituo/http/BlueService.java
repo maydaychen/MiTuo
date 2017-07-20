@@ -1,5 +1,6 @@
 package mituo.wshoto.com.mituo.http;
 
+import mituo.wshoto.com.mituo.bean.AllRepairBean;
 import mituo.wshoto.com.mituo.bean.CarInfoBean;
 import mituo.wshoto.com.mituo.bean.CouponBean;
 import mituo.wshoto.com.mituo.bean.EmsBean;
@@ -7,11 +8,14 @@ import mituo.wshoto.com.mituo.bean.GatherBean;
 import mituo.wshoto.com.mituo.bean.LoginBean;
 import mituo.wshoto.com.mituo.bean.OrderBean;
 import mituo.wshoto.com.mituo.bean.OrderInfoBean;
+import mituo.wshoto.com.mituo.bean.PayStatusBean;
 import mituo.wshoto.com.mituo.bean.PicBean;
 import mituo.wshoto.com.mituo.bean.RepairObjsBean;
 import mituo.wshoto.com.mituo.bean.ReportBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
+import mituo.wshoto.com.mituo.bean.SearchBean;
 import mituo.wshoto.com.mituo.bean.TimeBean;
+import mituo.wshoto.com.mituo.bean.WeixinBean;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -46,7 +50,7 @@ public interface BlueService {
                                         @Query("pageSize") int pageSize, @Query("pageNo") int pageNo);
 
     @GET("/api/js/order/searchOrderList")
-    rx.Observable<ResultBean> search(@Query("token") String token, @Query("searchStr") String searchStr);
+    rx.Observable<SearchBean> search(@Query("token") String token, @Query("searchStr") String searchStr);
 
     @GET("/api/js/order/getOrderDetail")
     rx.Observable<OrderInfoBean> order_detail(@Query("token") String token, @Query("orderCode") String orderCode);
@@ -57,9 +61,8 @@ public interface BlueService {
     @FormUrlEncoded
     @POST("/api/js/order/saveCarDetail")
     rx.Observable<ResultBean> save_car_info(@Field("token") String token, @Field("orderCode") String orderCode,
-                                            @Field("carCjh") String carCjh, @Field("carFdjbh") String carFdjbh,
-                                            @Field("carXslc") String carXslc, @Field("xcbylc") String xcbylc,
-                                            @Field("xcbyDate") String xcbyDate);
+                                            @Field("carCjh") String carCjh, @Field("carXslc") String carXslc,
+                                            @Field("xcbylc") String xcbylc, @Field("xcbyDate") String xcbyDate);
 
     @GET("/api/js/order/getWxxmDetail")
     rx.Observable<RepairObjsBean> repair_detail(@Query("token") String token, @Query("orderCode") String orderCode);
@@ -68,7 +71,7 @@ public interface BlueService {
     rx.Observable<GatherBean> gather(@Query("token") String token, @Query("orderCode") String orderCode);
 
     @GET("/api/js/order/getAllWxxm")
-    rx.Observable<ResultBean> repair_objs(@Query("token") String token);
+    rx.Observable<AllRepairBean> repair_objs(@Query("token") String token);
 
     @FormUrlEncoded
     @POST("/api/js/order/startVideo")
@@ -81,7 +84,12 @@ public interface BlueService {
                                          @Field("time") String time);
 
     @GET("/api/js/order/getAllBgxm")
-    rx.Observable<ReportBean> all_check(@Query("token") String token,@Query("orderCode") String orderCode);
+    rx.Observable<ReportBean> all_check(@Query("token") String token, @Query("orderCode") String orderCode);
+
+    @FormUrlEncoded
+    @POST("/api/js/order/saveWxxm")
+    rx.Observable<ResultBean> save_repair(@Field("token") String token, @Field("orderCode") String orderCode,
+                                         @Field("jsonStr") String jsonStr);
 
     @GET("/api/js/order/getSysTime")
     rx.Observable<TimeBean> sync_time(@Query("token") String token);
@@ -100,9 +108,33 @@ public interface BlueService {
     @FormUrlEncoded
     @POST("/api/js/order/savePay")
     rx.Observable<ResultBean> save_pay(@Field("token") String token, @Field("orderCode") String orderCode,
-                                         @Field("paySum") String paySum,@Field("couponCode") String couponCode,
-                                         @Field("payType") String payType,@Field("khqm") String khqm);
+                                       @Field("paySum") String paySum, @Field("couponCode") String couponCode,
+                                       @Field("payType") String payType, @Field("khqm") String khqm);
 
     @GET("/api/js/wxPay/nativePay")
-    rx.Observable<CouponBean> wechat_sao(@Query("token") String token, @Query("orderCode") String orderCode);
+    rx.Observable<WeixinBean> wechat_sao(@Query("token") String token, @Query("orderCode") String orderCode);
+
+    @GET("/api/js/aliPay/tradePreCreate")
+    rx.Observable<WeixinBean> ali_sao(@Query("token") String token, @Query("orderCode") String orderCode);
+
+    @GET("/api/js/order/checkPay")
+    rx.Observable<PayStatusBean> check_pay(@Query("token") String token, @Query("orderCode") String orderCode);
+
+    @GET("/api/js/wxPay/scanPay")
+    rx.Observable<WeixinBean> wechat_pay(@Query("token") String token, @Query("orderCode") String orderCode,
+                                         @Query("authCode") String authCode);
+
+    @GET("/api/js/aliPay/tradePay")
+    rx.Observable<WeixinBean> ali_pay(@Query("token") String token, @Query("orderCode") String orderCode,
+                                      @Query("authCode") String authCode);
+
+    @FormUrlEncoded
+    @POST("/api/js/order/uploadWxpic")
+    rx.Observable<ResultBean> upload_img(@Field("token") String token, @Field("orderCode") String orderCode,
+                                       @Field("base64") String base64, @Field("picName") String picName);
+
+    @FormUrlEncoded
+    @POST("/api/js/order/saveBgResult")
+    rx.Observable<ResultBean> save_report(@Field("token") String token, @Field("orderCode") String orderCode,
+                                           @Field("jsonStr") String jsonStr);
 }

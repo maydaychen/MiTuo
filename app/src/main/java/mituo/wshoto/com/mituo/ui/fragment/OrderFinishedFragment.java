@@ -19,8 +19,8 @@ import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.adapter.FinishedOrderAdapter;
 import mituo.wshoto.com.mituo.bean.OrderBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
-import mituo.wshoto.com.mituo.http.ProgressSubscriber;
-import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
+import mituo.wshoto.com.mituo.http.ProgressErrorSubscriber;
+import mituo.wshoto.com.mituo.http.SubscriberOnNextAndErrorListener;
 
 /**
  * Created by Weshine on 2017/6/6.
@@ -35,7 +35,7 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
     @BindView(R.id.rv_order_finished)
     PullLoadMoreRecyclerView mRvOrderFinished;
     private View root;
-    private SubscriberOnNextListener<OrderBean> getOrderListOnNext;
+    private SubscriberOnNextAndErrorListener<OrderBean> getOrderListOnNext;
     private int page = 1;
     private FinishedOrderAdapter mFinishedOrderAdapter;
 
@@ -45,17 +45,31 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
             savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_order_finished, container, false);
         ButterKnife.bind(this, root);
-        
-        getOrderListOnNext = resultBean -> {
-            mRvOrderFinished.setPullLoadMoreCompleted();
-            mRvOrderFinished.setVisibility(View.VISIBLE);
-            if (resultBean.getCode().equals("200")) {
-                mFinishedOrderAdapter.addAllData(resultBean.getResultData().getList());
-            } else {
-                Toast.makeText(getActivity(), resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+
+        getOrderListOnNext = new SubscriberOnNextAndErrorListener<OrderBean>() {
+            @Override
+            public void onNext(OrderBean resultBean) {
+                try {
+                    mRvOrderFinished.setPullLoadMoreCompleted();
+                    mRvOrderFinished.setVisibility(View.VISIBLE);
+                    if (resultBean.getCode().equals("200")) {
+                        mFinishedOrderAdapter.addAllData(resultBean.getResultData().getList());
+                    } else {
+                        Toast.makeText(getActivity(), resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NullPointerException e) {
+                    if (page != 0) {
+                        Toast.makeText(getActivity(), "已经加载完毕！", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mRvOrderFinished.setPullLoadMoreCompleted();
+                mRvOrderFinished.setVisibility(View.VISIBLE);
             }
         };
-        
 
         RecyclerView recyclerView = mRvOrderFinished.getRecyclerView();
         recyclerView.setVerticalScrollBarEnabled(true);
@@ -76,7 +90,13 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
         return root;
 
     }
-    
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData();
+    }
+
 
     public static OrderFinishedFragment newInstance(String content) {
         Bundle arguments = new Bundle();
@@ -109,13 +129,13 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
 
 
     private void initView() {
-        getData();
+
     }
 
     private void getData() {
         SharedPreferences preferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         HttpMethods.getInstance().check_order(
-                new ProgressSubscriber<>(getOrderListOnNext, getActivity()), preferences.getString("token", ""), 1, 10,
+                new ProgressErrorSubscriber<>(getOrderListOnNext, getActivity()), preferences.getString("token", ""), 1, 10,
                 page);
     }
 

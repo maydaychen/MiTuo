@@ -17,7 +17,7 @@ public class MemorySpaceCheck
      * @param path
      * @return
      */
-    private static long getAvailableSize(String path)
+    public static long getAvailableSize(String path)
     {
         StatFs fileStats = new StatFs(path);
         fileStats.restat(path);

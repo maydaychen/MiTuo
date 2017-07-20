@@ -22,6 +22,8 @@ import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 
+import static mituo.wshoto.com.mituo.Utils.logout;
+
 public class CarInfoActivity extends InitActivity {
 
     @BindView(R.id.toolbar4)
@@ -38,8 +40,6 @@ public class CarInfoActivity extends InitActivity {
     TextView tvCarType;
     @BindView(R.id.et_car_model_num)
     EditText etCarModelNum;
-    @BindView(R.id.et_enginee_num)
-    EditText etEngineeNum;
     @BindView(R.id.et_mile)
     EditText etMile;
     @BindView(R.id.et_next_care_mile)
@@ -65,20 +65,22 @@ public class CarInfoActivity extends InitActivity {
 
     @Override
     public void initData() {
-        ownerName.setText(mResultDataBean.getContactName());
-        ownerTelephone.setText(mResultDataBean.getContactPhone());
-        tvCarNum.setText(mResultDataBean.getCarNo());
-        tvCarType.setText(mResultDataBean.getCarXh());
-        etCarModelNum.setText(mResultDataBean.getCarCjh());
-        etEngineeNum.setText(mResultDataBean.getCarFdjbh());
+        ownerName.setText(String.format(getResources().getString(R.string.car_onwer_edit), mResultDataBean.getContactName()));
+        ownerTelephone.setText(String.format(getResources().getString(R.string.telephone_edit), mResultDataBean.getContactPhone()));
+        tvCarNum.setText(String.format(getResources().getString(R.string.card_num_edit), mResultDataBean.getCarNo()));
+        tvCarType.setText(String.format(getResources().getString(R.string.car_type_edit), mResultDataBean.getCarXh()));
         etMile.setText(mResultDataBean.getCarXslc());
         mTvCareNextTime.setText(mResultDataBean.getXcbyDate());
-        etNextCareMile.setText(mResultDataBean.getXcbylc());
+        etNextCareMile.setText( mResultDataBean.getXcbylc());
+        etCarModelNum.setText( mResultDataBean.getCarCjh());
 
         gatherOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 Toast.makeText(this, "修改成功！", Toast.LENGTH_SHORT).show();
-            } else {
+                finish();
+            } else if (resultBean.getCode().equals("401")){
+                logout(CarInfoActivity.this);
+            } else{
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
@@ -105,11 +107,9 @@ public class CarInfoActivity extends InitActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-            finish();
             HttpMethods.getInstance().save_car_info(
                     new ProgressSubscriber<>(gatherOnNext, this), getIntent().getStringExtra("oid"),
-                    preferences.getString("token", ""), etCarModelNum.getText().toString(),
-                    etEngineeNum.getText().toString(), etMile.getText().toString(),
+                    preferences.getString("token", ""), etCarModelNum.getText().toString(), etMile.getText().toString(),
                     etNextCareMile.getText().toString(), mTvCareNextTime.getText().toString());
             return true;
         }

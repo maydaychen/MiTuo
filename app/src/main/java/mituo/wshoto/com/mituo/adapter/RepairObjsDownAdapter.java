@@ -45,7 +45,7 @@ public class RepairObjsDownAdapter extends RecyclerView.Adapter<RepairObjsDownAd
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.projects.setText(mData.get(position).getXmName());
         viewHolder.name.setText(mData.get(position).getXmName());
-        viewHolder.objs.setText(mData.get(position).getPjName());
+        viewHolder.objs.setText(mData.get(position).getPjpp() + mData.get(position).getPjName());
         viewHolder.itemView.setTag(position);
     }
 

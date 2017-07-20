@@ -55,9 +55,8 @@
                     android:id="@+id/iv_remind"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/iv_remind"
+                    android:layout_toLeftOf="@id/tv_remind"
                     android:padding="8dp"/>
 
 
@@ -83,8 +82,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/car_onwer_edit"
-                        android:textColor="@color/font_33"/>
+                        android:text="车主姓名"
+                        android:textColor="@color/font_66"/>
 
                     <TextView
                         android:id="@+id/owner_telephone"
@@ -92,8 +91,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/telephone_edit"
-                        android:textColor="@color/font_33"/>
+                        android:text="联系方式"
+                        android:textColor="@color/font_66"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -107,8 +106,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:text="@string/card_num_edit"
-                        android:textColor="@color/font_33"/>
+                        android:text="车牌号码"
+                        android:textColor="@color/font_66"/>
 
                     <TextView
                         android:id="@+id/car_type"
@@ -116,8 +115,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:text="@string/car_type_edit"
-                        android:textColor="@color/font_33"/>
+                        android:text="车辆型号"
+                        android:textColor="@color/font_66"/>
                 </LinearLayout>
 
                 <TextView
@@ -125,36 +124,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/car_num_edit"
-                    android:textColor="@color/font_33"/>
+                    android:text="车架号码"
+                    android:textColor="@color/font_66"/>
+
+
+                <TextView
+                    android:id="@+id/total_mileage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="行驶里程"
+                    android:textColor="@color/font_66"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/engine_num"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1"
-                        android:text="@string/engine_num_edit"
-                        android:textColor="@color/font_33"/>
-
-                    <TextView
-                        android:id="@+id/total_mileage"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1"
-                        android:text="@string/mileage_edit"
-                        android:textColor="@color/font_33"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginBottom="24dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp">
 
                     <TextView
                         android:id="@+id/next_care_time"
@@ -162,8 +147,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:text="@string/next_care_time_edit"
-                        android:textColor="@color/font_33"/>
+                        android:text="下次保养时间"
+                        android:textColor="@color/font_66"/>
 
                     <TextView
                         android:id="@+id/next_care_mileage"
@@ -171,8 +156,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:text="@string/next_care_km_edit"
-                        android:textColor="@color/font_33"/>
+                        android:text="下次保养里程"
+                        android:textColor="@color/font_66"/>
                 </LinearLayout>
 
                 <Button
