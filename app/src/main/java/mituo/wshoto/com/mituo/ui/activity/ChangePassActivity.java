@@ -38,7 +38,6 @@ public class ChangePassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pass);
         ButterKnife.bind(this);
-        mToolbar.setTitle("修改密码");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());

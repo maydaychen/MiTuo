@@ -11,7 +11,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="8dp"
-        android:textColor="@color/font_99" />
+        android:textColor="@color/font_33" />
 
     <TextView
         android:id="@+id/tv_peijian"
@@ -20,7 +20,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="8dp"
-        android:textColor="@color/font_99" />
+        android:textColor="@color/font_33" />
 
     <TextView
         android:id="@+id/tv_num"
@@ -29,7 +29,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="8dp"
-        android:textColor="@color/font_99" />
+        android:textColor="@color/font_33" />
 
     <TextView
         android:id="@+id/tv_price"
@@ -38,6 +38,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="8dp"
-        android:textColor="@color/font_99" />
+        android:textColor="@color/font_33" />
 
 </LinearLayout>

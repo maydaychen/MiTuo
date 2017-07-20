@@ -62,7 +62,6 @@ public class CheckReport2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_check_report2);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        mToolbar.setTitle("检测报告");
         setSupportActionBar(mToolbar);
         mBean = new ArrayList<>();
         mToolbar.setNavigationIcon(R.drawable.nav_back);

@@ -31,7 +31,6 @@ public class FindPass2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_pass2);
         ButterKnife.bind(this);
-        mToolbar2.setTitle("修改密码");
         setSupportActionBar(mToolbar2);
 
         getLatestOnNext = resultBean -> {

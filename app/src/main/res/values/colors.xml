@@ -14,6 +14,7 @@
     <color name="line_cc">#cccccc</color>
     <color name="gether_background">#f0f0f0</color>
     <color name="yellow">#ffd54f</color>
+    <color name="check_background">#f2fafb</color>
 
 
     <color name="contents_text">#ff000000</color>

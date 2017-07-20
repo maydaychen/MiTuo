@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/test_report_check_box_sel"
+    <item android:drawable="@drawable/test_report_radio_sel"
           android:state_checked="true"/>
-    <item android:drawable="@drawable/test_report_check_box_normal"
+    <item android:drawable="@drawable/test_report_radio_normal"
           android:state_checked="false"/>
 </selector>

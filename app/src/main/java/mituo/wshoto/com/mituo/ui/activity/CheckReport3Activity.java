@@ -32,6 +32,7 @@ import mituo.wshoto.com.mituo.bean.ResultBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
+import mituo.wshoto.com.mituo.ui.widget.RecycleViewDivider;
 
 import static mituo.wshoto.com.mituo.Utils.logout;
 
@@ -53,7 +54,6 @@ public class CheckReport3Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_report3);
         ButterKnife.bind(this);
-        mToolbar.setTitle("检测报告");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());
@@ -66,15 +66,15 @@ public class CheckReport3Activity extends AppCompatActivity {
                 mainIntent.putExtra("oid", getIntent().getStringExtra("oid"));
                 mainIntent.putExtra("status", 0);
                 startActivity(mainIntent);
-            } else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(CheckReport3Activity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
 
         repairObjsDownAdapter = new CheckReportAdapter(listObj);
-//            mRvRepairObjs.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL));
+        mRvCheck.addItemDecoration(new RecycleViewDivider(CheckReport3Activity.this, LinearLayoutManager.VERTICAL));
         mRvCheck.setLayoutManager(new LinearLayoutManager(this));
         mRvCheck.setAdapter(repairObjsDownAdapter);
 

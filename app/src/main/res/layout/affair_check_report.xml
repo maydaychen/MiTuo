@@ -40,7 +40,8 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/affair_direction_iv"
                     android:padding="8dp"
-                    android:text="检测报告"/>
+                    android:text="检测报告"
+                    android:textColor="@color/font_33"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -64,10 +65,10 @@
                     android:id="@+id/check_report_edit"
                     android:layout_width="600px"
                     android:layout_height="72px"
-                    android:clickable="false"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/boder_blue"
+                    android:clickable="false"
                     android:text="填写"
                     android:textColor="@color/white"/>
 

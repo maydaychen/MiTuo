@@ -38,6 +38,7 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
     private SubscriberOnNextAndErrorListener<OrderBean> getOrderListOnNext;
     private int page = 1;
     private FinishedOrderAdapter mFinishedOrderAdapter;
+    private boolean IS_REFRESH = false;
 
     @Nullable
     @Override
@@ -50,6 +51,10 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
             @Override
             public void onNext(OrderBean resultBean) {
                 try {
+                    if (IS_REFRESH){
+                        mFinishedOrderAdapter.clearData();
+                        mFinishedOrderAdapter.notifyDataSetChanged();
+                    }
                     mRvOrderFinished.setPullLoadMoreCompleted();
                     mRvOrderFinished.setVisibility(View.VISIBLE);
                     if (resultBean.getCode().equals("200")) {
@@ -94,6 +99,7 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
     @Override
     public void onResume() {
         super.onResume();
+        IS_REFRESH = true;
         getData();
     }
 

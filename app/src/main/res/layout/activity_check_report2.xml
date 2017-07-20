@@ -12,13 +12,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:elevation="8dp"        app:titleTextColor="@color/font_33"
+        android:elevation="8dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="检测报告"
+            android:textColor="@color/font_33"
+            android:textSize="20sp"/>
+    </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/order_tab"
@@ -30,15 +40,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar4"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@color/blue"
+        app:tabIndicatorColor="@color/colorAccent"
         app:tabMaxWidth="0dp"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/blue"/>
+        app:tabTextColor="@color/font_66"
+        app:tabSelectedTextColor="@color/colorAccent"/>
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="0dp"
-        android:layout_height="53dp"
+        android:layout_height="70px"
         android:gravity="center_vertical"
         android:paddingLeft="24px"
         android:text="请勾选异常项目"

@@ -40,7 +40,8 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/affair_direction_iv"
                     android:padding="8dp"
-                    android:text="车辆信息"/>
+                    android:text="车辆信息"
+                    android:textColor="@color/font_33"/>
 
                 <TextView
                     android:id="@+id/tv_remind"
@@ -83,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="车主姓名"
-                        android:textColor="@color/font_66"/>
+                        android:textColor="@color/font_33"/>
 
                     <TextView
                         android:id="@+id/owner_telephone"
@@ -92,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="联系方式"
-                        android:textColor="@color/font_66"/>
+                        android:textColor="@color/font_33"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -107,7 +108,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
                         android:text="车牌号码"
-                        android:textColor="@color/font_66"/>
+                        android:textColor="@color/font_33"/>
 
                     <TextView
                         android:id="@+id/car_type"
@@ -116,7 +117,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
                         android:text="车辆型号"
-                        android:textColor="@color/font_66"/>
+                        android:textColor="@color/font_33"/>
                 </LinearLayout>
 
                 <TextView
@@ -125,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="车架号码"
-                    android:textColor="@color/font_66"/>
+                    android:textColor="@color/font_33"/>
 
 
                 <TextView
@@ -134,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="行驶里程"
-                    android:textColor="@color/font_66"/>
+                    android:textColor="@color/font_99"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -148,7 +149,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
                         android:text="下次保养时间"
-                        android:textColor="@color/font_66"/>
+                        android:textColor="@color/font_33"/>
 
                     <TextView
                         android:id="@+id/next_care_mileage"
@@ -157,7 +158,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
                         android:text="下次保养里程"
-                        android:textColor="@color/font_66"/>
+                        android:textColor="@color/font_99"/>
                 </LinearLayout>
 
                 <Button

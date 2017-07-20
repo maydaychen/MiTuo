@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="670px"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp"
+        android:text="客户签名"
+        android:textColor="@color/font_33"
+        android:textSize="18sp"/>
+
+    <mituo.wshoto.com.mituo.ui.widget.LinePathView
+        android:id="@+id/view"
+        android:layout_width="670px"
+        android:layout_height="420px"
+        android:layout_gravity="center_horizontal"
+        android:background="#cccccc"/>
+
+    <RelativeLayout
+        android:layout_width="670px"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/clear1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="清除"
+            android:textColor="@color/font_66"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/save1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="8dp"
+            android:text="确认"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/save1"
+            android:padding="8dp"
+            android:text="返回"
+            android:textColor="@color/font_66"
+            android:textSize="18sp"/>
+    </RelativeLayout>
+</LinearLayout>

@@ -50,7 +50,6 @@ public class RepairObjectsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repair_objects);
         ButterKnife.bind(this);
-        mToolbar.setTitle("维修项目");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());

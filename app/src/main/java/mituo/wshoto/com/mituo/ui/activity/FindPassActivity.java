@@ -38,8 +38,9 @@ public class FindPassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_pass);
         ButterKnife.bind(this);
-        mToolbar2.setTitle("找回密码");
         setSupportActionBar(mToolbar2);
+        mToolbar2.setNavigationIcon(R.drawable.nav_back);
+        mToolbar2.setNavigationOnClickListener(v -> finish());
 
         getLatestOnNext = resultBean -> {
             ems = resultBean.getResultData().getVcode()+"";

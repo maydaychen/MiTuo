@@ -37,6 +37,7 @@
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/font_33"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/affair_direction_iv"
                     android:padding="8dp"
@@ -73,7 +74,7 @@
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="68px"
                     android:layout_marginEnd="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
@@ -84,7 +85,7 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="68px"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="8dp"
@@ -93,7 +94,7 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="68px"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="8dp"
@@ -102,7 +103,7 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="68px"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="8dp"
@@ -111,11 +112,11 @@
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="68px"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="价格（元）"
+                        android:text="价格（￥）"
                         android:textColor="@color/font_99"/>
                 </LinearLayout>
 
@@ -151,6 +152,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:textColor="@color/font_66"
                             android:padding="8dp"
                             android:text="合计："/>
 
@@ -192,6 +194,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:textColor="@color/font_66"
                             android:padding="8dp"
                             android:text="使用代金券："/>
 
@@ -233,6 +236,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:textColor="@color/font_66"
                             android:padding="8dp"
                             android:text="实付："/>
 

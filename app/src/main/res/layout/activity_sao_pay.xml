@@ -31,12 +31,12 @@
 
         <TextView
             android:id="@+id/tv_pay_type"
-            android:layout_toRightOf="@id/iv_back"
-            android:textColor="@color/font_33"
-            android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"/>
+            android:layout_centerInParent="true"
+            android:padding="8dp"
+            android:textColor="@color/font_33"
+            android:textSize="20sp"/>
 
     </RelativeLayout>
 

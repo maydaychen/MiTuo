@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/boder_list"
               android:layout_marginBottom="20dp"
+              android:background="@drawable/boder_list"
               android:orientation="vertical">
 
     <RelativeLayout
@@ -13,8 +13,8 @@
         <TextView
             android:id="@+id/tv_objs_name"
             android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:padding="8dp"/>
 
         <ImageView
@@ -37,21 +37,24 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="8dp"
-            android:text="维修项目"/>
+            android:text="维修项目"
+            android:textColor="@color/font_99"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="配件名称"/>
+            android:text="配件名称"
+            android:textColor="@color/font_99"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="使用数量"/>
+            android:text="使用数量"
+            android:textColor="@color/font_99"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -62,8 +65,8 @@
     <LinearLayout
         android:id="@+id/ll_xm"
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/tv_xm"
@@ -89,23 +92,23 @@
             <ImageView
                 android:id="@+id/tv_xm_add"
                 android:layout_width="wrap_content"
-                android:padding="8dp"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:src="@drawable/maintenance_project_icon_minus_normal"/>
 
             <TextView
                 android:id="@+id/tv_xm_num"
                 android:layout_width="80px"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_margin="8dp"
-                android:background="@drawable/boder_grey"/>
+                android:background="@drawable/boder_grey"
+                android:gravity="center"/>
 
             <ImageView
                 android:id="@+id/tv_xm_minus"
                 android:layout_width="wrap_content"
-                android:padding="8dp"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:src="@drawable/maintenance_project_icon_plus"/>
         </LinearLayout>
 

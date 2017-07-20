@@ -19,7 +19,6 @@ public class ChangePassSuccessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pass_success);
         ButterKnife.bind(this);
-        mToolbar2.setTitle("修改密码");
         setSupportActionBar(mToolbar2);
     }
 

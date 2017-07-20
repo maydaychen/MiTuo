@@ -30,7 +30,6 @@ public class CheckReportActivity extends InitActivity {
     public void initView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_check_report);
         ButterKnife.bind(this);
-        mToolbar.setTitle("检测报告");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());

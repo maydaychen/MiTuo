@@ -33,7 +33,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/affair_direction_iv"
                 android:padding="8dp"
-                android:text="订单信息"/>
+                android:text="订单信息"
+                android:textColor="@color/font_33"/>
         </RelativeLayout>
 
         <LinearLayout

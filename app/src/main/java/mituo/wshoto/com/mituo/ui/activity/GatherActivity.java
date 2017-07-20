@@ -1,25 +1,33 @@
 package mituo.wshoto.com.mituo.ui.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +47,11 @@ import mituo.wshoto.com.mituo.bean.WeixinBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
+import mituo.wshoto.com.mituo.ui.widget.LinePathView;
 import mituo.wshoto.com.mituo.ui.widget.RecycleViewDivider;
 
+import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static mituo.wshoto.com.mituo.Utils.logout;
 
 public class GatherActivity extends InitActivity {
@@ -58,6 +69,8 @@ public class GatherActivity extends InitActivity {
     RecyclerView mRvGather;
     @BindView(R.id.tv_gather_money)
     TextView mTvGatherMoney;
+    @BindView(R.id.ll_sum)
+    LinearLayout mLlSum;
 
     private GatherBean.ResultDataBean mResultBean;
     private static final int SHOW_SUBACTIVITY = 1;
@@ -68,18 +81,20 @@ public class GatherActivity extends InitActivity {
     private SharedPreferences preferences;
     private Bitmap mBitmap;
     private String coupon = "";
+    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
     private List<String> couponList = new ArrayList<>();
     //pay_type:0,现金；1，支付宝，2，微信
     private String payType = "2";
     private CouponBean mCouponBean;
     List<Map<String, String>> list = new ArrayList<>();
     GatherAdapter gatherAdapter;
+    private LinePathView mPathView;
+    private PopupWindow popupWindow;
 
     @Override
     public void initView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_gather);
         ButterKnife.bind(this);
-        mToolbar.setTitle("结算清单");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());
@@ -210,16 +225,16 @@ public class GatherActivity extends InitActivity {
             case RESULT_OK:
                 mEtNum.setText(data.getStringExtra("code"));
                 break;
-            case 100:
-//                String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "qm.png";
-                String path = Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png";
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 2;
-                Bitmap bm = BitmapFactory.decodeFile(path, options);
-                mBitmap = bm;
-                mImageView2.setImageBitmap(bm);
-                mLlMobilePay.setVisibility(View.VISIBLE);
-                break;
+//            case 100:
+////                String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "qm.png";
+//                String path = Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png";
+//                BitmapFactory.Options options = new BitmapFactory.Options();
+//                options.inSampleSize = 2;
+//                Bitmap bm = BitmapFactory.decodeFile(path, options);
+//                mBitmap = bm;
+//                mImageView2.setImageBitmap(bm);
+//                mLlMobilePay.setVisibility(View.VISIBLE);
+//                break;
         }
 
     }
@@ -228,9 +243,10 @@ public class GatherActivity extends InitActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.imageView2:
-                Intent handIntent = new Intent(GatherActivity.this, HandWriteActivity.class);
-                handIntent.putExtra("oid", getIntent().getStringExtra("oid"));
-                startActivityForResult(handIntent, 1);
+//                Intent handIntent = new Intent(GatherActivity.this, HandWriteActivity.class);
+//                handIntent.putExtra("oid", getIntent().getStringExtra("oid"));
+//                startActivityForResult(handIntent, 1);
+                showPopupWindow();
                 break;
             case R.id.button4:
                 if (mEtNum.getText().length() == 0) {
@@ -286,6 +302,88 @@ public class GatherActivity extends InitActivity {
         builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
 
         builder.create().show();
+    }
+
+    private void showPopupWindow() {
+        View contentView = LayoutInflater.from(this).inflate(
+                R.layout.popup_sign, null);
+
+        mPathView = (LinePathView) contentView.findViewById(R.id.view);
+        final TextView mClear = (TextView) contentView.findViewById(R.id.clear1);
+        final TextView mSave = (TextView) contentView.findViewById(R.id.save1);
+        final TextView back = (TextView) contentView.findViewById(R.id.back);
+        popupWindow = new PopupWindow(contentView,
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT,
+                true);
+        mSave.setOnClickListener(v -> {
+            if (mPathView.getTouched()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(
+                            WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO},
+                                MY_PERMISSIONS_REQUEST_CALL_PHONE);
+                    } else {
+                        save();
+                    }
+                } else {
+                    save();
+                }
+            } else {
+                Toast.makeText(GatherActivity.this, "您没有签名~", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mClear.setOnClickListener(v -> mPathView.clear());
+        back.setOnClickListener(view -> popupWindow.dismiss());
+
+        ColorDrawable dw = new ColorDrawable(0x00000000);
+        popupWindow.setBackgroundDrawable(dw);
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.4f;
+        getWindow().setAttributes(lp);
+        popupWindow.setOnDismissListener(() -> {
+            WindowManager.LayoutParams lp1 = getWindow().getAttributes();
+            lp1.alpha = 1f;
+            getWindow().setAttributes(lp1);
+        });
+
+
+        popupWindow.showAsDropDown(GatherActivity.this.findViewById(R.id.ll_sum));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE) {
+            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //用户同意使用write
+                save();
+            } else {
+                //用户不同意，自行处理即可
+                finish();
+            }
+        }
+    }
+
+    private void save() {
+        try {
+            popupWindow.dismiss();
+            File destDir = new File(Config.PATH_MOBILE);
+            if (!destDir.exists()) {
+                destDir.mkdirs();
+            }
+//            mPathView.save("/sdcard/qm.png", true, 10);
+            mPathView.save(Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+            Bitmap bm = BitmapFactory.decodeFile(Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", options);
+            mBitmap = bm;
+            mImageView2.setImageBitmap(bm);
+            mLlMobilePay.setVisibility(View.VISIBLE);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

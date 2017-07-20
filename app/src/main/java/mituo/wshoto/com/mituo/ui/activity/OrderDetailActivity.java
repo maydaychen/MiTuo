@@ -46,6 +46,8 @@ import static mituo.wshoto.com.mituo.Utils.logout;
 
 public class OrderDetailActivity extends InitActivity {
 
+    @BindView(R.id.tv_title)
+    TextView mTvTitle;
     private SubscriberOnNextListener<OrderInfoBean> getOrderInfoOnNext;
     private SubscriberOnNextListener<CarInfoBean> getCarInfoOnNext;
     private SubscriberOnNextListener<RepairObjsBean> getObjsOnNext;
@@ -87,9 +89,9 @@ public class OrderDetailActivity extends InitActivity {
         EventBus.getDefault().register(this);
         status = getIntent().getIntExtra("status", 0);
         if (status == 0) {
-            mTbOrder.setTitle("订单明细（进行中）");
+            mTvTitle.setText("订单明细（进行中）");
         } else {
-            mTbOrder.setTitle("订单明细");
+            mTvTitle.setText("订单明细");
             mTvFinishOrder.setVisibility(View.GONE);
         }
         setSupportActionBar(mTbOrder);
@@ -105,63 +107,63 @@ public class OrderDetailActivity extends InitActivity {
             if (resultBean.getCode().equals("200")) {
                 mDetail.setInfo(resultBean.getResultData().getOrderCode(), resultBean.getResultData().getYyTime(),
                         resultBean.getResultData().getYyAddress());
-            } else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         getCarInfoOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 mCarInfo.setInfo(resultBean.getResultData(), status, getIntent().getStringExtra("oid"));
-            } else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         getObjsOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 mRepairObjs.setInfo(resultBean.getResultData(), status, getIntent().getStringExtra("oid"));
-            }else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         gatherOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 mGather.setInfo(resultBean.getResultData(), status, getIntent().getStringExtra("oid"));
-            } else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         picOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 mRepairPhotos.setInfo(status, resultBean);
-            } else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         finishOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 finish();
-            }else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         getChecksOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 mCheckReport.setInfo(status, resultBean, getIntent().getStringExtra("oid"));
-            }else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
@@ -173,9 +175,9 @@ public class OrderDetailActivity extends InitActivity {
         UploadPicOnNext = resultBean -> {
             if (resultBean.isResult()) {
                 mRepairPhotos.addPic(Utils.bitmaptoString(mBitmap), Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + num++ + ".png");
-            } else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
@@ -196,7 +198,7 @@ public class OrderDetailActivity extends InitActivity {
                             new ProgressSubscriber<>(UploadPicOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"),
                             Utils.bitmaptoString(mBitmap), Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + num++ + ".png");
                 }
-            }catch (NullPointerException ignored){
+            } catch (NullPointerException ignored) {
 
             }
         }
@@ -318,5 +320,4 @@ public class OrderDetailActivity extends InitActivity {
                 new ProgressSubscriber<>(finishOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
 
     }
-
 }

@@ -12,14 +12,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:elevation="8dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        android:elevation="8dp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:titleTextColor="@color/font_33"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="车辆信息"
+            android:textColor="@color/font_33"
+            android:textSize="20sp"/>
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/relativeLayout"
@@ -40,7 +49,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/car_onwer"/>
+            android:text="@string/car_onwer"
+            android:textColor="@color/font_33"/>
 
         <TextView
             android:id="@+id/owner_telephone"
@@ -48,7 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_weight="1"
-            android:text="@string/telephone"/>
+            android:text="@string/telephone"
+            android:textColor="@color/font_33"/>
     </LinearLayout>
 
     <LinearLayout
@@ -70,7 +81,8 @@
             android:layout_below="@id/owner_name"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:text="@string/card_num"/>
+            android:text="@string/card_num"
+            android:textColor="@color/font_33"/>
 
         <TextView
             android:id="@+id/tv_car_type"
@@ -80,7 +92,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:text="@string/car_type"/>
+            android:text="@string/car_type"
+            android:textColor="@color/font_33"/>
     </LinearLayout>
 
     <LinearLayout

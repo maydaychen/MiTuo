@@ -35,6 +35,7 @@ public class OrderUnfinishedFragment extends Fragment implements PullLoadMoreRec
     private int page = 1;
     private UnFinishedOrderAdapter mUnFinishedOrderAdapter;
     private View root;
+    private boolean IS_REFRESH = false;
 
     @Nullable
     @Override
@@ -47,8 +48,10 @@ public class OrderUnfinishedFragment extends Fragment implements PullLoadMoreRec
             @Override
             public void onNext(OrderBean resultBean) {
                 try {
-                    mUnFinishedOrderAdapter.clearData();
-                    mUnFinishedOrderAdapter.notifyDataSetChanged();
+                    if (IS_REFRESH){
+                        mUnFinishedOrderAdapter.clearData();
+                        mUnFinishedOrderAdapter.notifyDataSetChanged();
+                    }
                     mRvOrder.setPullLoadMoreCompleted();
                     mRvOrder.setVisibility(View.VISIBLE);
                     if (resultBean.getCode().equals("200")) {
@@ -92,6 +95,7 @@ public class OrderUnfinishedFragment extends Fragment implements PullLoadMoreRec
     @Override
     public void onResume() {
         super.onResume();
+        IS_REFRESH = true;
         getData();
     }
 

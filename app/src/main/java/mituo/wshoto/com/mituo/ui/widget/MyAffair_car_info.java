@@ -216,9 +216,10 @@ public class MyAffair_car_info extends RelativeLayout {
             car_type.setText(builder4);
         } else setRemind();
         if (!(null == resultBean.getCarXslc())) {
+            ForegroundColorSpan specialSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_33));
             mTotalMileage.setText(String.format(getResources().getString(R.string.mileage_edit), resultBean.getCarXslc()));
             SpannableStringBuilder builder6 = new SpannableStringBuilder(mTotalMileage.getText().toString());
-            builder6.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder6.setSpan(specialSpan, 5, 5 + resultBean.getCarXslc().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mTotalMileage.setText(builder6);
         } else setRemind();
         if (!(null == resultBean.getXcbyDate())) {
@@ -228,9 +229,10 @@ public class MyAffair_car_info extends RelativeLayout {
             mNextCareTime.setText(builder7);
         } else setRemind();
         if (!(null == resultBean.getXcbylc())) {
+            ForegroundColorSpan specialSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_33));
             mNextCareMileage.setText(String.format(getResources().getString(R.string.next_care_km_edit), resultBean.getXcbylc()));
             SpannableStringBuilder builder8 = new SpannableStringBuilder(mNextCareMileage.getText().toString());
-            builder8.setSpan(redSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder8.setSpan(specialSpan, 7, 7 + resultBean.getXcbylc().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mNextCareMileage.setText(builder8);
         } else setRemind();
         if (!(null == resultBean.getCarCjh())) {

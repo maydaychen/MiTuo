@@ -113,7 +113,7 @@ public class MyAffair_repair_video extends RelativeLayout {
                         infoRl.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    if (orderStatus!=1){
+                    if (orderStatus != 1) {
                         if (!isOpened) {
                             edit.setVisibility(View.VISIBLE);
                         }
@@ -223,7 +223,17 @@ public class MyAffair_repair_video extends RelativeLayout {
             mTextView2.setText(builder1);
             try {
                 mTextView3.setText(String.format(getResources().getString(R.string.video_time), changeTime(test())));
+
+                SpannableStringBuilder builder2 = new SpannableStringBuilder(mTextView3.getText().toString());
+                ForegroundColorSpan fontSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_99));
+                builder2.setSpan(fontSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                mTextView3.setText(builder2);
+
                 mTextView4.setText(String.format(getResources().getString(R.string.video_size), getsizeize(Config.PATH_MOBILE + "/" + orderNum + ".mp4")));
+                SpannableStringBuilder builder3 = new SpannableStringBuilder(mTextView4.getText().toString());
+                builder3.setSpan(fontSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                mTextView4.setText(builder3);
+
                 iv_remind.setVisibility(GONE);
                 tv_remind.setVisibility(GONE);
             } catch (IOException e) {
@@ -231,7 +241,7 @@ public class MyAffair_repair_video extends RelativeLayout {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             IS_OK = false;
             iv_remind.setVisibility(VISIBLE);
             tv_remind.setVisibility(VISIBLE);

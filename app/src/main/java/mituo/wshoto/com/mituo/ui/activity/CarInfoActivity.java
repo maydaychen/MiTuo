@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -53,7 +56,6 @@ public class CarInfoActivity extends InitActivity {
     public void initView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_car_info);
         ButterKnife.bind(this);
-        mToolbar.setTitle("车辆信息");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());
@@ -65,10 +67,27 @@ public class CarInfoActivity extends InitActivity {
 
     @Override
     public void initData() {
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_99));
         ownerName.setText(String.format(getResources().getString(R.string.car_onwer_edit), mResultDataBean.getContactName()));
+        SpannableStringBuilder builder1 = new SpannableStringBuilder(ownerName.getText().toString());
+        builder1.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ownerName.setText(builder1);
+
         ownerTelephone.setText(String.format(getResources().getString(R.string.telephone_edit), mResultDataBean.getContactPhone()));
+        SpannableStringBuilder builder2 = new SpannableStringBuilder(ownerTelephone.getText().toString());
+        builder2.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ownerTelephone.setText(builder2);
+
         tvCarNum.setText(String.format(getResources().getString(R.string.card_num_edit), mResultDataBean.getCarNo()));
+        SpannableStringBuilder builder3 = new SpannableStringBuilder(tvCarNum.getText().toString());
+        builder3.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvCarNum.setText(builder3);
+
         tvCarType.setText(String.format(getResources().getString(R.string.car_type_edit), mResultDataBean.getCarXh()));
+        SpannableStringBuilder builder4 = new SpannableStringBuilder(tvCarType.getText().toString());
+        builder4.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvCarType.setText(builder4);
+
         etMile.setText(mResultDataBean.getCarXslc());
         mTvCareNextTime.setText(mResultDataBean.getXcbyDate());
         etNextCareMile.setText( mResultDataBean.getXcbylc());
