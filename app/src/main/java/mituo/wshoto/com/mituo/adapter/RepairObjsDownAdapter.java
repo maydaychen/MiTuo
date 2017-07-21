@@ -13,7 +13,6 @@ import mituo.wshoto.com.mituo.bean.RepairObjsBean;
 
 /**
  * Created by user on 2017/7/4.
- *
  */
 
 public class RepairObjsDownAdapter extends RecyclerView.Adapter<RepairObjsDownAdapter.ViewHolder> implements View.OnClickListener {
@@ -45,7 +44,11 @@ public class RepairObjsDownAdapter extends RecyclerView.Adapter<RepairObjsDownAd
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.projects.setText(mData.get(position).getXmName());
         viewHolder.name.setText(mData.get(position).getXmName());
-        viewHolder.objs.setText(mData.get(position).getPjpp() + mData.get(position).getPjName());
+        if (null==mData.get(position).getPjName()||mData.get(position).getPjName().equals("")){
+            viewHolder.objs.setText("--");
+        } else {
+            viewHolder.objs.setText(mData.get(position).getPjpp() + mData.get(position).getPjName() + "*" + mData.get(position).getPjNum());
+        }
         viewHolder.itemView.setTag(position);
     }
 

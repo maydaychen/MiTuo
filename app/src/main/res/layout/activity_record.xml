@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:keepScreenOn="true"
             android:layout_marginRight="30dp"
             android:padding="16dp"
             android:src="@drawable/ic_play_arrow_white_24dp"/>

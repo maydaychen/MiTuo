@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -36,6 +37,10 @@ public class MyAffair_check_report extends RelativeLayout {
 
     @BindView(R.id.lv_report)
     RecyclerView mLvReport;
+    @BindView(R.id.tv_remind)
+    TextView mTvRemind;
+    @BindView(R.id.iv_remind)
+    ImageView mIvRemind;
     private Context mContext;
 
     private RelativeLayout titleRl;
@@ -174,18 +179,25 @@ public class MyAffair_check_report extends RelativeLayout {
         List<String> list = new ArrayList<>();
         for (ReportBean.ResultDataBean.Step2Bean step2Bean : reportBean.getResultData().getStep2()) {
             for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2Bean.getList()) {
-                switch (listBean.getBgxmValue()) {
-                    case "1":
-                        list.add(listBean.getBgxmName() + "建议进场检查");
-                        break;
-                    case "2":
-                        list.add(listBean.getBgxmName() + "急需更换或维修");
-                        break;
+                if (null != listBean.getBgxmValue()) {
+                    switch (listBean.getBgxmValue()) {
+                        case "1":
+                            list.add(listBean.getBgxmName() + "建议进场检查");
+                            break;
+                        case "2":
+                            list.add(listBean.getBgxmName() + "急需更换或维修");
+                            break;
+                    }
                 }
             }
         }
         if (list.size() == 0) {
             IS_OK = false;
+            mIvRemind.setVisibility(VISIBLE);
+            mTvRemind.setVisibility(VISIBLE);
+        }else {
+            mIvRemind.setVisibility(INVISIBLE);
+            mTvRemind.setVisibility(INVISIBLE);
         }
         mLvReport.setLayoutManager(new LinearLayoutManager(mContext));
         ReportAdapter reportAdapter = new ReportAdapter(list);

@@ -91,8 +91,11 @@ public class RepairObjLeftAdapter extends RecyclerView.Adapter<RepairObjLeftAdap
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
             viewHolder.name.setText(mData.get(position).getXmName());
-            viewHolder.objs.setText(mData.get(position).getPjpp() + mData.get(position).getPjName());
-
+            if (null==mData.get(position).getPjName()||mData.get(position).getPjName().equals("")){
+                viewHolder.objs.setText("--");
+            }else {
+                viewHolder.objs.setText(mData.get(position).getPjpp() + mData.get(position).getPjName() + "*" + mData.get(position).getPjNum());
+            }
             viewHolder.itemView.setTag(position);
         }
 

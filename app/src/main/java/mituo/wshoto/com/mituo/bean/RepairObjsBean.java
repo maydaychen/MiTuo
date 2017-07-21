@@ -150,6 +150,7 @@ public class RepairObjsBean {
                 private String isZd;
                 private String xmprice;
                 private String pjlb;
+                private String isCanZidai;
 
                 public String getPjName() {
                     return pjName;
@@ -222,6 +223,14 @@ public class RepairObjsBean {
                 public void setPjlb(String pjlb) {
                     this.pjlb = pjlb;
                 }
+
+                public String getIsCanZidai() {
+                    return isCanZidai;
+                }
+
+                public void setIsCanZidai(String isCanZidai) {
+                    this.isCanZidai = isCanZidai;
+                }
             }
         }
 
@@ -248,6 +257,7 @@ public class RepairObjsBean {
             private String pjPrice;
             private String pjpp;
             private String pjlb;
+            private String isCanZidai;
 
             public String getPjName() {
                 return pjName;
@@ -319,6 +329,14 @@ public class RepairObjsBean {
 
             public void setPjlb(String pjlb) {
                 this.pjlb = pjlb;
+            }
+
+            public String getIsCanZidai() {
+                return isCanZidai;
+            }
+
+            public void setIsCanZidai(String isCanZidai) {
+                this.isCanZidai = isCanZidai;
             }
         }
     }

@@ -43,9 +43,9 @@ public class GatherAdapter extends RecyclerView.Adapter<GatherAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.project.setText(mData.get(position).get("name"));
-        viewHolder.peijian.setText(mData.get(position).get("peijian"));
-        viewHolder.num.setText(mData.get(position).get("num"));
-        viewHolder.price.setText(mData.get(position).get("price"));
+        viewHolder.peijian.setText(null == mData.get(position).get("peijian") || mData.get(position).get("peijian").equals("") ? "--" : mData.get(position).get("peijian"));
+        viewHolder.num.setText(null == mData.get(position).get("num") || mData.get(position).get("num").equals("") ? "--" : mData.get(position).get("num"));
+        viewHolder.price.setText(null == mData.get(position).get("price") || mData.get(position).get("price").equals("") ? "--" : mData.get(position).get("price"));
         viewHolder.itemView.setTag(position);
     }
 

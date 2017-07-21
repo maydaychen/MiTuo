@@ -39,7 +39,6 @@ public class CheckReportAdapter extends RecyclerView.Adapter<CheckReportAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.name.setText(mData.get(position).getBgxmName());
-
         RxCompoundButton.checkedChanges(viewHolder.check)
                 .subscribe(aBoolean -> {
                     if (aBoolean) {

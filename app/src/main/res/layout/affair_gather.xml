@@ -37,11 +37,11 @@
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/font_33"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/affair_direction_iv"
                     android:padding="8dp"
-                    android:text="结算清单"/>
+                    android:text="结算清单"
+                    android:textColor="@color/font_33"/>
 
                 <TextView
                     android:id="@+id/tv_remind"
@@ -50,16 +50,19 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:padding="8dp"
-                    android:textColor="@color/font_red"/>
+                    android:text="尚未付款"
+                    android:textColor="@color/font_red"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/iv_remind"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/iv_remind"
-                    android:padding="8dp"/>
+                    android:layout_toLeftOf="@id/tv_remind"
+                    android:padding="8dp"
+                    android:src="@drawable/order_details_icon_remind"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -152,9 +155,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:textColor="@color/font_66"
                             android:padding="8dp"
-                            android:text="合计："/>
+                            android:text="合计："
+                            android:textColor="@color/font_66"/>
 
                         <TextView
                             android:layout_width="0dp"
@@ -194,9 +197,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:textColor="@color/font_66"
                             android:padding="8dp"
-                            android:text="使用代金券："/>
+                            android:text="使用代金券："
+                            android:textColor="@color/font_66"/>
 
                         <TextView
                             android:layout_width="0dp"
@@ -236,9 +239,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:textColor="@color/font_66"
                             android:padding="8dp"
-                            android:text="实付："/>
+                            android:text="实付："
+                            android:textColor="@color/font_66"/>
 
                         <TextView
                             android:layout_width="0dp"

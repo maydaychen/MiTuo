@@ -75,6 +75,7 @@ public class MyAffair_gather extends RelativeLayout {
     private boolean isOpened = true;
     private boolean animatorLock = false;
     private GatherBean.ResultDataBean mResultDataBean;
+    public boolean IS_OK = true;
 
     public MyAffair_gather(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -157,18 +158,6 @@ public class MyAffair_gather extends RelativeLayout {
         return result;
     }
 
-    public void setRemind(int i) {
-        switch (i) {
-            case 0:
-                iv_remind.setVisibility(GONE);
-                tv_remind.setVisibility(GONE);
-                break;
-            case 1:
-                iv_remind.setImageResource(R.drawable.order_details_icon_remind);
-                tv_remind.setText("尚未完善");
-                break;
-        }
-    }
 
     public ObjectAnimator close() {
         Animator.AnimatorListener changeStatusListener = new Animator.AnimatorListener() {
@@ -236,8 +225,21 @@ public class MyAffair_gather extends RelativeLayout {
         tvGatherMoney.setText(String.format(getResources().getString(R.string.money), mResultBean.getHj()));
     }
 
+    public void setRemind(PayStatusBean payStatusBean) {
+        if (payStatusBean.getResultData().isPayStatus()) {
+            setPayInfo(payStatusBean.getResultData());
+            iv_remind.setVisibility(GONE);
+            tv_remind.setVisibility(GONE);
+            IS_OK = true;
+        } else {
+            iv_remind.setVisibility(VISIBLE);
+            tv_remind.setVisibility(VISIBLE);
+            IS_OK = false;
+        }
+    }
+
     public void setPayInfo(PayStatusBean.ResultDataBean mResultBean) {
-        mTvGatherReal.setText(String.format(getResources().getString(R.string.money), mResultBean.getPaySum()+""));
+        mTvGatherReal.setText(String.format(getResources().getString(R.string.money), mResultBean.getPaySum() + ""));
         mTvGatherCoupon.setText(mResultBean.getCouponPrice());
         mTvPayKind.setText(mResultBean.getPayType().equals("1") ? "微信支付" : "支付宝支付");
         mTvPayOrder.setText(mResultBean.getPayCode());

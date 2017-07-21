@@ -52,6 +52,8 @@ public class LoginActivity extends InitActivity {
                 SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("token", resultBean.getResultData().getToken());
+                editor.putString("name", resultBean.getResultData().getName());
+                editor.putString("telephone", resultBean.getResultData().getPhone());
                 editor.putBoolean("autoLog", mCbAutoLog.isChecked());
                 editor.apply();
                 finish();

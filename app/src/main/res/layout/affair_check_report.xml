@@ -42,6 +42,27 @@
                     android:padding="8dp"
                     android:text="检测报告"
                     android:textColor="@color/font_33"/>
+
+                <TextView
+                    android:id="@+id/tv_remind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="8dp"
+                    android:text="尚未填写"
+                    android:textColor="@color/font_red"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/iv_remind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/tv_remind"
+                    android:padding="8dp"
+                    android:src="@drawable/order_details_icon_remind"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <LinearLayout

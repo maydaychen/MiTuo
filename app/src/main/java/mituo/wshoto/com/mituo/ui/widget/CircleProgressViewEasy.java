@@ -8,6 +8,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
+import mituo.wshoto.com.mituo.R;
+
 /**
  * Created by Weshine on 2017/6/15.
  */
@@ -69,7 +71,7 @@ public class CircleProgressViewEasy extends View {
 
         // 绘制圆圈，进度条背景
         canvas.drawArc(mRectF, -90, 360, false, mPaint);
-        mPaint.setColor(Color.rgb(0xf8, 0x60, 0x30));
+        mPaint.setColor(mContext.getResources().getColor(R.color.colorAccent));
         canvas.drawArc(mRectF, -90, ((float) mProgress / mMaxProgress) * 360, false, mPaint);
 
         // 绘制进度文案显示

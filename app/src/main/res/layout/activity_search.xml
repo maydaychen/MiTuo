@@ -8,7 +8,7 @@
     android:background="@color/background"
     tools:context="mituo.wshoto.com.mituo.ui.activity.SearchActivity">
 
-    <android.support.v7.widget.SearchView
+    <EditText
         android:id="@+id/sv_search"
         android:layout_width="585dp"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp">
 
-    </android.support.v7.widget.SearchView>
+    </EditText>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_search"

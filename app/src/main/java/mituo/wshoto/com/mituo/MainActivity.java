@@ -20,7 +20,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SearchView;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +48,9 @@ public class MainActivity extends InitActivity
     @BindView(R.id.vp_content)
     CustomViewPager mVpContent;
 
+
     private List<String> tabIndicators;
     private List<Fragment> tabFragments;
-    private SearchView searchView;
     private SharedPreferences preferences;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
 
@@ -69,8 +70,11 @@ public class MainActivity extends InitActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
+        View headerView = navigationView.getHeaderView(0);
+        TextView textView = (TextView) headerView.findViewById(R.id.name);
+        TextView telephone = (TextView) headerView.findViewById(R.id.telephone);
+        textView.setText(preferences.getString("name",""));
+        telephone.setText(preferences.getString("telephone",""));
         mVpContent.setOffscreenPageLimit(2);
         initContent();
         initTab();
@@ -168,6 +172,13 @@ public class MainActivity extends InitActivity
 //        mOrderTab.setTabMode(TabLayout.MODE_FIXED);
 //        mOrderTab.setTabGravity(TabLayout.GRAVITY_FILL);
         mOrderTab.setupWithViewPager(mVpContent);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 
     class ContentPagerAdapter extends FragmentPagerAdapter {

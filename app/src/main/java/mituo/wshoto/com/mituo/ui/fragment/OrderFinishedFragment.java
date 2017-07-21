@@ -53,12 +53,13 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
                 try {
                     if (IS_REFRESH){
                         mFinishedOrderAdapter.clearData();
-                        mFinishedOrderAdapter.notifyDataSetChanged();
+//                        mFinishedOrderAdapter.notifyDataSetChanged();
                     }
                     mRvOrderFinished.setPullLoadMoreCompleted();
                     mRvOrderFinished.setVisibility(View.VISIBLE);
                     if (resultBean.getCode().equals("200")) {
                         mFinishedOrderAdapter.addAllData(resultBean.getResultData().getList());
+                        mFinishedOrderAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(getActivity(), resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
                     }
@@ -100,6 +101,7 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
     public void onResume() {
         super.onResume();
         IS_REFRESH = true;
+        setRefresh();
         getData();
     }
 
@@ -121,6 +123,7 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
     @Override
     public void onLoadMore() {
         page = page + 1;
+        IS_REFRESH = false;
         getData();
     }
 
@@ -129,7 +132,6 @@ public class OrderFinishedFragment extends Fragment implements PullLoadMoreRecyc
         mFinishedOrderAdapter.notifyDataSetChanged();
         page = 1;
         currentItem = 10;
-        mFinishedOrderAdapter.notifyDataSetChanged();
         mRvOrderFinished.setVisibility(View.INVISIBLE);
     }
 

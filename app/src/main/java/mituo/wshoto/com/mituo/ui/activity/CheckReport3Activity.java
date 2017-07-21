@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -47,6 +46,7 @@ public class CheckReport3Activity extends AppCompatActivity {
     private String jsonElements;
     private CheckReportAdapter repairObjsDownAdapter;
     private ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX> step1List;
+    private ArrayList<ReportBean.ResultDataBean.Step2Bean.ListBean> step2List;
     private List<ReportBean.ResultDataBean.Step2Bean.ListBean> listBeen;
 
     @Override
@@ -59,6 +59,7 @@ public class CheckReport3Activity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(v -> finish());
         ArrayList<ReportBean.ResultDataBean.Step2Bean.ListBean> listObj = (ArrayList<ReportBean.ResultDataBean.Step2Bean.ListBean>) getIntent().getSerializableExtra("objs");
         step1List = (ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX>) getIntent().getSerializableExtra("step1");
+        step2List = (ArrayList<ReportBean.ResultDataBean.Step2Bean.ListBean>) getIntent().getSerializableExtra("step2");
         gatherOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 Toast.makeText(this, "修改成功！", Toast.LENGTH_SHORT).show();
@@ -98,6 +99,14 @@ public class CheckReport3Activity extends AppCompatActivity {
             JsonObject jsonObject = new JsonObject();
             try {
                 listBeen = repairObjsDownAdapter.getList();
+                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
+                    for (ReportBean.ResultDataBean.Step2Bean.ListBean bean : listBeen) {
+                        if (listBean.getBgxmId() == bean.getBgxmId()) {
+                            listBean.setBgxmValue(bean.getBgxmValue());
+                        }
+                    }
+                }
+                listBeen = step2List;
                 for (ReportBean.ResultDataBean.Step1Bean.ListBeanX listBeanX : step1List) {
                     ReportBean.ResultDataBean.Step2Bean.ListBean step2Bean = new ReportBean.ResultDataBean.Step2Bean.ListBean();
                     Utils.copy(listBeanX, step2Bean);
@@ -117,9 +126,6 @@ public class CheckReport3Activity extends AppCompatActivity {
                     .create();
             jsonObject.add("list", gson.toJsonTree(listBeen));
             jsonElements = gson.toJson(jsonObject);
-            String TAG = "111111";
-            Log.d(TAG, "onCreate: " + jsonElements);
-
             SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
             HttpMethods.getInstance().save_report(
                     new ProgressSubscriber<>(gatherOnNext, this), preferences.getString("token", ""),

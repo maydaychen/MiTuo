@@ -251,8 +251,8 @@ public class HttpMethods {
                 .subscribe(subscriber);
     }
 
-    public void all_repair_objs(Subscriber<AllRepairBean> subscriber, String token) {
-        movieService.repair_objs(token)
+    public void all_repair_objs(Subscriber<AllRepairBean> subscriber, String token, String orderCode) {
+        movieService.repair_objs(token,orderCode)
 //                .map(new HttpResultFunc<>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

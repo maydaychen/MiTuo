@@ -71,7 +71,7 @@ public interface BlueService {
     rx.Observable<GatherBean> gather(@Query("token") String token, @Query("orderCode") String orderCode);
 
     @GET("/api/js/order/getAllWxxm")
-    rx.Observable<AllRepairBean> repair_objs(@Query("token") String token);
+    rx.Observable<AllRepairBean> repair_objs(@Query("token") String token, @Query("orderCode") String orderCode);
 
     @FormUrlEncoded
     @POST("/api/js/order/startVideo")

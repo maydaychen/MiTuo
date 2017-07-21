@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.bean.AllRepairBean;
@@ -28,11 +29,10 @@ import mituo.wshoto.com.mituo.ui.widget.RecycleViewDivider;
 
 public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDetailAdapter.ViewHolder> {
     private RepairObjsBean.ResultDataBean mData;
-    private ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>> peijianList;
+    private Map<String, ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>>> peijianList;
     private Context mContext;
-    public int num;
 
-    public RepairObjsDetailAdapter(RepairObjsBean.ResultDataBean mData, ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>> mPeijianList, Context context) {
+    public RepairObjsDetailAdapter(RepairObjsBean.ResultDataBean mData, Map<String, ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>>> mPeijianList, Context context) {
         this.mData = mData;
         this.mContext = context;
         this.peijianList = mPeijianList;
@@ -60,51 +60,72 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             if (mData.getTcList().get(position).getTcName().contains("保养")) {
                 viewHolder.taocan.setAdapter(new RepairCareTaocanObjAdapter(mData.getTcList().get(position).getTcxmList()));
             } else {
-                viewHolder.taocan.setAdapter(new RepairTaocanObjAdapter(mData.getTcList().get(position).getTcxmList(), peijianList));
+                viewHolder.taocan.setAdapter(new RepairTaocanObjAdapter(mData.getTcList().get(position).getTcxmList(), peijianList.get(mData.getTcList().get(position).getTcName())));
             }
             viewHolder.itemView.setTag(position);
-
         } else {
             int mPositon = position - mData.getTcList().size();
-            try{
-                num = Integer.valueOf(mData.getXmList().get(mPositon).getPjNum());
-            }catch (NumberFormatException e){
-                num =1;
-            }
             viewHolder.name.setText(mData.getXmList().get(mPositon).getXmName());
             viewHolder.xm_name.setText(mData.getXmList().get(mPositon).getXmName());
-            if (null==mData.getXmList().get(mPositon).getPjNum()) {
+            if (null == mData.getXmList().get(mPositon).getPjNum()) {
                 viewHolder.pj_num.setText("1");
-            }else {
+                mData.getXmList().get(mPositon).setPjNum("1");
+            } else {
                 viewHolder.pj_num.setText(mData.getXmList().get(mPositon).getPjNum() + "");
             }
             List<String> list = new ArrayList<>();
-            list.add("客户自带");
-            try{
-                for (AllRepairBean.ResultDataBean.PjListBean pjListBean : peijianList.get(0)) {
+            try {
+                for (AllRepairBean.ResultDataBean.PjListBean pjListBean : peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0)) {
                     list.add(pjListBean.getPjpp() + pjListBean.getPjName());
                 }
-            }catch (IndexOutOfBoundsException ignored){
+            } catch (IndexOutOfBoundsException ignored) {
+            } catch (NullPointerException ignored) {
+            }
+            if (mData.getXmList().get(mPositon).getIsCanZidai().equals("0")) {
+                list.add("客户自带");
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.item_text, R.id.tv_item_text, list);
             viewHolder.mSpinner.setAdapter(adapter);
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if ((mData.getXmList().get(mPositon).getPjpp() + mData.getXmList().get(mPositon).getPjName()).equals(adapter.getItem(i).toString())) {
+                    viewHolder.mSpinner.setSelection(i, true);
+                    break;
+                }
+            }
+
             viewHolder.mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position == 0) {
-                        mData.getXmList().get(mPositon).setIsZd("0");
-                        mData.getXmList().get(mPositon).setPjName("");
-                        mData.getXmList().get(mPositon).setPjNum("");
-                        mData.getXmList().get(mPositon).setPjpp("");
-                        mData.getXmList().get(mPositon).setPjPrice("");
-                        mData.getXmList().get(mPositon).setPjCode("");
+                    if (mData.getXmList().get(mPositon).getIsCanZidai().equals("0")) {
+                        if (position == adapter.getCount() - 1) {
+                            viewHolder.num_del.setVisibility(View.GONE);
+                            viewHolder.num_add.setVisibility(View.GONE);
+                            mData.getXmList().get(mPositon).setIsZd("0");
+                            mData.getXmList().get(mPositon).setPjName("");
+                            mData.getXmList().get(mPositon).setPjNum("1");
+                            viewHolder.pj_num.setText("1");
+                            mData.getXmList().get(mPositon).setPjpp("");
+                            mData.getXmList().get(mPositon).setPjPrice("");
+                            mData.getXmList().get(mPositon).setPjCode("");
+                        } else {
+                            mData.getXmList().get(mPositon).setPjName(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjName());
+                            mData.getXmList().get(mPositon).setPjNum(mData.getXmList().get(mPositon).getPjNum());
+                            if (viewHolder.pj_num.getText().equals("1")) {
+                                viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
+                                viewHolder.num_del.setClickable(false);
+                            }
+                            mData.getXmList().get(mPositon).setPjpp(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjpp());
+                            mData.getXmList().get(mPositon).setPjPrice(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjPrice());
+                            mData.getXmList().get(mPositon).setPjCode(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjCode());
+                        }
                     } else {
-                        mData.getXmList().get(mPositon).setPjName(peijianList.get(0).get(position).getPjName());
-                        mData.getXmList().get(mPositon).setPjNum(num + "");
-                        mData.getXmList().get(mPositon).setPjpp(peijianList.get(0).get(position).getPjpp());
-                        mData.getXmList().get(mPositon).setPjPrice(peijianList.get(0).get(position).getPjPrice());
-                        mData.getXmList().get(mPositon).setPjCode(peijianList.get(0).get(position).getPjCode());
+                        mData.getXmList().get(mPositon).setPjName(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjName());
+                        mData.getXmList().get(mPositon).setPjNum(mData.getXmList().get(mPositon).getPjNum());
+                        mData.getXmList().get(mPositon).setPjpp(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjpp());
+                        mData.getXmList().get(mPositon).setPjPrice(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjPrice());
+                        mData.getXmList().get(mPositon).setPjCode(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjCode());
                     }
+
                 }
 
                 @Override
@@ -114,28 +135,33 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             });
             viewHolder.mSpinner.setPrompt("ceshi");
             viewHolder.itemView.setTag(position);
-            if (num == 1) {
+            if (Integer.valueOf(mData.getXmList().get(mPositon).getPjNum()) == 1) {
                 viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
                 viewHolder.num_del.setClickable(false);
             }
             viewHolder.num_add.setOnClickListener(v -> {
-                num++;
-                if (num > 1) {
+                int a = Integer.valueOf(mData.getXmList().get(mPositon).getPjNum());
+                a++;
+                if (a > 1) {
                     viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus_normal);
                     viewHolder.num_del.setClickable(true);
                 }
-                mData.getXmList().get(mPositon).setPjNum(num + "");
-                viewHolder.pj_num.setText(num + "");
+                mData.getXmList().get(mPositon).setPjNum(a + "");
+                viewHolder.pj_num.setText(a + "");
             });
             viewHolder.num_del.setOnClickListener(v -> {
-                num--;
-                if (num == 1) {
+                int a = Integer.valueOf(mData.getXmList().get(mPositon).getPjNum());
+                if (a > 1) {
+                    a--;
+                }
+                if (a == 1) {
                     viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
                     viewHolder.num_del.setClickable(false);
                 }
-                mData.getXmList().get(mPositon).setPjNum(num + "");
-                viewHolder.pj_num.setText(num + "");
+                mData.getXmList().get(mPositon).setPjNum(a + "");
+                viewHolder.pj_num.setText(a + "");
             });
+
         }
 
     }
@@ -143,6 +169,9 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
     //获取数据的数量
     @Override
     public int getItemCount() {
+        if (null == mData) {
+            return 0;
+        }
         return mData.getXmList().size() + mData.getTcList().size();
     }
 
@@ -263,33 +292,73 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             viewHolder.name.setText(mData.get(position).getXmName());
             viewHolder.pj_num.setText(mData.get(position).getPjNum() + "");
             int mPositon = position;
-            mData.get(position).setPjNum("1");
+            if (null == mData.get(position).getPjNum()) {
+                viewHolder.pj_num.setText("1");
+                mData.get(position).setPjNum("1");
+            } else {
+                viewHolder.pj_num.setText(mData.get(position).getPjNum() + "");
+            }
+            if (Integer.valueOf(mData.get(position).getPjNum()) <= 1) {
+                viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
+                viewHolder.num_del.setClickable(false);
+            }
             List<String> list = new ArrayList<>();
-            list.add("客户自带");
-            for (AllRepairBean.ResultDataBean.PjListBean pjListBean : mlistBeen.get(position)) {
-                list.add(pjListBean.getPjpp() + pjListBean.getPjName());
+            try {
+                if (mlistBeen.size() != 0) {
+                    for (AllRepairBean.ResultDataBean.PjListBean pjListBean : mlistBeen.get(position)) {
+                        list.add(pjListBean.getPjpp() + pjListBean.getPjName());
+                    }
+                }
+            } catch (NullPointerException ignored) {
+            }
+            if (mData.get(position).getIsCanZidai().equals("0")) {
+                list.add("客户自带");
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.item_text, R.id.tv_item_text, list);
             viewHolder.mSpinner.setAdapter(adapter);
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if ((mData.get(position).getPjpp() + mData.get(position).getPjName()).equals(adapter.getItem(i).toString())) {
+                    viewHolder.mSpinner.setSelection(i, true);
+                    break;
+                }
+            }
             viewHolder.pj_num.setText(mData.get(position).getPjNum());
-            viewHolder.num_del.setClickable(false);
             viewHolder.mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position == 0) {
-                        viewHolder.num_del.setVisibility(View.GONE);
-                        viewHolder.num_add.setVisibility(View.GONE);
-                        mData.get(mPositon).setIsZd("0");
-                        mData.get(mPositon).setPjName("");
-                        mData.get(mPositon).setPjNum("");
-                        mData.get(mPositon).setPjpp("");
-                        mData.get(mPositon).setPjPrice("");
-                        mData.get(mPositon).setPjCode("");
+                    if (mData.get(mPositon).getIsCanZidai().equals("0")) {
+                        if (position == adapter.getCount() - 1) {
+                            viewHolder.num_del.setVisibility(View.GONE);
+                            viewHolder.num_add.setVisibility(View.GONE);
+                            mData.get(mPositon).setIsZd("0");
+                            mData.get(mPositon).setPjName("");
+                            mData.get(mPositon).setPjNum("1");
+                            viewHolder.pj_num.setText("1");
+                            mData.get(mPositon).setPjpp("");
+                            mData.get(mPositon).setPjPrice("");
+                            mData.get(mPositon).setPjCode("");
+                        } else {
+                            viewHolder.num_del.setVisibility(View.VISIBLE);
+                            viewHolder.num_add.setVisibility(View.VISIBLE);
+                            if (viewHolder.pj_num.getText().equals("1")) {
+                                viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
+                                viewHolder.num_del.setClickable(false);
+                            }
+                            mData.get(mPositon).setPjName(mlistBeen.get(mPositon).get(position).getPjName());
+                            mData.get(mPositon).setPjNum(mData.get(mPositon).getPjNum());
+                            mData.get(mPositon).setPjpp(mlistBeen.get(mPositon).get(position).getPjpp());
+                            mData.get(mPositon).setPjPrice(mlistBeen.get(mPositon).get(position).getPjPrice());
+                            mData.get(mPositon).setPjCode(mlistBeen.get(mPositon).get(position).getPjCode());
+                        }
                     } else {
                         viewHolder.num_del.setVisibility(View.VISIBLE);
                         viewHolder.num_add.setVisibility(View.VISIBLE);
+                        if (viewHolder.pj_num.getText().equals("1")) {
+                            viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
+                            viewHolder.num_del.setClickable(false);
+                        }
                         mData.get(mPositon).setPjName(mlistBeen.get(mPositon).get(position).getPjName());
-                        mData.get(mPositon).setPjNum("1");
+                        mData.get(mPositon).setPjNum(mData.get(mPositon).getPjNum());
                         mData.get(mPositon).setPjpp(mlistBeen.get(mPositon).get(position).getPjpp());
                         mData.get(mPositon).setPjPrice(mlistBeen.get(mPositon).get(position).getPjPrice());
                         mData.get(mPositon).setPjCode(mlistBeen.get(mPositon).get(position).getPjCode());
@@ -302,10 +371,6 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
                 }
             });
             viewHolder.mSpinner.setPrompt("ceshi");
-            if (Integer.valueOf(mData.get(position).getPjNum()) == 1) {
-                viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
-                viewHolder.num_del.setClickable(false);
-            }
             viewHolder.num_add.setOnClickListener(v -> {
                 int a = Integer.valueOf(mData.get(position).getPjNum());
                 a++;
@@ -318,7 +383,9 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             });
             viewHolder.num_del.setOnClickListener(v -> {
                 int a = Integer.valueOf(mData.get(position).getPjNum());
-                a--;
+                if (a > 1) {
+                    a--;
+                }
                 if (a == 1) {
                     viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
                     viewHolder.num_del.setClickable(false);
@@ -349,10 +416,11 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
                 name = (TextView) view.findViewById(R.id.tv_xm);
                 mSpinner = (Spinner) view.findViewById(R.id.sp_xm);
                 pj_num = (TextView) view.findViewById(R.id.tv_xm_num);
-                num_del = (ImageView) view.findViewById(R.id.tv_xm_add);
-                num_add = (ImageView) view.findViewById(R.id.tv_xm_minus);
+                num_del = (ImageView) view.findViewById(R.id.tv_tc_add);
+                num_add = (ImageView) view.findViewById(R.id.tv_tc_minus);
             }
         }
+
     }
 
     public RepairObjsBean.ResultDataBean getData() {

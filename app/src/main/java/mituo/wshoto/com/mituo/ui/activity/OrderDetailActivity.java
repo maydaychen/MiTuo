@@ -16,6 +16,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -168,8 +170,8 @@ public class OrderDetailActivity extends InitActivity {
             }
         };
         checkPayOnNext = resultBean -> {
-            if (resultBean.getResultData().isPayStatus()) {
-                mGather.setPayInfo(resultBean.getResultData());
+            if (resultBean.getCode().equals("200")) {
+                mGather.setRemind(resultBean);
             }
         };
         UploadPicOnNext = resultBean -> {
@@ -279,6 +281,7 @@ public class OrderDetailActivity extends InitActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         super.onResume();
+        Config.mBean = new ArrayList<>();
         mRepairVideo.setInfo(status, getIntent().getStringExtra("oid"));
         HttpMethods.getInstance().order_detail(
                 new ProgressSubscriber<>(getOrderInfoOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
@@ -303,7 +306,12 @@ public class OrderDetailActivity extends InitActivity {
         if (mCarInfo.IS_OK) {
             if (mRepairVideo.IS_OK) {
                 if (mCheckReport.IS_OK) {
+                    if (mGather.IS_OK) {
 
+                    } else {
+                        Toast.makeText(this, "尚未付款", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 } else {
                     Toast.makeText(this, "检测报告尚未填写", Toast.LENGTH_SHORT).show();
                     return;

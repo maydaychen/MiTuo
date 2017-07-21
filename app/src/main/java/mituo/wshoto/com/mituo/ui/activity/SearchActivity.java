@@ -6,10 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.List;
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +25,7 @@ import static mituo.wshoto.com.mituo.Utils.logout;
 
 public class SearchActivity extends InitActivity {
     @BindView(R.id.sv_search)
-    SearchView mSvSearch;
+    EditText mSvSearch;
     @BindView(R.id.rv_search)
     RecyclerView mRvSearch;
     private SearchAdapter adapter;
@@ -60,19 +60,10 @@ public class SearchActivity extends InitActivity {
 
     @Override
     public void initData() {
-        mSvSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                date = newText;
-                HttpMethods.getInstance().search(
-                        new ProgressSubscriber<>(gatherOnNext, SearchActivity.this), preferences.getString("token", ""), newText);
-                return true;
-            }
+        RxTextView.textChanges(mSvSearch).subscribe(charSequence -> {
+            date = charSequence.toString();
+            HttpMethods.getInstance().search(
+                    new ProgressSubscriber<>(gatherOnNext, SearchActivity.this), preferences.getString("token", ""), date);
         });
     }
 

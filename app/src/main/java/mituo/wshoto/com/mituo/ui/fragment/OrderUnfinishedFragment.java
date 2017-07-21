@@ -48,14 +48,16 @@ public class OrderUnfinishedFragment extends Fragment implements PullLoadMoreRec
             @Override
             public void onNext(OrderBean resultBean) {
                 try {
-                    if (IS_REFRESH){
+                    if (IS_REFRESH) {
                         mUnFinishedOrderAdapter.clearData();
-                        mUnFinishedOrderAdapter.notifyDataSetChanged();
+//                        mUnFinishedOrderAdapter.addAllData(resultBean.getResultData().getList());
+//                        mUnFinishedOrderAdapter.notifyDataSetChanged();
                     }
                     mRvOrder.setPullLoadMoreCompleted();
                     mRvOrder.setVisibility(View.VISIBLE);
                     if (resultBean.getCode().equals("200")) {
                         mUnFinishedOrderAdapter.addAllData(resultBean.getResultData().getList());
+                        mUnFinishedOrderAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(getActivity(), resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
                     }
@@ -96,6 +98,7 @@ public class OrderUnfinishedFragment extends Fragment implements PullLoadMoreRec
     public void onResume() {
         super.onResume();
         IS_REFRESH = true;
+        setRefresh();
         getData();
     }
 
@@ -116,6 +119,7 @@ public class OrderUnfinishedFragment extends Fragment implements PullLoadMoreRec
     @Override
     public void onLoadMore() {
         page = page + 1;
+        IS_REFRESH = false;
         getData();
     }
 
@@ -124,7 +128,6 @@ public class OrderUnfinishedFragment extends Fragment implements PullLoadMoreRec
         mUnFinishedOrderAdapter.notifyDataSetChanged();
         page = 1;
         currentItem = 10;
-        mUnFinishedOrderAdapter.notifyDataSetChanged();
         mRvOrder.setVisibility(View.INVISIBLE);
     }
 

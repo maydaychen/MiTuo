@@ -37,6 +37,7 @@ import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 
+import static mituo.wshoto.com.mituo.Config.mBean;
 import static mituo.wshoto.com.mituo.Utils.logout;
 
 public class CheckReport2Activity extends AppCompatActivity {
@@ -51,10 +52,11 @@ public class CheckReport2Activity extends AppCompatActivity {
     Button mButton2;
 
     private ReportBean mReportBean;
-    private List<ReportBean.ResultDataBean.Step2Bean.ListBean> mBean;
+
     private ReportStep2Adapter reportAdapter;
-    private ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX> step1List;
+    private ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX> step1List;//所有step1值
     private SubscriberOnNextListener<ResultBean> gatherOnNext;
+    private List<ReportBean.ResultDataBean.Step2Bean.ListBean> listX;//所有step2
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +65,25 @@ public class CheckReport2Activity extends AppCompatActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         setSupportActionBar(mToolbar);
-        mBean = new ArrayList<>();
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());
         mReportBean = (ReportBean) getIntent().getSerializableExtra("objs");
         step1List = (ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX>) getIntent().getSerializableExtra("step1");
+        listX = new ArrayList<>();
         for (ReportBean.ResultDataBean.Step2Bean step2Bean : mReportBean.getResultData().getStep2()) {
             mOrderTab.addTab(mOrderTab.newTab().setText(step2Bean.getTypeName()));
+            for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2Bean.getList()) {
+//                try{
+//                    if (listBean.getBgxmValue().equals("1")||listBean.getBgxmValue().equals("2")) {
+//                        mBean.add(listBean);
+//                    }else {
+//                        listBean.setBgxmValue("0");
+//                    }
+//                }catch (NullPointerException e){
+//                    listBean.setBgxmValue("0");
+//                }
+                listX.add(listBean);
+            }
         }
         mRvReport.setLayoutManager(new LinearLayoutManager(this));
         reportAdapter = new ReportStep2Adapter(mReportBean.getResultData().getStep2().get(0).getList(), mBean);
@@ -97,7 +111,23 @@ public class CheckReport2Activity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        mButton2.setOnClickListener(v -> finishCheck());
+        if (mBean.size()==0) {
+            mButton2.setOnClickListener(v -> finishCheck());
+        }else {
+            mButton2.setText("下一步");
+            mButton2.setOnClickListener(v -> {
+                mBean = reportAdapter.getSelected();
+                ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX> listObj = (ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX>) getIntent().getSerializableExtra("step1");
+                Intent intent = new Intent(CheckReport2Activity.this, CheckReport3Activity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("objs", (Serializable) mBean);
+                intent.putExtras(bundle);
+                intent.putExtra("oid", getIntent().getStringExtra("oid"));
+                intent.putExtra("step1", listObj);
+                intent.putExtra("step2", (Serializable)listX);
+                startActivity(intent);
+            });
+        }
         gatherOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 Toast.makeText(this, "修改成功！", Toast.LENGTH_SHORT).show();
@@ -105,9 +135,9 @@ public class CheckReport2Activity extends AppCompatActivity {
                 mainIntent.putExtra("oid", getIntent().getStringExtra("oid"));
                 mainIntent.putExtra("status", 0);
                 startActivity(mainIntent);
-            } else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(CheckReport2Activity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
@@ -132,6 +162,7 @@ public class CheckReport2Activity extends AppCompatActivity {
                 intent.putExtras(bundle);
                 intent.putExtra("oid", getIntent().getStringExtra("oid"));
                 intent.putExtra("step1", listObj);
+                intent.putExtra("step2", (Serializable)listX);
                 startActivity(intent);
             });
         }

@@ -6,31 +6,23 @@ package mituo.wshoto.com.mituo.bean;
 
 public class LoginBean {
     /**
-     * resultMsg : 请求成功
-     * resultData : {"token":"be65614e199416dbdcad1543b2b2d84d"}
-     * result : true
      * code : 200
+     * result : true
+     * resultData : {"phone":"13665137658","name":"陈译","token":"c61635a04b6507836538cba188809625"}
+     * resultMsg : 请求成功
      */
 
-    private String resultMsg;
-    private ResultDataBean resultData;
-    private boolean result;
     private String code;
+    private boolean result;
+    private ResultDataBean resultData;
+    private String resultMsg;
 
-    public String getResultMsg() {
-        return resultMsg;
+    public String getCode() {
+        return code;
     }
 
-    public void setResultMsg(String resultMsg) {
-        this.resultMsg = resultMsg;
-    }
-
-    public ResultDataBean getResultData() {
-        return resultData;
-    }
-
-    public void setResultData(ResultDataBean resultData) {
-        this.resultData = resultData;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public boolean isResult() {
@@ -41,20 +33,48 @@ public class LoginBean {
         this.result = result;
     }
 
-    public String getCode() {
-        return code;
+    public ResultDataBean getResultData() {
+        return resultData;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setResultData(ResultDataBean resultData) {
+        this.resultData = resultData;
+    }
+
+    public String getResultMsg() {
+        return resultMsg;
+    }
+
+    public void setResultMsg(String resultMsg) {
+        this.resultMsg = resultMsg;
     }
 
     public static class ResultDataBean {
         /**
-         * token : be65614e199416dbdcad1543b2b2d84d
+         * phone : 13665137658
+         * name : 陈译
+         * token : c61635a04b6507836538cba188809625
          */
 
+        private String phone;
+        private String name;
         private String token;
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
 
         public String getToken() {
             return token;

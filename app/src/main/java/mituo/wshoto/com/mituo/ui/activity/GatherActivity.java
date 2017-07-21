@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,7 @@ import mituo.wshoto.com.mituo.Utils;
 import mituo.wshoto.com.mituo.adapter.GatherAdapter;
 import mituo.wshoto.com.mituo.bean.CouponBean;
 import mituo.wshoto.com.mituo.bean.GatherBean;
+import mituo.wshoto.com.mituo.bean.PayStatusBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
 import mituo.wshoto.com.mituo.bean.WeixinBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
@@ -85,11 +87,11 @@ public class GatherActivity extends InitActivity {
     private List<String> couponList = new ArrayList<>();
     //pay_type:0,现金；1，支付宝，2，微信
     private String payType = "2";
-    private CouponBean mCouponBean;
     List<Map<String, String>> list = new ArrayList<>();
     GatherAdapter gatherAdapter;
     private LinePathView mPathView;
     private PopupWindow popupWindow;
+    private SubscriberOnNextListener<PayStatusBean> checkPayOnNext;
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -100,6 +102,16 @@ public class GatherActivity extends InitActivity {
         mToolbar.setNavigationOnClickListener(v -> finish());
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+
+        checkPayOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
+                if (resultBean.getResultData().getKhqm() != null && !resultBean.getResultData().getKhqm().equals("")) {
+                    mImageView2.setImageBitmap(Utils.stringtoBitmap(resultBean.getResultData().getKhqm()));
+                    mLlMobilePay.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -121,7 +133,6 @@ public class GatherActivity extends InitActivity {
         });
 
         CheckCounOnNext = resultBean -> {
-            mCouponBean = resultBean;
             if (resultBean.getCode().equals("200")) {
                 show(resultBean.getResultData().getCouponPrice());
             } else if (resultBean.getCode().equals("401")) {
@@ -163,6 +174,14 @@ public class GatherActivity extends InitActivity {
         };
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HttpMethods.getInstance().check_pay(
+                new ProgressSubscriber<>(checkPayOnNext, GatherActivity.this), preferences.getString("token", ""),
+                getIntent().getStringExtra("oid"));
     }
 
     @Override
@@ -252,9 +271,13 @@ public class GatherActivity extends InitActivity {
                 if (mEtNum.getText().length() == 0) {
                     Toast.makeText(this, "请填写代金券券码！", Toast.LENGTH_SHORT).show();
                 } else {
-                    HttpMethods.getInstance().check_coupon(
-                            new ProgressSubscriber<>(CheckCounOnNext, this), preferences.getString("token", ""),
-                            getIntent().getStringExtra("oid"), mEtNum.getText().toString());
+                    if (couponList.contains(mEtNum.getText().toString())) {
+                        Toast.makeText(this, "该券已使用", Toast.LENGTH_SHORT).show();
+                    } else {
+                        HttpMethods.getInstance().check_coupon(
+                                new ProgressSubscriber<>(CheckCounOnNext, this), preferences.getString("token", ""),
+                                getIntent().getStringExtra("oid"), mEtNum.getText().toString());
+                    }
                 }
                 break;
             case R.id.iv_gather_saoyisao:
@@ -262,12 +285,22 @@ public class GatherActivity extends InitActivity {
                 startActivityForResult(intent10, SHOW_SUBACTIVITY);
                 break;
             case R.id.bt_mobile_pay_1:
-                String test = Utils.bitmaptoString(mBitmap);
+                if (couponList.size() != 0) {
+                    for (String s : couponList) {
+                        coupon = coupon + s + ",";
+                    }
+                    coupon = coupon.substring(0, coupon.length() - 1);
+                }
+
                 HttpMethods.getInstance().save_pay(
                         new ProgressSubscriber<>(SavePayOnNext, this), preferences.getString("token", ""),
                         getIntent().getStringExtra("oid"), mResultBean.getHj(), coupon, payType, Utils.bitmaptoString(mBitmap));
                 break;
             case R.id.bt_mobile_pay_2:
+                for (String s : couponList) {
+                    coupon = coupon + s + ",";
+                }
+                coupon = coupon.substring(0, coupon.length() - 1);
                 HttpMethods.getInstance().save_pay(
                         new ProgressSubscriber<>(SavePay2OnNext, this), preferences.getString("token", ""),
                         getIntent().getStringExtra("oid"), mResultBean.getHj(), coupon, payType, Utils.bitmaptoString(mBitmap));
@@ -287,7 +320,10 @@ public class GatherActivity extends InitActivity {
                 dialog.dismiss();
                 return;
             }
-            mResultBean.setHj(Double.valueOf(mResultBean.getHj()) - Double.valueOf(context) + "");
+
+            DecimalFormat df = new DecimalFormat("######0.00");
+            String sum = df.format(Float.valueOf(mResultBean.getHj()) - Float.valueOf(context));
+            mResultBean.setHj(sum);
             couponList.add(mEtNum.getText().toString());
             mTvGatherMoney.setText(String.format(getResources().getString(R.string.money), mResultBean.getHj()));
             HashMap<String, String> map = new HashMap<>();
