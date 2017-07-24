@@ -15,6 +15,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import mituo.wshoto.com.mituo.NullStringToEmptyAdapterFactory;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.RepairMessage;
 import mituo.wshoto.com.mituo.Utils;
 import mituo.wshoto.com.mituo.adapter.RepairObjsDetailAdapter;
 import mituo.wshoto.com.mituo.bean.AllRepairBean;
@@ -58,6 +63,7 @@ public class RepairObjectsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repair_objects);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());
@@ -118,7 +124,8 @@ public class RepairObjectsActivity extends AppCompatActivity {
                 peijian.put(xmListBean.getXmName(), (ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>>) data.getSerializableExtra("peijian"));
                 RepairObjsBean.ResultDataBean.XmListBean xmListBean1 = new RepairObjsBean.ResultDataBean.XmListBean();
                 xmListBean1.setPjlb(xmListBean.getPjlb());
-                xmListBean1.setIsZd(xmListBean.getIsZd());
+                xmListBean1.setIsZd("1");
+                xmListBean1.setIsCanZidai(xmListBean.getIsZd());
                 xmListBean1.setXmName(xmListBean.getXmName());
                 xmListBean1.setXmprice(xmListBean.getXmprice());
                 xmListBean1.setPjNum("1");
@@ -171,7 +178,6 @@ public class RepairObjectsActivity extends AppCompatActivity {
     }
 
     private void refresh() {
-        try {
             for (RepairObjsBean.ResultDataBean.TcListBean tcListBean : mResultDataBean.getTcList()) {
                 ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>> allList = new ArrayList<>();
                 for (RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {
@@ -187,8 +193,10 @@ public class RepairObjectsActivity extends AppCompatActivity {
                     //获取关联配件
                     ArrayList<AllRepairBean.ResultDataBean.PjListBean> pjList = new ArrayList<>();
                     for (AllRepairBean.ResultDataBean.PjListBean pjListBean : mPjListBeen) {
-                        if (tcxmListBean.getPjlb().equals(pjListBean.getPjlb())) {
-                            pjList.add(pjListBean);
+                        if (null!= tcxmListBean.getPjlb()){
+                            if (tcxmListBean.getPjlb().equals(pjListBean.getPjlb())) {
+                                pjList.add(pjListBean);
+                            }
                         }
                     }
                     allList.add(pjList);
@@ -196,8 +204,8 @@ public class RepairObjectsActivity extends AppCompatActivity {
                 map.put(tcListBean.getTcName(), allList);
             }
 
-            ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>> allList = new ArrayList<>();
             for (RepairObjsBean.ResultDataBean.XmListBean xmListBean : mResultDataBean.getXmList()) {
+                ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>> allList = new ArrayList<>();
                 for (AllRepairBean.ResultDataBean.XmListBean listBean : mXmListBeen) {
                     if (listBean.getXmName().equals(xmListBean.getXmName())) {
                         xmListBean.setIsCanZidai(listBean.getIsZd());
@@ -206,16 +214,15 @@ public class RepairObjectsActivity extends AppCompatActivity {
 
                 ArrayList<AllRepairBean.ResultDataBean.PjListBean> pjList = new ArrayList<>();
                 for (AllRepairBean.ResultDataBean.PjListBean pjListBean : mPjListBeen) {
-                    if (xmListBean.getPjlb().equals(pjListBean.getPjlb())) {
-                        pjList.add(pjListBean);
+                    if (null!= xmListBean.getPjlb()){
+                        if (xmListBean.getPjlb().equals(pjListBean.getPjlb())) {
+                            pjList.add(pjListBean);
+                        }
                     }
                 }
                 allList.add(pjList);
                 map.put(xmListBean.getXmName(), allList);
             }
-        } catch (NullPointerException ignored) {
-
-        }
         repairObjsDetailAdapter = new RepairObjsDetailAdapter(mResultDataBean, map, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this) {
             @Override
@@ -224,5 +231,11 @@ public class RepairObjectsActivity extends AppCompatActivity {
             }
         });
         mRecyclerView.setAdapter(repairObjsDetailAdapter);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(RepairMessage loginInfoMessage) {
+        mResultDataBean = loginInfoMessage.mResultDataBean;
+        refresh();
     }
 }

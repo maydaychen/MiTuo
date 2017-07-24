@@ -73,15 +73,15 @@ public class CheckReport2Activity extends AppCompatActivity {
         for (ReportBean.ResultDataBean.Step2Bean step2Bean : mReportBean.getResultData().getStep2()) {
             mOrderTab.addTab(mOrderTab.newTab().setText(step2Bean.getTypeName()));
             for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2Bean.getList()) {
-//                try{
-//                    if (listBean.getBgxmValue().equals("1")||listBean.getBgxmValue().equals("2")) {
-//                        mBean.add(listBean);
-//                    }else {
-//                        listBean.setBgxmValue("0");
-//                    }
-//                }catch (NullPointerException e){
-//                    listBean.setBgxmValue("0");
-//                }
+                try{
+                    if (listBean.getBgxmValue().equals("1")||listBean.getBgxmValue().equals("2")) {
+                        mBean.add(listBean);
+                    }else {
+                        listBean.setBgxmValue("0");
+                    }
+                }catch (NullPointerException e){
+                    listBean.setBgxmValue("0");
+                }
                 listX.add(listBean);
             }
         }

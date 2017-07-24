@@ -35,6 +35,8 @@ public class AddRepairObjsActivity extends InitActivity {
     TextView mTextView15;
     private SubscriberOnNextListener<AllRepairBean> getOrderListOnNext;
     private RepairObjsBean.ResultDataBean mResultDataBean;
+    private List<AllRepairBean.ResultDataBean.XmListBean> temp_xmList;
+    private List<AllRepairBean.ResultDataBean.TcListBean> temp_tcList;
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -50,13 +52,31 @@ public class AddRepairObjsActivity extends InitActivity {
     public void initData() {
         getOrderListOnNext = resultBean -> {
             List<String> list = new ArrayList<>();
+            temp_tcList = new ArrayList<>();
+            temp_xmList = new ArrayList<>();
             for (AllRepairBean.ResultDataBean.TcListBean tcListBean : resultBean.getResultData().getTcList()) {
                 list.add(tcListBean.getTcName());
+                temp_tcList.add(tcListBean);
             }
             for (AllRepairBean.ResultDataBean.TcListBean tcListBean : resultBean.getResultData().getTcList()) {
                 for (RepairObjsBean.ResultDataBean.TcListBean listBean : mResultDataBean.getTcList()) {
                     if (listBean.getTcName().equals(tcListBean.getTcName())) {
                         list.remove(tcListBean.getTcName());
+                        temp_tcList.remove(tcListBean);
+                    }
+                }
+            }
+            List<String> list1 = new ArrayList<>();
+            for (AllRepairBean.ResultDataBean.XmListBean xmListBean : resultBean.getResultData().getXmList()) {
+                list1.add(xmListBean.getXmName());
+                temp_xmList.add(xmListBean);
+            }
+
+            for (AllRepairBean.ResultDataBean.XmListBean xmListBean : resultBean.getResultData().getXmList()) {
+                for (RepairObjsBean.ResultDataBean.XmListBean listBean : mResultDataBean.getXmList()) {
+                    if (listBean.getXmName().equals(xmListBean.getXmName())) {
+                        list1.remove(xmListBean.getXmName());
+                        temp_xmList.remove(xmListBean);
                     }
                 }
             }
@@ -64,30 +84,19 @@ public class AddRepairObjsActivity extends InitActivity {
             mRvAddRepairObj.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("objs", resultBean.getResultData().getTcList().get(position));
+                bundle.putSerializable("objs", temp_tcList.get(position));
                 intent.putExtras(bundle);
                 intent.putExtra("isTaocan", true);
                 setResult(RESULT_OK, intent);
                 finish();
             });
 
-            List<String> list1 = new ArrayList<>();
-            for (AllRepairBean.ResultDataBean.XmListBean xmListBean : resultBean.getResultData().getXmList()) {
-                list1.add(xmListBean.getXmName());
-            }
 
-            for (AllRepairBean.ResultDataBean.XmListBean xmListBean : resultBean.getResultData().getXmList()) {
-                for (RepairObjsBean.ResultDataBean.XmListBean listBean : mResultDataBean.getXmList()) {
-                    if (listBean.getXmName().equals(xmListBean.getXmName())) {
-                        list.remove(xmListBean.getXmName());
-                    }
-                }
-            }
             mRvAddRepairObjProject.setAdapter(new ArrayAdapter<>(this, R.layout.item_taocan_text, list1));
             mRvAddRepairObjProject.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("objs", resultBean.getResultData().getXmList().get(position));
+                bundle.putSerializable("objs", temp_xmList.get(position));
                 intent.putExtras(bundle);
                 intent.putExtra("isTaocan", false);
                 setResult(RESULT_OK, intent);

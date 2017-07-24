@@ -202,18 +202,40 @@ public class MyAffair_gather extends RelativeLayout {
             for (GatherBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("name", tcxmListBean.getXmName());
-                map.put("peijian", tcxmListBean.getPjName());
+                map.put("peijian", tcxmListBean.getPjpp() + tcxmListBean.getPjName());
                 map.put("num", tcxmListBean.getPjNum());
                 map.put("price", tcxmListBean.getPjPrice());
                 list.add(map);
             }
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "套餐减免费用");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", "-" + tcListBean.getTcJmfy());
+            list.add(map);
         }
         for (GatherBean.ResultDataBean.XmListBean xmListBean : mResultBean.getXmList()) {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", xmListBean.getXmName());
-            map.put("peijian", xmListBean.getPjName());
+            map.put("peijian", xmListBean.getPjpp() + xmListBean.getPjName());
             map.put("num", xmListBean.getPjNum());
             map.put("price", xmListBean.getPjPrice());
+            list.add(map);
+        }
+        if (null != mResultBean.getSmfwf() && !mResultBean.getSmfwf().equals("")) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "上门服务费");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", mResultBean.getSmfwf());
+            list.add(map);
+        }
+        if (null != mResultBean.getGsf() && !mResultBean.getGsf().equals("")) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "工时费");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", mResultBean.getGsf());
             list.add(map);
         }
         GatherAdapter gatherAdapter;
@@ -240,7 +262,7 @@ public class MyAffair_gather extends RelativeLayout {
 
     public void setPayInfo(PayStatusBean.ResultDataBean mResultBean) {
         mTvGatherReal.setText(String.format(getResources().getString(R.string.money), mResultBean.getPaySum() + ""));
-        mTvGatherCoupon.setText(mResultBean.getCouponPrice());
+        mTvGatherCoupon.setText(mResultBean.getCouponPrice() + "");
         mTvPayKind.setText(mResultBean.getPayType().equals("1") ? "微信支付" : "支付宝支付");
         mTvPayOrder.setText(mResultBean.getPayCode());
         if (mResultBean.isPayStatus()) {

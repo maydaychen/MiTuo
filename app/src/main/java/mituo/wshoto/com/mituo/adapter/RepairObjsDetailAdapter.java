@@ -14,11 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.RepairMessage;
 import mituo.wshoto.com.mituo.bean.AllRepairBean;
 import mituo.wshoto.com.mituo.bean.RepairObjsBean;
 import mituo.wshoto.com.mituo.ui.widget.RecycleViewDivider;
@@ -58,7 +61,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             viewHolder.taocan.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL));
             viewHolder.taocan.setLayoutManager(new LinearLayoutManager(mContext));
             if (mData.getTcList().get(position).getTcName().contains("保养")) {
-                viewHolder.taocan.setAdapter(new RepairCareTaocanObjAdapter(mData.getTcList().get(position).getTcxmList()));
+                viewHolder.taocan.setAdapter(new RepairCareTaocanObjAdapter(mData.getTcList().get(position).getTcxmList(), peijianList.get(mData.getTcList().get(position).getTcName())));
             } else {
                 viewHolder.taocan.setAdapter(new RepairTaocanObjAdapter(mData.getTcList().get(position).getTcxmList(), peijianList.get(mData.getTcList().get(position).getTcName())));
             }
@@ -213,7 +216,8 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             } else {
                 mData.getXmList().remove(position - mData.getTcList().size());
             }
-            notifyDataSetChanged();
+            RepairMessage msg = new RepairMessage(mData);
+            EventBus.getDefault().post(msg);
         });
         builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
         builder.create().show();
@@ -221,9 +225,11 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
 
     class RepairCareTaocanObjAdapter extends RecyclerView.Adapter<RepairCareTaocanObjAdapter.ViewHolder> {
         private List<RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean> mData;
+        private ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>> mlistBeen = new ArrayList<>();
 
-        public RepairCareTaocanObjAdapter(List<RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean> mData) {
+        public RepairCareTaocanObjAdapter(List<RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean> mData, ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>> listBeen) {
             this.mData = mData;
+            this.mlistBeen = listBeen;
         }
 
 
@@ -240,8 +246,21 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
             viewHolder.name.setText(mData.get(position).getXmName());
+            if (mlistBeen.get(position).size()!=0) {
+                mData.get(position).setPjpp(mlistBeen.get(position).get(0).getPjpp());
+                mData.get(position).setPjNum("1");
+                mData.get(position).setPjCode(mlistBeen.get(position).get(0).getPjCode());
+                mData.get(position).setPjPrice(mlistBeen.get(position).get(0).getPjPrice());
+                mData.get(position).setPjName(mlistBeen.get(position).get(0).getPjName());
+            }else {
+                mData.get(position).setPjNum("1");
+            }
+            if (null == mData.get(position).getPjpp()) {
+                viewHolder.mSpinner.setText("--");
+            } else {
+                viewHolder.mSpinner.setText(mData.get(position).getPjpp() + mData.get(position).getPjName());
+            }
             viewHolder.pj_num.setText(mData.get(position).getPjNum() + "");
-            viewHolder.mSpinner.setText(mData.get(position).getPjpp() + mData.get(position).getPjName());
             viewHolder.itemView.setTag(position);
         }
 

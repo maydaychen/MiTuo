@@ -191,11 +191,11 @@ public class MyAffair_check_report extends RelativeLayout {
                 }
             }
         }
-        if (list.size() == 0) {
+        if (reportBean.getResultData().getStep1().size() == 0 && reportBean.getResultData().getStep2().size() == 0) {
             IS_OK = false;
             mIvRemind.setVisibility(VISIBLE);
             mTvRemind.setVisibility(VISIBLE);
-        }else {
+        } else {
             mIvRemind.setVisibility(INVISIBLE);
             mTvRemind.setVisibility(INVISIBLE);
         }

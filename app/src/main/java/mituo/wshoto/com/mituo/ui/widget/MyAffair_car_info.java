@@ -180,6 +180,8 @@ public class MyAffair_car_info extends RelativeLayout {
 
 
     private void setRemind() {
+        iv_remind.setVisibility(VISIBLE);
+        tv_remind.setVisibility(VISIBLE);
         iv_remind.setImageResource(R.drawable.order_details_icon_remind);
         tv_remind.setText("尚未完善");
         IS_OK = false;
@@ -188,6 +190,9 @@ public class MyAffair_car_info extends RelativeLayout {
     public void setInfo(CarInfoBean.ResultDataBean resultBean, int status, String num) {
         orderNum = num;
         mResultDataBean = resultBean;
+        iv_remind.setVisibility(GONE);
+        tv_remind.setVisibility(GONE);
+        IS_OK = true;
         ForegroundColorSpan redSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_99));
         if (!(null == resultBean.getContactName())) {
             mOwnerName.setText(String.format(getResources().getString(R.string.car_onwer_edit), resultBean.getContactName()));

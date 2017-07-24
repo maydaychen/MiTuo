@@ -47,7 +47,13 @@ public class SaoPayActivity extends AppCompatActivity {
     private SubscriberOnNextListener<WeixinBean> gatherOnNext;
     private SubscriberOnNextListener<PayStatusBean> checkPayOnNext;
     private Handler handler = new Handler();
+    private Runnable runnable;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable, 2000);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +62,7 @@ public class SaoPayActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
 
-        Runnable runnable = new Runnable() {
+        runnable = new Runnable() {
             @Override
             public void run() {
                 // TODO Auto-generated method stub
@@ -88,7 +94,6 @@ public class SaoPayActivity extends AppCompatActivity {
             if (resultBean.getCode().equals("200")) {
                 Bitmap qrcodeBitmap = generateBitmap(resultBean.getResultData().getUrlCode(), 500, 500);
                 mIvErweima.setImageBitmap(qrcodeBitmap);
-                handler.postDelayed(runnable, 2000);
             } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }

@@ -1,5 +1,6 @@
 package mituo.wshoto.com.mituo.ui.activity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -23,6 +24,7 @@ public abstract class InitActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 21) {
             StatusBarCompat.compat(this, ContextCompat.getColor(this, R.color.colorAccent));
         }
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initView(savedInstanceState);
         initData();
     }

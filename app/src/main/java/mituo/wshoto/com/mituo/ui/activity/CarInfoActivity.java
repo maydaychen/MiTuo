@@ -9,7 +9,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,11 +42,11 @@ public class CarInfoActivity extends InitActivity {
     @BindView(R.id.tv_car_type)
     TextView tvCarType;
     @BindView(R.id.et_car_model_num)
-    EditText etCarModelNum;
+    AutoCompleteTextView etCarModelNum;
     @BindView(R.id.et_mile)
-    EditText etMile;
+    AutoCompleteTextView etMile;
     @BindView(R.id.et_next_care_mile)
-    EditText etNextCareMile;
+    AutoCompleteTextView etNextCareMile;
 
     private MonthYearPicker myp;
     private CarInfoBean.ResultDataBean mResultDataBean;

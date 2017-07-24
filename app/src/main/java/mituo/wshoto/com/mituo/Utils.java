@@ -83,7 +83,7 @@ public class Utils {
         return string;
     }
 
-    public static String changeTime(int ms) {
+    public static String changeTime(double ms) {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
         String hms = formatter.format(ms);

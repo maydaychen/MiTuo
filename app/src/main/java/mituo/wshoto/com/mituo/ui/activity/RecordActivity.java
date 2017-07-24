@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +41,7 @@ import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static mituo.wshoto.com.mituo.MemorySpaceCheck.getSDAvailableSize;
 
 public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
@@ -52,9 +56,12 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     //    private Button start;// 开始录制按钮
 //    private Button stop;// 停止录制按钮
     private boolean IS_RECORDING = false;
+    private Camera mCamera;
     private SharedPreferences preferences;
     private MediaRecorder mediarecorder;// 录制视频的类
     private SurfaceView surfaceview;// 显示视频的控件
+    private String time;
+    private boolean HAVA_TIME = false;
     // 用来显示视频的一个接口，我靠不用还不行，也就是说用mediarecorder录制视频还得给个界面看
     // 想偷偷录视频的同学可以考虑别的办法。。嗯需要实现这个接口的Callback接口
     private SurfaceHolder surfaceHolder;
@@ -70,6 +77,9 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.activity_record);
         ButterKnife.bind(this);
+        if (getSDAvailableSize()/ 1048576<150) {
+
+        }
         init();
     }
 
@@ -117,6 +127,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         };
         endOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
+                freeCameraResource();
                 mLlResult.setVisibility(View.VISIBLE);
                 mIvStart.setVisibility(View.GONE);
                 IS_RECORDING = false;
@@ -145,6 +156,12 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         // 将holder，这个holder为开始在oncreat里面取得的holder，将它赋给surfaceHolder
         surfaceHolder = holder;
+
+        try {
+            initCamera();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -153,6 +170,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         surfaceview = null;
         surfaceHolder = null;
         mediarecorder = null;
+        freeCameraResource();
     }
 
     private void record() {
@@ -160,10 +178,23 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         mIvStart.setImageResource(R.drawable.ic_pause_white_24dp);
         mediarecorder = new MediaRecorder();// 创建mediarecorder对象
         // 设置录制视频源为Camera(相机)
+
+        if (mCamera != null)
+            mediarecorder.setCamera(mCamera);
+        mediarecorder.setOnErrorListener((mr, what, extra) -> {
+            try {
+                if (mr != null)
+                    mr.reset();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         mediarecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         // 设置录制完成后视频的封装格式THREE_GPP为3gp.MPEG_4为mp4
-        mediarecorder
-                .setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mediarecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         // 设置录制的视频编码h263 h264
         mediarecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         // 设置视频录制的分辨率。必须放在设置编码和格式的后面，否则报错
@@ -206,19 +237,51 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         }
     }
 
-    @OnClick({R.id.iv_start, R.id.iv_cancel, R.id.iv_confirm})
+    @OnClick({R.id.iv_start, R.id.iv_confirm})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_start:
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+                time = formatter.format(curDate);
+
                 HttpMethods.getInstance().get_time(
                         new ProgressSubscriber<>(picOnNext, this), preferences.getString("token", ""));
-                break;
-            case R.id.iv_cancel:
-                finish();
                 break;
             case R.id.iv_confirm:
                 finish();
                 break;
         }
     }
+
+    private void initCamera() throws IOException {
+        if (mCamera != null) {
+            freeCameraResource();
+        }
+        try {
+            mCamera = Camera.open();
+        } catch (Exception e) {
+            e.printStackTrace();
+            freeCameraResource();
+        }
+        if (mCamera == null)
+            return;
+
+        // setCameraParams();
+
+        mCamera.setPreviewDisplay(surfaceHolder);
+        mCamera.startPreview();
+        mCamera.unlock();
+    }
+
+    private void freeCameraResource() {
+        if (mCamera != null) {
+            mCamera.setPreviewCallback(null);
+            mCamera.stopPreview();
+            mCamera.lock();
+            mCamera.release();
+            mCamera = null;
+        }
+    }
+
 }

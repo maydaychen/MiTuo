@@ -5,10 +5,12 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -99,6 +101,15 @@ public class MyAffair_repair_video extends RelativeLayout {
             Intent intent = new Intent(mContext, RecordActivity.class);
             intent.putExtra("oid", orderNum);
             mContext.startActivity(intent);
+        });
+        mTextView2.setOnClickListener(v -> {
+            Uri uri = Uri.parse(Config.PATH_MOBILE + "/" + orderNum + ".mp4");
+//调用系统自带的播放器
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Log.v("URI:::::::::", uri.toString());
+            intent.setDataAndType(uri, "video/mp4");
+            mContext.startActivity(intent);
+
         });
     }
 
@@ -222,7 +233,7 @@ public class MyAffair_repair_video extends RelativeLayout {
             builder1.setSpan(redSpan, 4, (orderNum + ".mp4").length() + 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mTextView2.setText(builder1);
             try {
-                mTextView3.setText(String.format(getResources().getString(R.string.video_time), changeTime(test())));
+                mTextView3.setText(String.format(getResources().getString(R.string.video_time), changeTime(test2())));
 
                 SpannableStringBuilder builder2 = new SpannableStringBuilder(mTextView3.getText().toString());
                 ForegroundColorSpan fontSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_99));
@@ -236,6 +247,10 @@ public class MyAffair_repair_video extends RelativeLayout {
 
                 iv_remind.setVisibility(GONE);
                 tv_remind.setVisibility(GONE);
+                if (isOpened) {
+                    infoRl.setVisibility(VISIBLE);
+                    infoRl.setScaleY(1f);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -246,9 +261,9 @@ public class MyAffair_repair_video extends RelativeLayout {
             iv_remind.setVisibility(VISIBLE);
             tv_remind.setVisibility(VISIBLE);
         }
-
-
     }
+
+
 
     private int test() throws IOException {
         String url = Config.PATH_MOBILE + "/" + orderNum + ".mp4";
@@ -257,6 +272,23 @@ public class MyAffair_repair_video extends RelativeLayout {
         mediaPlayer.prepare();
         int a = mediaPlayer.getDuration();
         return a;
+    }
+
+    private double test2() {
+        String url = Config.PATH_MOBILE + "/" + orderNum + ".mp4";
+        MediaPlayer player = new MediaPlayer();
+        try {
+            player.setDataSource(url);  //recordingFilePath（）为音频文件的路径
+            player.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        double duration = player.getDuration();//获取音频的时间
+        Log.d("ACETEST", "### duration: " + duration);
+        player.release();//记得释放资源
+        return duration;
     }
 
 

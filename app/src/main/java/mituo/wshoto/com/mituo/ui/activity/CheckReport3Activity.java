@@ -99,6 +99,15 @@ public class CheckReport3Activity extends AppCompatActivity {
             JsonObject jsonObject = new JsonObject();
             try {
                 listBeen = repairObjsDownAdapter.getList();
+                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : listBeen) {
+                    if (!listBean.getBgxmValue().equals("1") && !listBean.getBgxmValue().equals("2")) {
+                        Toast.makeText(this, "异常项未填写完整！", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }
+                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
+                    listBean.setBgxmValue("0");
+                }
                 for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
                     for (ReportBean.ResultDataBean.Step2Bean.ListBean bean : listBeen) {
                         if (listBean.getBgxmId() == bean.getBgxmId()) {

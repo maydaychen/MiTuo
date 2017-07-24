@@ -92,6 +92,7 @@ public class GatherActivity extends InitActivity {
     private LinePathView mPathView;
     private PopupWindow popupWindow;
     private SubscriberOnNextListener<PayStatusBean> checkPayOnNext;
+    private List<PayStatusBean.ResultDataBean.CouponCodeListBean> mCodeListBeen;
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -105,8 +106,20 @@ public class GatherActivity extends InitActivity {
 
         checkPayOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
+                mCodeListBeen = resultBean.getResultData().getCouponCodeList();
                 if (resultBean.getResultData().getKhqm() != null && !resultBean.getResultData().getKhqm().equals("")) {
                     mImageView2.setImageBitmap(Utils.stringtoBitmap(resultBean.getResultData().getKhqm()));
+                    mBitmap = Utils.stringtoBitmap(resultBean.getResultData().getKhqm());
+                    mLlMobilePay.setVisibility(View.VISIBLE);
+                    if (resultBean.getResultData().getCouponCodeList().size() != 0) {
+                        for (PayStatusBean.ResultDataBean.CouponCodeListBean couponCodeListBean : resultBean.getResultData().getCouponCodeList()) {
+                            couponList.add(couponCodeListBean.getCouponCode());
+                        }
+                    }
+                }
+                if (resultBean.getResultData().isPayStatus()) {
+                    mLlMobilePay.setVisibility(View.GONE);
+                } else {
                     mLlMobilePay.setVisibility(View.VISIBLE);
                 }
             }
@@ -192,19 +205,51 @@ public class GatherActivity extends InitActivity {
             for (GatherBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("name", tcxmListBean.getXmName());
-                map.put("peijian", tcxmListBean.getPjName());
+                map.put("peijian", tcxmListBean.getPjpp() + tcxmListBean.getPjName());
                 map.put("num", tcxmListBean.getPjNum());
                 map.put("price", tcxmListBean.getPjPrice());
                 list.add(map);
             }
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "套餐减免费用");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", "-" + tcListBean.getTcJmfy());
+            list.add(map);
         }
         for (GatherBean.ResultDataBean.XmListBean xmListBean : mResultBean.getXmList()) {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", xmListBean.getXmName());
-            map.put("peijian", xmListBean.getPjName());
+            map.put("peijian", xmListBean.getPjpp() + xmListBean.getPjName());
             map.put("num", xmListBean.getPjNum());
             map.put("price", xmListBean.getPjPrice());
             list.add(map);
+        }
+        if (null != mResultBean.getSmfwf() && !mResultBean.getSmfwf().equals("")) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "上门服务费");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", mResultBean.getSmfwf());
+            list.add(map);
+        }
+        if (null != mResultBean.getGsf() && !mResultBean.getGsf().equals("")) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "工时费");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", mResultBean.getGsf());
+            list.add(map);
+        }
+        if (couponList.size() != 0) {
+            for (PayStatusBean.ResultDataBean.CouponCodeListBean couponCodeListBean : mCodeListBeen) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("name", "优惠券减免");
+                map.put("peijian", couponCodeListBean.getCouponCode());
+                map.put("num", "--");
+                map.put("price", mResultBean.getGsf());
+                list.add(map);
+            }
         }
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this) {
             @Override
@@ -297,10 +342,12 @@ public class GatherActivity extends InitActivity {
                         getIntent().getStringExtra("oid"), mResultBean.getHj(), coupon, payType, Utils.bitmaptoString(mBitmap));
                 break;
             case R.id.bt_mobile_pay_2:
-                for (String s : couponList) {
-                    coupon = coupon + s + ",";
+                if (couponList.size() != 0) {
+                    for (String s : couponList) {
+                        coupon = coupon + s + ",";
+                    }
+                    coupon = coupon.substring(0, coupon.length() - 1);
                 }
-                coupon = coupon.substring(0, coupon.length() - 1);
                 HttpMethods.getInstance().save_pay(
                         new ProgressSubscriber<>(SavePay2OnNext, this), preferences.getString("token", ""),
                         getIntent().getStringExtra("oid"), mResultBean.getHj(), coupon, payType, Utils.bitmaptoString(mBitmap));
@@ -333,9 +380,13 @@ public class GatherActivity extends InitActivity {
             map.put("price", "-" + context);
             list.add(map);
             gatherAdapter.notifyDataSetChanged();
+            mEtNum.setText("");
         });
 
-        builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("取消", (dialog, which) -> {
+            dialog.dismiss();
+            mEtNum.setText("");
+        });
 
         builder.create().show();
     }
