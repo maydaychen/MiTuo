@@ -31,6 +31,7 @@ public class CheckReportAdapter extends RecyclerView.Adapter<CheckReportAdapter.
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_report_step3, viewGroup, false);
         ViewHolder vh = new ViewHolder(view);
+        vh.setIsRecyclable(false);
         return vh;
     }
 

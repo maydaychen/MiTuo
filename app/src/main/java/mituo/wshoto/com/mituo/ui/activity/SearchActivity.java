@@ -13,6 +13,7 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mituo.wshoto.com.mituo.AllCapTransformationMethod;
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.adapter.SearchAdapter;
 import mituo.wshoto.com.mituo.bean.SearchBean;
@@ -47,7 +48,7 @@ public class SearchActivity extends InitActivity {
                 adapter.setOnItemClickListener((view, data1) -> {
                     Intent intent = new Intent(SearchActivity.this, OrderDetailActivity.class);
                     intent.putExtra("oid", resultBean.getResultData().getList().get(data1).getOrderCode());
-                    intent.putExtra("status", 0);
+                    intent.putExtra("status", Integer.valueOf(resultBean.getResultData().getList().get(data1).getOrderStatus()));
                     startActivity(intent);
                 });
             } else if (resultBean.getCode().equals("401")) {
@@ -60,8 +61,9 @@ public class SearchActivity extends InitActivity {
 
     @Override
     public void initData() {
+        mSvSearch.setTransformationMethod(new AllCapTransformationMethod());
         RxTextView.textChanges(mSvSearch).subscribe(charSequence -> {
-            date = charSequence.toString();
+            date = charSequence.toString().toUpperCase();
             HttpMethods.getInstance().search(
                     new ProgressSubscriber<>(gatherOnNext, SearchActivity.this), preferences.getString("token", ""), date);
         });

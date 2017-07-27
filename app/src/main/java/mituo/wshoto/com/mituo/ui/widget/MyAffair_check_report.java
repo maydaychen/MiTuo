@@ -196,6 +196,7 @@ public class MyAffair_check_report extends RelativeLayout {
             mIvRemind.setVisibility(VISIBLE);
             mTvRemind.setVisibility(VISIBLE);
         } else {
+            IS_OK = true;
             mIvRemind.setVisibility(INVISIBLE);
             mTvRemind.setVisibility(INVISIBLE);
         }
@@ -205,4 +206,7 @@ public class MyAffair_check_report extends RelativeLayout {
 
     }
 
+    public void Payed(){
+        edit.setVisibility(GONE);
+    }
 }

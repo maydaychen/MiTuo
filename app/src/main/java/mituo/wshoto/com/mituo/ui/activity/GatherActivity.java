@@ -42,6 +42,7 @@ import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.Utils;
 import mituo.wshoto.com.mituo.adapter.GatherAdapter;
 import mituo.wshoto.com.mituo.bean.CouponBean;
+import mituo.wshoto.com.mituo.bean.CouponDetailBean;
 import mituo.wshoto.com.mituo.bean.GatherBean;
 import mituo.wshoto.com.mituo.bean.PayStatusBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
@@ -84,7 +85,7 @@ public class GatherActivity extends InitActivity {
     private Bitmap mBitmap;
     private String coupon = "";
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
-    private List<String> couponList = new ArrayList<>();
+    private List<CouponDetailBean> couponList = new ArrayList<>();
     //pay_type:0,现金；1，支付宝，2，微信
     private String payType = "2";
     List<Map<String, String>> list = new ArrayList<>();
@@ -93,6 +94,7 @@ public class GatherActivity extends InitActivity {
     private PopupWindow popupWindow;
     private SubscriberOnNextListener<PayStatusBean> checkPayOnNext;
     private List<PayStatusBean.ResultDataBean.CouponCodeListBean> mCodeListBeen;
+    private DecimalFormat df = new DecimalFormat("######0.00");
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -111,24 +113,26 @@ public class GatherActivity extends InitActivity {
                     mImageView2.setImageBitmap(Utils.stringtoBitmap(resultBean.getResultData().getKhqm()));
                     mBitmap = Utils.stringtoBitmap(resultBean.getResultData().getKhqm());
                     mLlMobilePay.setVisibility(View.VISIBLE);
+                    couponList = new ArrayList<>();
+                    mResultBean.setHj(resultBean.getResultData().getPaySum() + "");
+                    coupon = "";
                     if (resultBean.getResultData().getCouponCodeList().size() != 0) {
                         for (PayStatusBean.ResultDataBean.CouponCodeListBean couponCodeListBean : resultBean.getResultData().getCouponCodeList()) {
-                            couponList.add(couponCodeListBean.getCouponCode());
+                            CouponDetailBean couponDetailBean = new CouponDetailBean(couponCodeListBean.getCouponPrice(), couponCodeListBean.getCouponCode());
+                            couponList.add(couponDetailBean);
+
                         }
+                        mTvGatherMoney.setText(String.format(getResources().getString(R.string.money), mResultBean.getHj()));
                     }
-                }
-                if (resultBean.getResultData().isPayStatus()) {
-                    mLlMobilePay.setVisibility(View.GONE);
-                } else {
                     mLlMobilePay.setVisibility(View.VISIBLE);
+                    setDate();
                 }
             }
         };
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 switch (pos) {
                     case 0:
                         payType = "2";
@@ -200,67 +204,7 @@ public class GatherActivity extends InitActivity {
     @Override
     public void initData() {
         mResultBean = (GatherBean.ResultDataBean) getIntent().getSerializableExtra("objs");
-
-        for (GatherBean.ResultDataBean.TcListBean tcListBean : mResultBean.getTcList()) {
-            for (GatherBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("name", tcxmListBean.getXmName());
-                map.put("peijian", tcxmListBean.getPjpp() + tcxmListBean.getPjName());
-                map.put("num", tcxmListBean.getPjNum());
-                map.put("price", tcxmListBean.getPjPrice());
-                list.add(map);
-            }
-            HashMap<String, String> map = new HashMap<>();
-            map.put("name", "套餐减免费用");
-            map.put("peijian", "--");
-            map.put("num", "--");
-            map.put("price", "-" + tcListBean.getTcJmfy());
-            list.add(map);
-        }
-        for (GatherBean.ResultDataBean.XmListBean xmListBean : mResultBean.getXmList()) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("name", xmListBean.getXmName());
-            map.put("peijian", xmListBean.getPjpp() + xmListBean.getPjName());
-            map.put("num", xmListBean.getPjNum());
-            map.put("price", xmListBean.getPjPrice());
-            list.add(map);
-        }
-        if (null != mResultBean.getSmfwf() && !mResultBean.getSmfwf().equals("")) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("name", "上门服务费");
-            map.put("peijian", "--");
-            map.put("num", "--");
-            map.put("price", mResultBean.getSmfwf());
-            list.add(map);
-        }
-        if (null != mResultBean.getGsf() && !mResultBean.getGsf().equals("")) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("name", "工时费");
-            map.put("peijian", "--");
-            map.put("num", "--");
-            map.put("price", mResultBean.getGsf());
-            list.add(map);
-        }
-        if (couponList.size() != 0) {
-            for (PayStatusBean.ResultDataBean.CouponCodeListBean couponCodeListBean : mCodeListBeen) {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("name", "优惠券减免");
-                map.put("peijian", couponCodeListBean.getCouponCode());
-                map.put("num", "--");
-                map.put("price", mResultBean.getGsf());
-                list.add(map);
-            }
-        }
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        mRvGather.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.VERTICAL));
-        mRvGather.setLayoutManager(layoutManager);
-        gatherAdapter = new GatherAdapter(list);
-        mRvGather.setAdapter(gatherAdapter);
+        setDate();
         mTvGatherMoney.setText(String.format(getResources().getString(R.string.money), mResultBean.getHj()));
     }
 
@@ -316,6 +260,7 @@ public class GatherActivity extends InitActivity {
                 if (mEtNum.getText().length() == 0) {
                     Toast.makeText(this, "请填写代金券券码！", Toast.LENGTH_SHORT).show();
                 } else {
+                    mEtNum.setText("");
                     if (couponList.contains(mEtNum.getText().toString())) {
                         Toast.makeText(this, "该券已使用", Toast.LENGTH_SHORT).show();
                     } else {
@@ -331,8 +276,8 @@ public class GatherActivity extends InitActivity {
                 break;
             case R.id.bt_mobile_pay_1:
                 if (couponList.size() != 0) {
-                    for (String s : couponList) {
-                        coupon = coupon + s + ",";
+                    for (CouponDetailBean couponDetailBean : couponList) {
+                        coupon = coupon + couponDetailBean.getNum() + ",";
                     }
                     coupon = coupon.substring(0, coupon.length() - 1);
                 }
@@ -343,8 +288,8 @@ public class GatherActivity extends InitActivity {
                 break;
             case R.id.bt_mobile_pay_2:
                 if (couponList.size() != 0) {
-                    for (String s : couponList) {
-                        coupon = coupon + s + ",";
+                    for (CouponDetailBean couponDetailBean : couponList) {
+                        coupon = coupon + couponDetailBean.getNum() + ",";
                     }
                     coupon = coupon.substring(0, coupon.length() - 1);
                 }
@@ -368,10 +313,12 @@ public class GatherActivity extends InitActivity {
                 return;
             }
 
-            DecimalFormat df = new DecimalFormat("######0.00");
+
             String sum = df.format(Float.valueOf(mResultBean.getHj()) - Float.valueOf(context));
             mResultBean.setHj(sum);
-            couponList.add(mEtNum.getText().toString());
+
+            CouponDetailBean couponDetailBean = new CouponDetailBean(Integer.valueOf(context), mEtNum.getText().toString());
+            couponList.add(couponDetailBean);
             mTvGatherMoney.setText(String.format(getResources().getString(R.string.money), mResultBean.getHj()));
             HashMap<String, String> map = new HashMap<>();
             map.put("name", "优惠券减免");
@@ -454,16 +401,17 @@ public class GatherActivity extends InitActivity {
 
     private void save() {
         try {
+            String path = preferences.getString("path", Config.PATH_MOBILE);
             popupWindow.dismiss();
-            File destDir = new File(Config.PATH_MOBILE);
+            File destDir = new File(path);
             if (!destDir.exists()) {
                 destDir.mkdirs();
             }
 //            mPathView.save("/sdcard/qm.png", true, 10);
-            mPathView.save(Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
+            mPathView.save(path + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 2;
-            Bitmap bm = BitmapFactory.decodeFile(Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", options);
+            Bitmap bm = BitmapFactory.decodeFile(path + "/" + getIntent().getStringExtra("oid") + ".png", options);
             mBitmap = bm;
             mImageView2.setImageBitmap(bm);
             mLlMobilePay.setVisibility(View.VISIBLE);
@@ -473,4 +421,67 @@ public class GatherActivity extends InitActivity {
         }
     }
 
+    private void setDate() {
+        list = new ArrayList<>();
+        for (GatherBean.ResultDataBean.TcListBean tcListBean : mResultBean.getTcList()) {
+            for (GatherBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("name", tcxmListBean.getXmName());
+                map.put("peijian", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjName());
+                map.put("num", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjNum());
+                map.put("price", tcxmListBean.getPjPrice());
+                list.add(map);
+            }
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "套餐减免费用");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", "-" + tcListBean.getTcJmfy());
+            list.add(map);
+        }
+        for (GatherBean.ResultDataBean.XmListBean xmListBean : mResultBean.getXmList()) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", xmListBean.getXmName());
+            map.put("peijian", xmListBean.getPjName());
+            map.put("num", xmListBean.getPjNum());
+            map.put("price", xmListBean.getPjPrice());
+            list.add(map);
+        }
+        if (null != mResultBean.getSmfwf() && !mResultBean.getSmfwf().equals("")) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "上门服务费");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", mResultBean.getSmfwf());
+            list.add(map);
+        }
+        if (null != mResultBean.getGsf() && !mResultBean.getGsf().equals("")) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "工时费");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", mResultBean.getGsf());
+            list.add(map);
+        }
+        if (couponList.size() != 0) {
+            for (int i = 0; i < mCodeListBeen.size(); i++) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("name", "优惠券减免");
+                map.put("peijian", couponList.get(i).getNum());
+                map.put("num", "--");
+                map.put("price", "-" + couponList.get(i).getMoney() + "");
+                list.add(map);
+            }
+        }
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        mRvGather.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.VERTICAL));
+        mRvGather.setLayoutManager(layoutManager);
+        gatherAdapter = new GatherAdapter(list);
+        mRvGather.setAdapter(gatherAdapter);
+    }
 }

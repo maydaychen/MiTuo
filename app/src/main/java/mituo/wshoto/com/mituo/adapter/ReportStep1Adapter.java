@@ -1,11 +1,13 @@
 package mituo.wshoto.com.mituo.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 
@@ -21,9 +23,11 @@ import mituo.wshoto.com.mituo.bean.ReportBean;
 
 public class ReportStep1Adapter extends RecyclerView.Adapter<ReportStep1Adapter.ViewHolder> {
     private List<ReportBean.ResultDataBean.Step1Bean> mData;
+    private Context context;
 
-    public ReportStep1Adapter(List<ReportBean.ResultDataBean.Step1Bean> mData) {
+    public ReportStep1Adapter(List<ReportBean.ResultDataBean.Step1Bean> mData, Context mContext) {
         this.mData = mData;
+        this.context = mContext;
     }
 
 
@@ -141,6 +145,15 @@ public class ReportStep1Adapter extends RecyclerView.Adapter<ReportStep1Adapter.
     }
 
     public List<ReportBean.ResultDataBean.Step1Bean> getList() {
+        for (ReportBean.ResultDataBean.Step1Bean step1Bean : mData) {
+            for (ReportBean.ResultDataBean.Step1Bean.ListBeanX listBeanX : step1Bean.getList()) {
+                if (null == listBeanX.getBgxmValue() || listBeanX.getBgxmValue().equals("")) {
+                    Toast.makeText(context, "请填写完整", Toast.LENGTH_SHORT).show();
+                    List<ReportBean.ResultDataBean.Step1Bean> err = new ArrayList<>();
+                    return err;
+                }
+            }
+        }
         return mData;
     }
 }

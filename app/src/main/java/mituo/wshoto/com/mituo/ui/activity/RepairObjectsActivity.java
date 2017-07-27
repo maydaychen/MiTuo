@@ -224,12 +224,7 @@ public class RepairObjectsActivity extends AppCompatActivity {
                 map.put(xmListBean.getXmName(), allList);
             }
         repairObjsDetailAdapter = new RepairObjsDetailAdapter(mResultDataBean, map, this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(repairObjsDetailAdapter);
     }
 

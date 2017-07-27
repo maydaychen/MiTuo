@@ -19,7 +19,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import mituo.wshoto.com.mituo.ui.activity.LoginActivity;
 
@@ -138,7 +142,7 @@ public class Utils {
         }
     }
 
-    public static void logout(Activity context){
+    public static void logout(Activity context) {
         new AlertDialog.Builder(context)
                 .setTitle("警告")
                 .setMessage("您的账号已在别处登录，请重新登录！")
@@ -154,5 +158,19 @@ public class Utils {
                     }
                 })
                 .show();
+    }
+
+    public static boolean isChinaPhoneLegal(String str) throws PatternSyntaxException {
+        String regExp = "^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$";
+        Pattern p = Pattern.compile(regExp);
+        Matcher m = p.matcher(str);
+        return m.matches();
+    }
+
+    //时间戳转日期
+    public static String LongToDate(Long time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String times = sdr.format(new Date(time));
+        return times;
     }
 }

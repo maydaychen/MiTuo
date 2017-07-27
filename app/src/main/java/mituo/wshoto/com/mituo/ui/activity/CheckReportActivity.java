@@ -36,7 +36,7 @@ public class CheckReportActivity extends InitActivity {
         mReportBean = (ReportBean) getIntent().getSerializableExtra("objs");
 
         mRecyclerView2.setLayoutManager(new LinearLayoutManager(this));
-        reportAdapter = new ReportStep1Adapter(mReportBean.getResultData().getStep1());
+        reportAdapter = new ReportStep1Adapter(mReportBean.getResultData().getStep1(), CheckReportActivity.this);
         mRecyclerView2.setAdapter(reportAdapter);
     }
 
@@ -48,6 +48,9 @@ public class CheckReportActivity extends InitActivity {
     @OnClick(R.id.button2)
     public void onViewClicked() {
         List<ReportBean.ResultDataBean.Step1Bean> list = reportAdapter.getList();
+        if (list.size() == 0) {
+            return;
+        }
         List<ReportBean.ResultDataBean.Step1Bean.ListBeanX> listX = new ArrayList<>();
 
         for (ReportBean.ResultDataBean.Step1Bean step1Bean : list) {

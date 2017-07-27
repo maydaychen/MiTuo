@@ -19,6 +19,8 @@ import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 
+import static mituo.wshoto.com.mituo.Utils.isChinaPhoneLegal;
+
 public class FindPassActivity extends AppCompatActivity {
     @BindView(R.id.toolbar2)
     Toolbar mToolbar2;
@@ -31,7 +33,7 @@ public class FindPassActivity extends AppCompatActivity {
     private boolean flag = true;
     private int recLen = 60;
     private SubscriberOnNextListener<EmsBean> getLatestOnNext;
-    private String ems,phone;
+    private String ems, phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class FindPassActivity extends AppCompatActivity {
         mToolbar2.setNavigationOnClickListener(v -> finish());
 
         getLatestOnNext = resultBean -> {
-            ems = resultBean.getResultData().getVcode()+"";
+            ems = resultBean.getResultData().getVcode() + "";
         };
     }
 
@@ -73,22 +75,22 @@ public class FindPassActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button3:
-                phone =mEtTelephone.getText().toString();
-                if (flag && !mEtTelephone.getText().toString().equals("")) {
+                phone = mEtTelephone.getText().toString();
+                if (flag && !mEtTelephone.getText().toString().equals("") && isChinaPhoneLegal(mEtTelephone.getText().toString())) {
                     flag = false;
                     handler.post(runnable);
                     HttpMethods.getInstance().getEms(
                             new ProgressSubscriber<>(getLatestOnNext, this), mEtTelephone.getText().toString());
                 } else {
-                    Toast.makeText(this, "请填写手机号！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "请填写正确手机号！", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.bt_next:
-                if (mEtNum.getText().toString().equals(ems)){
+                if (mEtNum.getText().toString().equals(ems)) {
                     Intent intent = new Intent(FindPassActivity.this, FindPass2Activity.class);
                     intent.putExtra("phone", phone);
                     startActivity(intent);
-                }else {
+                } else {
                     Toast.makeText(this, "验证码输入有误！", Toast.LENGTH_SHORT).show();
                 }
                 break;

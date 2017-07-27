@@ -45,9 +45,9 @@ public class ChangePassActivity extends AppCompatActivity {
         ChangePassOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 startActivity(new Intent(ChangePassActivity.this, ChangePassSuccessActivity.class));
-            } else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(ChangePassActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
@@ -58,11 +58,15 @@ public class ChangePassActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         switch (view.getId()) {
             case R.id.bt_next:
-                if (mNewPass.getText().toString().equals(mNewPass2.getText().toString())) {
-                    HttpMethods.getInstance().change_pass(
-                            new ProgressSubscriber<>(ChangePassOnNext, this), preferences.getString("token", ""), mOldPass.getText().toString(), mNewPass.getText().toString());
-                }else {
-                    Toast.makeText(this, "两次密码请输入一致！", Toast.LENGTH_SHORT).show();
+                if (mNewPass.getText().toString().equals("") || mNewPass2.getText().toString().equals("")) {
+                    Toast.makeText(this, "请填写新密码！", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (mNewPass.getText().toString().equals(mNewPass2.getText().toString())) {
+                        HttpMethods.getInstance().change_pass(
+                                new ProgressSubscriber<>(ChangePassOnNext, this), preferences.getString("token", ""), mOldPass.getText().toString(), mNewPass.getText().toString());
+                    } else {
+                        Toast.makeText(this, "两次密码请输入一致！", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
         }

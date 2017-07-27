@@ -8,7 +8,7 @@ public class TimeBean {
     /**
      * code : 200
      * result : true
-     * resultData : {"time":"2017/07/24 14:56:24"}
+     * resultData : {"timeStamp":1501126556068,"time":"2017-07-27 11:35:56"}
      * resultMsg : 请求成功
      */
 
@@ -51,10 +51,20 @@ public class TimeBean {
 
     public static class ResultDataBean {
         /**
-         * time : 2017/07/24 14:56:24
+         * timeStamp : 1501126556068
+         * time : 2017-07-27 11:35:56
          */
 
+        private long timeStamp;
         private String time;
+
+        public long getTimeStamp() {
+            return timeStamp;
+        }
+
+        public void setTimeStamp(long timeStamp) {
+            this.timeStamp = timeStamp;
+        }
 
         public String getTime() {
             return time;

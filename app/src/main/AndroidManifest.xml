@@ -34,7 +34,9 @@
             android:name=".ui.activity.LoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.FindPassActivity"/>
+        <activity
+            android:name=".ui.activity.FindPassActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.StorageActivity">
         </activity>
         <activity

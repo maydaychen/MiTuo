@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -79,6 +80,13 @@ public class AddRepairObjsActivity extends InitActivity {
                         temp_xmList.remove(xmListBean);
                     }
                 }
+            }
+
+            if (list.size() == 0) {
+                mTextView14.setVisibility(View.GONE);
+            }
+            if (list1.size() == 0) {
+                mTextView15.setVisibility(View.GONE);
             }
             mRvAddRepairObj.setAdapter(new ArrayAdapter<>(this, R.layout.item_taocan_text, list));
             mRvAddRepairObj.setOnItemClickListener((parent, view, position, id) -> {

@@ -33,6 +33,7 @@ import mituo.wshoto.com.mituo.bean.PicBean;
 import mituo.wshoto.com.mituo.bean.RepairObjsBean;
 import mituo.wshoto.com.mituo.bean.ReportBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
+import mituo.wshoto.com.mituo.bean.TimeBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
@@ -59,11 +60,13 @@ public class OrderDetailActivity extends InitActivity {
     private SubscriberOnNextListener<ResultBean> finishOnNext;
     private SubscriberOnNextListener<ResultBean> UploadPicOnNext;
     private SubscriberOnNextListener<PayStatusBean> checkPayOnNext;
+    private SubscriberOnNextListener<TimeBean> timeOnNext;
 
     private int num = 1;
     private int status;
     private SharedPreferences preferences;
     private Bitmap mBitmap;
+    private String path;
 
     @BindView(R.id.tb_order)
     Toolbar mTbOrder;
@@ -103,6 +106,7 @@ public class OrderDetailActivity extends InitActivity {
     @Override
     public void initData() {
         preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        path = preferences.getString("path", Config.PATH_MOBILE);
         mTbOrder.setNavigationIcon(R.drawable.nav_back);
         mTbOrder.setNavigationOnClickListener(v -> finish());
         getOrderInfoOnNext = resultBean -> {
@@ -136,6 +140,8 @@ public class OrderDetailActivity extends InitActivity {
         gatherOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 mGather.setInfo(resultBean.getResultData(), status, getIntent().getStringExtra("oid"));
+                HttpMethods.getInstance().check_pay(
+                        new ProgressSubscriber<>(checkPayOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
             } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
             } else {
@@ -172,11 +178,26 @@ public class OrderDetailActivity extends InitActivity {
         checkPayOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 mGather.setRemind(resultBean);
+                if (resultBean.getResultData().isPayStatus()) {
+                    mRepairObjs.Payed();
+                    mCheckReport.Payed();
+                }
+            }
+        };
+        timeOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
+                long time = System.currentTimeMillis();
+                SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong("sys_time", resultBean.getResultData().getTimeStamp() - time);
+                editor.apply();
+            } else {
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
         UploadPicOnNext = resultBean -> {
             if (resultBean.isResult()) {
-                mRepairPhotos.addPic(Utils.bitmaptoString(mBitmap), Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + num++ + ".png");
+                mRepairPhotos.addPic(Utils.bitmaptoString(mBitmap), path + "/" + getIntent().getStringExtra("oid") + num++ + ".png");
             } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
             } else {
@@ -198,7 +219,7 @@ public class OrderDetailActivity extends InitActivity {
                     mBitmap = extras.getParcelable("data");
                     HttpMethods.getInstance().upload_img(
                             new ProgressSubscriber<>(UploadPicOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"),
-                            Utils.bitmaptoString(mBitmap), Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + num++ + ".png");
+                            Utils.bitmaptoString(mBitmap), path + "/" + getIntent().getStringExtra("oid") + num++ + ".png");
                 }
             } catch (NullPointerException ignored) {
 
@@ -293,11 +314,9 @@ public class OrderDetailActivity extends InitActivity {
                 new ProgressSubscriber<>(getObjsOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
         HttpMethods.getInstance().gather(
                 new ProgressSubscriber<>(gatherOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
-        HttpMethods.getInstance().check_pay(
-                new ProgressSubscriber<>(checkPayOnNext, this), preferences.getString("token", ""),
-                getIntent().getStringExtra("oid"));
 //                "BY20170622000");
-
+        HttpMethods.getInstance().get_time(
+                new ProgressSubscriber<>(timeOnNext, this), preferences.getString("token", ""));
     }
 
 
@@ -307,7 +326,6 @@ public class OrderDetailActivity extends InitActivity {
             if (mRepairVideo.IS_OK) {
                 if (mCheckReport.IS_OK) {
                     if (mGather.IS_OK) {
-
                     } else {
                         Toast.makeText(this, "尚未付款", Toast.LENGTH_SHORT).show();
                         return;

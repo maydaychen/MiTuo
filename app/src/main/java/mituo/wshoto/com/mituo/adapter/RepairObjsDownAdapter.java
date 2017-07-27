@@ -44,11 +44,16 @@ public class RepairObjsDownAdapter extends RecyclerView.Adapter<RepairObjsDownAd
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.projects.setText(mData.get(position).getXmName());
         viewHolder.name.setText(mData.get(position).getXmName());
-        if (null==mData.get(position).getPjName()||mData.get(position).getPjName().equals("")){
-            viewHolder.objs.setText("--");
+        if (mData.get(position).getIsZd().equals("0")) {
+            viewHolder.objs.setText("用户自带");
         } else {
-            viewHolder.objs.setText(mData.get(position).getPjpp() + mData.get(position).getPjName() + "*" + mData.get(position).getPjNum());
+            if (null == mData.get(position).getPjName() || mData.get(position).getPjName().equals("")) {
+                viewHolder.objs.setText("--");
+            } else {
+                viewHolder.objs.setText(mData.get(position).getPjpp() + mData.get(position).getPjName() + "*" + mData.get(position).getPjNum());
+            }
         }
+
         viewHolder.itemView.setTag(position);
     }
 

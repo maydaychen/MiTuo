@@ -186,8 +186,10 @@ public class MyAffair_repair_objs extends RelativeLayout {
             mRvRepairObjs.setLayoutManager(new LinearLayoutManager(mContext));
             mRvRepairObjs.setAdapter(repairObjsDownAdapter);
         }
+    }
 
-
+    public void Payed(){
+        edit.setVisibility(GONE);
     }
 
 }

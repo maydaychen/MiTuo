@@ -98,7 +98,7 @@ public class PayStatusBean {
         private String payCode;
         private boolean payStatus;
         private String couponCode;
-        private int paySum;
+        private float paySum;
         private List<CouponCodeListBean> couponCodeList;
 
         public String getPayType() {
@@ -149,11 +149,11 @@ public class PayStatusBean {
             this.couponCode = couponCode;
         }
 
-        public int getPaySum() {
+        public float getPaySum() {
             return paySum;
         }
 
-        public void setPaySum(int paySum) {
+        public void setPaySum(float paySum) {
             this.paySum = paySum;
         }
 

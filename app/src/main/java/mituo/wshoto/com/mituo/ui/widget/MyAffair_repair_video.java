@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.text.Spannable;
@@ -54,7 +55,6 @@ public class MyAffair_repair_video extends RelativeLayout {
     private TextView tv_remind;
     private LinearLayout infoRl;
 
-    private ImageView directionIv;
     private Button edit;
     private View baseV;
     private String orderNum;
@@ -63,6 +63,8 @@ public class MyAffair_repair_video extends RelativeLayout {
     private boolean isFileExist = false;
     private boolean animatorLock = false;
     public boolean IS_OK = true;
+    private String path;
+    private SharedPreferences preferences;
 
     public MyAffair_repair_video(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -81,9 +83,10 @@ public class MyAffair_repair_video extends RelativeLayout {
     private void init() {
         baseV = LayoutInflater.from(mContext).inflate(R.layout.affair_repair_video, this);
         ButterKnife.bind(this);
+        preferences = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
+        path = preferences.getString("path", Config.PATH_MOBILE);
         titleRl = (RelativeLayout) baseV.findViewById(R.id.title);
         infoRl = (LinearLayout) baseV.findViewById(R.id.affair_info_rl);
-        directionIv = (ImageView) baseV.findViewById(R.id.affair_direction_iv);
         iv_remind = (ImageView) baseV.findViewById(R.id.iv_remind);
         tv_remind = (TextView) baseV.findViewById(R.id.tv_remind);
         edit = (Button) baseV.findViewById(R.id.video_edit);
@@ -103,8 +106,8 @@ public class MyAffair_repair_video extends RelativeLayout {
             mContext.startActivity(intent);
         });
         mTextView2.setOnClickListener(v -> {
-            Uri uri = Uri.parse(Config.PATH_MOBILE + "/" + orderNum + ".mp4");
-//调用系统自带的播放器
+            Uri uri = Uri.parse(path + "/" + orderNum + ".mp4");
+            //调用系统自带的播放器
             Intent intent = new Intent(Intent.ACTION_VIEW);
             Log.v("URI:::::::::", uri.toString());
             intent.setDataAndType(uri, "video/mp4");
@@ -225,7 +228,7 @@ public class MyAffair_repair_video extends RelativeLayout {
         if (status == 1) {
             edit.setVisibility(GONE);
         }
-        if (isFileExist = fileIsExists(Config.PATH_MOBILE + "/" + orderNum + ".mp4")) {
+        if (isFileExist = fileIsExists(path + "/" + orderNum + ".mp4")) {
             edit.setVisibility(GONE);
             mTextView2.setText(String.format(getResources().getString(R.string.video_name), orderNum + ".mp4"));
             SpannableStringBuilder builder1 = new SpannableStringBuilder(mTextView2.getText().toString());
@@ -240,11 +243,11 @@ public class MyAffair_repair_video extends RelativeLayout {
                 builder2.setSpan(fontSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 mTextView3.setText(builder2);
 
-                mTextView4.setText(String.format(getResources().getString(R.string.video_size), getsizeize(Config.PATH_MOBILE + "/" + orderNum + ".mp4")));
+                mTextView4.setText(String.format(getResources().getString(R.string.video_size), getsizeize(path + "/" + orderNum + ".mp4")));
                 SpannableStringBuilder builder3 = new SpannableStringBuilder(mTextView4.getText().toString());
                 builder3.setSpan(fontSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 mTextView4.setText(builder3);
-
+                IS_OK = true;
                 iv_remind.setVisibility(GONE);
                 tv_remind.setVisibility(GONE);
                 if (isOpened) {
@@ -264,9 +267,8 @@ public class MyAffair_repair_video extends RelativeLayout {
     }
 
 
-
     private int test() throws IOException {
-        String url = Config.PATH_MOBILE + "/" + orderNum + ".mp4";
+        String url = path + "/" + orderNum + ".mp4";
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setDataSource(url);
         mediaPlayer.prepare();
@@ -275,7 +277,7 @@ public class MyAffair_repair_video extends RelativeLayout {
     }
 
     private double test2() {
-        String url = Config.PATH_MOBILE + "/" + orderNum + ".mp4";
+        String url = path + "/" + orderNum + ".mp4";
         MediaPlayer player = new MediaPlayer();
         try {
             player.setDataSource(url);  //recordingFilePath（）为音频文件的路径

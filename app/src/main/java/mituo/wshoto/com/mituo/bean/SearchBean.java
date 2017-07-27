@@ -10,7 +10,7 @@ public class SearchBean {
     /**
      * code : 200
      * result : true
-     * resultData : {"list":[{"carNo":"苏B3A121","createTime":null,"orderCode":"BY20170714017"}]}
+     * resultData : {"list":[{"carNo":"苏b12345","createTime":null,"orderStatus":"1","orderCode":"BY20170719009"},{"carNo":"苏b12345","createTime":null,"orderStatus":"0","orderCode":"BY20170719026"},{"carNo":"苏B12345","createTime":null,"orderStatus":"1","orderCode":"BY20170721017"},{"carNo":"苏Q12345","createTime":null,"orderStatus":"0","orderCode":"BY20170725024"}]}
      * resultMsg : 请求成功
      */
 
@@ -64,13 +64,15 @@ public class SearchBean {
 
         public static class ListBean {
             /**
-             * carNo : 苏B3A121
+             * carNo : 苏b12345
              * createTime : null
-             * orderCode : BY20170714017
+             * orderStatus : 1
+             * orderCode : BY20170719009
              */
 
             private String carNo;
             private String createTime;
+            private String orderStatus;
             private String orderCode;
 
             public String getCarNo() {
@@ -87,6 +89,14 @@ public class SearchBean {
 
             public void setCreateTime(String createTime) {
                 this.createTime = createTime;
+            }
+
+            public String getOrderStatus() {
+                return orderStatus;
+            }
+
+            public void setOrderStatus(String orderStatus) {
+                this.orderStatus = orderStatus;
             }
 
             public String getOrderCode() {

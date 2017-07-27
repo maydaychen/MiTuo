@@ -1,6 +1,8 @@
 package mituo.wshoto.com.mituo.ui.activity;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,12 +70,14 @@ public class HandWriteActivity extends AppCompatActivity {
 
     private void save() {
         try {
-            File destDir = new File(Config.PATH_MOBILE);
+            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+            String path = preferences.getString("path", Config.PATH_MOBILE);
+            File destDir = new File(path);
             if (!destDir.exists()) {
                 destDir.mkdirs();
             }
 //            mPathView.save("/sdcard/qm.png", true, 10);
-            mPathView.save(Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
+            mPathView.save(path + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
             setResult(100);
             finish();
         } catch (IOException e) {

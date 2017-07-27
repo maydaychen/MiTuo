@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -54,12 +55,23 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
     //将数据与界面进行绑定的操作
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.delete.setOnClickListener(v -> show(position));
+        viewHolder.delete.setOnClickListener(v -> {
+            if (mData.getTcList().size() + mData.getXmList().size() > 1) {
+                show(position);
+            } else {
+                Toast.makeText(mContext, "请至少保留一项！", Toast.LENGTH_SHORT).show();
+            }
+        });
         if ((position + 1) <= mData.getTcList().size()) {
             viewHolder.name.setText(mData.getTcList().get(position).getTcName());
             viewHolder.ll_xm.setVisibility(View.GONE);
             viewHolder.taocan.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL));
-            viewHolder.taocan.setLayoutManager(new LinearLayoutManager(mContext));
+            viewHolder.taocan.setLayoutManager(new LinearLayoutManager(mContext) {
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            });
             if (mData.getTcList().get(position).getTcName().contains("保养")) {
                 viewHolder.taocan.setAdapter(new RepairCareTaocanObjAdapter(mData.getTcList().get(position).getTcxmList(), peijianList.get(mData.getTcList().get(position).getTcName())));
             } else {
@@ -79,7 +91,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             List<String> list = new ArrayList<>();
             try {
                 for (AllRepairBean.ResultDataBean.PjListBean pjListBean : peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0)) {
-                    list.add(pjListBean.getPjpp() + pjListBean.getPjName());
+                    list.add(pjListBean.getPjName());
                 }
             } catch (IndexOutOfBoundsException ignored) {
             } catch (NullPointerException ignored) {
@@ -90,7 +102,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.item_text, R.id.tv_item_text, list);
             viewHolder.mSpinner.setAdapter(adapter);
             for (int i = 0; i < adapter.getCount(); i++) {
-                if ((mData.getXmList().get(mPositon).getPjpp() + mData.getXmList().get(mPositon).getPjName()).equals(adapter.getItem(i).toString())) {
+                if ((mData.getXmList().get(mPositon).getPjName()).equals(adapter.getItem(i).toString())) {
                     viewHolder.mSpinner.setSelection(i, true);
                     break;
                 }
@@ -113,6 +125,8 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
                         } else {
                             mData.getXmList().get(mPositon).setPjName(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjName());
                             mData.getXmList().get(mPositon).setPjNum(mData.getXmList().get(mPositon).getPjNum());
+                            viewHolder.num_del.setVisibility(View.VISIBLE);
+                            viewHolder.num_add.setVisibility(View.VISIBLE);
                             if (viewHolder.pj_num.getText().equals("1")) {
                                 viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
                                 viewHolder.num_del.setClickable(false);
@@ -246,19 +260,19 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
             viewHolder.name.setText(mData.get(position).getXmName());
-            if (mlistBeen.get(position).size()!=0) {
+            if (mlistBeen.get(position).size() != 0) {
                 mData.get(position).setPjpp(mlistBeen.get(position).get(0).getPjpp());
                 mData.get(position).setPjNum("1");
                 mData.get(position).setPjCode(mlistBeen.get(position).get(0).getPjCode());
                 mData.get(position).setPjPrice(mlistBeen.get(position).get(0).getPjPrice());
                 mData.get(position).setPjName(mlistBeen.get(position).get(0).getPjName());
-            }else {
+            } else {
                 mData.get(position).setPjNum("1");
             }
             if (null == mData.get(position).getPjpp()) {
                 viewHolder.mSpinner.setText("--");
             } else {
-                viewHolder.mSpinner.setText(mData.get(position).getPjpp() + mData.get(position).getPjName());
+                viewHolder.mSpinner.setText(mData.get(position).getPjName());
             }
             viewHolder.pj_num.setText(mData.get(position).getPjNum() + "");
             viewHolder.itemView.setTag(position);
@@ -325,7 +339,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             try {
                 if (mlistBeen.size() != 0) {
                     for (AllRepairBean.ResultDataBean.PjListBean pjListBean : mlistBeen.get(position)) {
-                        list.add(pjListBean.getPjpp() + pjListBean.getPjName());
+                        list.add( pjListBean.getPjName());
                     }
                 }
             } catch (NullPointerException ignored) {
@@ -336,7 +350,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.item_text, R.id.tv_item_text, list);
             viewHolder.mSpinner.setAdapter(adapter);
             for (int i = 0; i < adapter.getCount(); i++) {
-                if ((mData.get(position).getPjpp() + mData.get(position).getPjName()).equals(adapter.getItem(i).toString())) {
+                if ((mData.get(position).getPjName()).equals(adapter.getItem(i).toString())) {
                     viewHolder.mSpinner.setSelection(i, true);
                     break;
                 }

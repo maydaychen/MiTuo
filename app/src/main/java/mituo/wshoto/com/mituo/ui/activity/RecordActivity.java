@@ -20,12 +20,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +30,6 @@ import butterknife.OnClick;
 import mituo.wshoto.com.mituo.Config;
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.bean.ResultBean;
-import mituo.wshoto.com.mituo.bean.TimeBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
 import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
@@ -42,6 +38,7 @@ import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static mituo.wshoto.com.mituo.MemorySpaceCheck.getSDAvailableSize;
+import static mituo.wshoto.com.mituo.Utils.LongToDate;
 
 public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
@@ -49,10 +46,10 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     ImageButton mIvStart;
     @BindView(R.id.ll_result)
     LinearLayout mLlResult;
-    private SubscriberOnNextListener<TimeBean> picOnNext;
     private SubscriberOnNextListener<ResultBean> startOnNext;
     private SubscriberOnNextListener<ResultBean> endOnNext;
     private String orderNumm;
+
     //    private Button start;// 开始录制按钮
 //    private Button stop;// 停止录制按钮
     private boolean IS_RECORDING = false;
@@ -65,6 +62,8 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     // 用来显示视频的一个接口，我靠不用还不行，也就是说用mediarecorder录制视频还得给个界面看
     // 想偷偷录视频的同学可以考虑别的办法。。嗯需要实现这个接口的Callback接口
     private SurfaceHolder surfaceHolder;
+    private Camera.Parameters cameraParams;
+    private Camera.AutoFocusCallback myAutoFocusCallback = null;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +76,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.activity_record);
         ButterKnife.bind(this);
-        if (getSDAvailableSize()/ 1048576<150) {
+        if (getSDAvailableSize() / 1048576 < 150) {
 
         }
         init();
@@ -88,6 +87,11 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
 //        stop = (Button) this.findViewById(R.id.stop);
 //        start.setOnClickListener(new TestVideoListener());
 //        stop.setOnClickListener(new TestVideoListener());
+        myAutoFocusCallback = (success, camera) -> {
+            if (success) {
+                camera.setOneShotPreviewCallback(null);
+            }
+        };
         orderNumm = getIntent().getStringExtra("oid");
         preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         surfaceview = (SurfaceView) this.findViewById(R.id.surfaceview);
@@ -95,52 +99,15 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         holder.addCallback(this); // holder加入回调接口
         // setType必须设置，要不出错.
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        picOnNext = resultBean -> {
-            if (resultBean.getCode().equals("200")) {
-                if (!IS_RECORDING) {
-                    HttpMethods.getInstance().start_record(
-                            new ProgressSubscriber<>(startOnNext, this), preferences.getString("token", ""),
-                            getIntent().getStringExtra("oid"), resultBean.getResultData().getTime());
-                } else {
-                    HttpMethods.getInstance().end_record(
-                            new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
-                            getIntent().getStringExtra("oid"), resultBean.getResultData().getTime());
-                }
-            } else {
-                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
-            }
-        };
 
         startOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkSelfPermission(CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO},
-                                MY_PERMISSIONS_REQUEST_CALL_PHONE);
-                    } else {
-                        record();
-                    }
-                } else record();
-            } else {
-                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+
             }
         };
         endOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
-                freeCameraResource();
-                mLlResult.setVisibility(View.VISIBLE);
-                mIvStart.setVisibility(View.GONE);
-                IS_RECORDING = false;
-                mIvStart.setImageResource(R.drawable.ic_play_arrow_white_24dp);
-                if (mediarecorder != null) {
-                    // 停止录制
-                    mediarecorder.stop();
-                    // 释放资源
-                    mediarecorder.release();
-                    mediarecorder = null;
-                }
-            } else {
-                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+
             }
         };
     }
@@ -204,11 +171,12 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         mediarecorder.setPreviewDisplay(surfaceHolder.getSurface());
         // 设置视频文件输出的路径
         Log.d("video", "record: " + Environment.getExternalStorageDirectory().getPath());
-        File destDir = new File(Config.PATH_MOBILE);
+        String path = preferences.getString("path", Config.PATH_MOBILE);
+        File destDir = new File(path);
         if (!destDir.exists()) {
             destDir.mkdirs();
         }
-        mediarecorder.setOutputFile(Config.PATH_MOBILE + "/" + orderNumm + ".mp4");
+        mediarecorder.setOutputFile(path + "/" + orderNumm + ".mp4");
         try {
             // 准备录制
             mediarecorder.prepare();
@@ -241,12 +209,37 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_start:
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-                time = formatter.format(curDate);
-
-                HttpMethods.getInstance().get_time(
-                        new ProgressSubscriber<>(picOnNext, this), preferences.getString("token", ""));
+                long time = System.currentTimeMillis();
+                time += preferences.getLong("sys_time", 1);
+                if (!IS_RECORDING) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO},
+                                    MY_PERMISSIONS_REQUEST_CALL_PHONE);
+                        } else {
+                            record();
+                        }
+                    } else record();
+                    HttpMethods.getInstance().start_record(
+                            new ProgressSubscriber<>(startOnNext, this), preferences.getString("token", ""),
+                            getIntent().getStringExtra("oid"), LongToDate(time));
+                } else {
+                    HttpMethods.getInstance().end_record(
+                            new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
+                            getIntent().getStringExtra("oid"),  LongToDate(time));
+                    freeCameraResource();
+                    mLlResult.setVisibility(View.VISIBLE);
+                    mIvStart.setVisibility(View.GONE);
+                    IS_RECORDING = false;
+                    mIvStart.setImageResource(R.drawable.ic_play_arrow_white_24dp);
+                    if (mediarecorder != null) {
+                        // 停止录制
+                        mediarecorder.stop();
+                        // 释放资源
+                        mediarecorder.release();
+                        mediarecorder = null;
+                    }
+                }
                 break;
             case R.id.iv_confirm:
                 finish();
@@ -260,6 +253,11 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         }
         try {
             mCamera = Camera.open();
+            cameraParams = mCamera.getParameters();
+            cameraParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+//            mCamera.autoFocus(myAutoFocusCallback);
+
+
         } catch (Exception e) {
             e.printStackTrace();
             freeCameraResource();
