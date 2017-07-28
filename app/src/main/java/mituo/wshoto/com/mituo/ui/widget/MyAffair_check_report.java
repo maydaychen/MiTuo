@@ -191,11 +191,18 @@ public class MyAffair_check_report extends RelativeLayout {
                 }
             }
         }
-        if (reportBean.getResultData().getStep1().size() == 0 && reportBean.getResultData().getStep2().size() == 0) {
-            IS_OK = false;
-            mIvRemind.setVisibility(VISIBLE);
-            mTvRemind.setVisibility(VISIBLE);
-        } else {
+
+        for (ReportBean.ResultDataBean.Step1Bean step1Bean : reportBean.getResultData().getStep1()) {
+            for (ReportBean.ResultDataBean.Step1Bean.ListBeanX listBeanX : step1Bean.getList()) {
+                if (null == listBeanX.getBgxmValue() || null == listBeanX.getBgxmName() || listBeanX.getBgxmValue().equals("") || listBeanX.getBgxmName().equals("")) {
+                    IS_OK = false;
+                    mIvRemind.setVisibility(VISIBLE);
+                    mTvRemind.setVisibility(VISIBLE);
+                    break;
+                }
+            }
+        }
+        if (IS_OK) {
             IS_OK = true;
             mIvRemind.setVisibility(INVISIBLE);
             mTvRemind.setVisibility(INVISIBLE);
@@ -206,7 +213,7 @@ public class MyAffair_check_report extends RelativeLayout {
 
     }
 
-    public void Payed(){
+    public void Payed() {
         edit.setVisibility(GONE);
     }
 }

@@ -102,9 +102,11 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.item_text, R.id.tv_item_text, list);
             viewHolder.mSpinner.setAdapter(adapter);
             for (int i = 0; i < adapter.getCount(); i++) {
-                if ((mData.getXmList().get(mPositon).getPjName()).equals(adapter.getItem(i).toString())) {
-                    viewHolder.mSpinner.setSelection(i, true);
-                    break;
+                if (mData.getXmList().get(mPositon).getPjName() != null) {
+                    if ((mData.getXmList().get(mPositon).getPjName()).equals(adapter.getItem(i).toString())) {
+                        viewHolder.mSpinner.setSelection(i, true);
+                        break;
+                    }
                 }
             }
 
@@ -339,7 +341,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             try {
                 if (mlistBeen.size() != 0) {
                     for (AllRepairBean.ResultDataBean.PjListBean pjListBean : mlistBeen.get(position)) {
-                        list.add( pjListBean.getPjName());
+                        list.add(pjListBean.getPjName());
                     }
                 }
             } catch (NullPointerException ignored) {
@@ -350,9 +352,11 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.item_text, R.id.tv_item_text, list);
             viewHolder.mSpinner.setAdapter(adapter);
             for (int i = 0; i < adapter.getCount(); i++) {
-                if ((mData.get(position).getPjName()).equals(adapter.getItem(i).toString())) {
-                    viewHolder.mSpinner.setSelection(i, true);
-                    break;
+                if (null != mData.get(position).getPjName()) {
+                    if ((mData.get(position).getPjName()).equals(adapter.getItem(i).toString())) {
+                        viewHolder.mSpinner.setSelection(i, true);
+                        break;
+                    }
                 }
             }
             viewHolder.pj_num.setText(mData.get(position).getPjNum());

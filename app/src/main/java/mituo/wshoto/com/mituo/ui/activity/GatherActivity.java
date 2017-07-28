@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -260,7 +261,6 @@ public class GatherActivity extends InitActivity {
                 if (mEtNum.getText().length() == 0) {
                     Toast.makeText(this, "请填写代金券券码！", Toast.LENGTH_SHORT).show();
                 } else {
-                    mEtNum.setText("");
                     if (couponList.contains(mEtNum.getText().toString())) {
                         Toast.makeText(this, "该券已使用", Toast.LENGTH_SHORT).show();
                     } else {
@@ -268,6 +268,7 @@ public class GatherActivity extends InitActivity {
                                 new ProgressSubscriber<>(CheckCounOnNext, this), preferences.getString("token", ""),
                                 getIntent().getStringExtra("oid"), mEtNum.getText().toString());
                     }
+                    mEtNum.setText("");
                 }
                 break;
             case R.id.iv_gather_saoyisao:
@@ -381,8 +382,7 @@ public class GatherActivity extends InitActivity {
             getWindow().setAttributes(lp1);
         });
 
-
-        popupWindow.showAsDropDown(GatherActivity.this.findViewById(R.id.ll_sum));
+        popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 
     @Override

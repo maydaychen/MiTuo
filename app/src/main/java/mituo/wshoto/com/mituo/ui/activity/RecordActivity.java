@@ -35,6 +35,7 @@ import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static mituo.wshoto.com.mituo.MemorySpaceCheck.getSDAvailableSize;
@@ -214,7 +215,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                 if (!IS_RECORDING) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (checkSelfPermission(CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO},
+                            requestPermissions(new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO,READ_EXTERNAL_STORAGE},
                                     MY_PERMISSIONS_REQUEST_CALL_PHONE);
                         } else {
                             record();

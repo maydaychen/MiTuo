@@ -205,10 +205,10 @@ public class MyAffair_gather extends RelativeLayout {
 
     public void setRemind(PayStatusBean payStatusBean) {
         if (payStatusBean.getResultData().getCouponCodeList().size() != 0) {
+            couponList = new ArrayList<>();
             for (PayStatusBean.ResultDataBean.CouponCodeListBean couponCodeListBean : payStatusBean.getResultData().getCouponCodeList()) {
                 CouponDetailBean couponDetailBean = new CouponDetailBean(couponCodeListBean.getCouponPrice(), couponCodeListBean.getCouponCode());
                 couponList.add(couponDetailBean);
-
             }
             tvGatherMoney.setText(String.format(getResources().getString(R.string.money), payStatusBean.getResultData().getPaySum() + ""));
         }
@@ -247,7 +247,7 @@ public class MyAffair_gather extends RelativeLayout {
             for (GatherBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("name", tcxmListBean.getXmName());
-                map.put("peijian", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjpp() + tcxmListBean.getPjName());
+                map.put("peijian", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjName());
                 map.put("num", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjNum());
                 map.put("price", tcxmListBean.getPjPrice());
                 list.add(map);
@@ -262,7 +262,7 @@ public class MyAffair_gather extends RelativeLayout {
         for (GatherBean.ResultDataBean.XmListBean xmListBean : mResultDataBean.getXmList()) {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", xmListBean.getXmName());
-            map.put("peijian", xmListBean.getPjpp() + xmListBean.getPjName());
+            map.put("peijian", xmListBean.getPjName());
             map.put("num", xmListBean.getPjNum());
             map.put("price", xmListBean.getPjPrice());
             list.add(map);
@@ -294,7 +294,12 @@ public class MyAffair_gather extends RelativeLayout {
             }
         }
         GatherAdapter gatherAdapter;
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         rvGather.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL));
         rvGather.setLayoutManager(layoutManager);
         gatherAdapter = new GatherAdapter(list);

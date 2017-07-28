@@ -8,8 +8,9 @@ import android.widget.CheckBox;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import mituo.wshoto.com.mituo.CheckMessage;
 import mituo.wshoto.com.mituo.R;
@@ -21,7 +22,9 @@ import mituo.wshoto.com.mituo.bean.ReportBean;
 
 public class ReportStep2Adapter extends RecyclerView.Adapter<ReportStep2Adapter.ViewHolder> {
     private List<ReportBean.ResultDataBean.Step2Bean.ListBean> mData;
-    List<ReportBean.ResultDataBean.Step2Bean.ListBean> list = new ArrayList<>();
+    List<ReportBean.ResultDataBean.Step2Bean.ListBean> list = new CopyOnWriteArrayList<>();
+    private ReportBean.ResultDataBean.Step2Bean.ListBean delList;
+    private ReportBean.ResultDataBean.Step2Bean.ListBean addList;
 
     public ReportStep2Adapter(List<ReportBean.ResultDataBean.Step2Bean.ListBean> mData, List<ReportBean.ResultDataBean.Step2Bean.ListBean> listBeen) {
         this.mData = mData;
@@ -43,7 +46,9 @@ public class ReportStep2Adapter extends RecyclerView.Adapter<ReportStep2Adapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.name.setText(mData.get(position).getBgxmName());
-        for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : list) {
+        Iterator<ReportBean.ResultDataBean.Step2Bean.ListBean> it = list.iterator();
+        while (it.hasNext()) {
+            ReportBean.ResultDataBean.Step2Bean.ListBean listBean = it.next();
             if (mData.get(position).getBgxmId() == listBean.getBgxmId()) {
                 viewHolder.name.setChecked(true);
             }
@@ -51,22 +56,35 @@ public class ReportStep2Adapter extends RecyclerView.Adapter<ReportStep2Adapter.
         viewHolder.name.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 if (!isContain(list, mData.get(position).getBgxmId())) {
-                    list.add(mData.get(position));
-                    CheckMessage msg = new CheckMessage(list);
-                    EventBus.getDefault().post(msg);
+//                    list.add(mData.get(position));
+                    addList = mData.get(position);
                 }
+                list.add(addList);
             } else {
-                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : list) {
+                Iterator<ReportBean.ResultDataBean.Step2Bean.ListBean> it1 = list.iterator();
+                while (it1.hasNext()) {
+                    ReportBean.ResultDataBean.Step2Bean.ListBean listBean = it1.next();
                     if (mData.get(position).getBgxmId() == listBean.getBgxmId()) {
-                        list.remove(listBean);
-                        CheckMessage msg = new CheckMessage(list);
-                        EventBus.getDefault().post(msg);
-                        return;
+//                        list.remove(listBean);
+                        delList = listBean;
+
+                        break;
                     }
                 }
+                list.remove(delList);
+//                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : list2) {
+//                    if (mData.get(position).getBgxmId() == listBean.getBgxmId()) {
+//                        list.remove(listBean);
+//                        CheckMessage msg = new CheckMessage(list);
+//                        EventBus.getDefault().post(msg);
+//                        return;
+//                    }
+//                }
             }
-
+            CheckMessage msg = new CheckMessage(list);
+            EventBus.getDefault().post(msg);
         });
+
         viewHolder.itemView.setTag(position);
     }
 

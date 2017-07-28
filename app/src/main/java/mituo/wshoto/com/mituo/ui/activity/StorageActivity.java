@@ -54,6 +54,7 @@ public class StorageActivity extends InitActivity {
     private String path;//默认存储路径
     private boolean HAS_SD = false;//是否拥有外置SD
     private ArrayList<StorageBean> storageData;
+    private SharedPreferences preferences;
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -64,8 +65,16 @@ public class StorageActivity extends InitActivity {
         mToolbar.setNavigationIcon(R.drawable.nav_back);
         mToolbar.setNavigationOnClickListener(v -> finish());
         mTest.setProgress((int) ((getSDTotalSize() - getSystemAvailableSize()) / (double) getSDTotalSize() * 100));
+        preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         DecimalFormat df = new DecimalFormat("######0.00");
 
+        if (preferences.getBoolean("is_inner", true)) {
+            mCbStarageSd.setChecked(true);
+            mCbStarageSd2.setChecked(false);
+        } else {
+            mCbStarageSd.setChecked(false);
+            mCbStarageSd2.setChecked(true);
+        }
         String result = String.format(getResources().getString(R.string.storage),
                 df.format((float) getSystemAvailableSize() / 1024 / 1024 / 1024) + "",
                 df.format((float) getSDTotalSize() / 1024 / 1024 / 1024) + "");//对应xml中定义的123顺序
@@ -122,13 +131,15 @@ public class StorageActivity extends InitActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+
             SharedPreferences.Editor editor = preferences.edit();
             if (IS_INNER) {
                 editor.putString("path", storageData.get(0).getPath() + "/mituo");
+                editor.putBoolean("is_inner", true);
                 editor.apply();
             } else {
                 editor.putString("path", storageData.get(1).getPath() + "/mituo");
+                editor.putBoolean("is_inner", false);
                 editor.apply();
             }
             finish();

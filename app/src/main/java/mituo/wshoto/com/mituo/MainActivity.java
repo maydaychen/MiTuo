@@ -37,6 +37,7 @@ import mituo.wshoto.com.mituo.ui.fragment.OrderFinishedFragment;
 import mituo.wshoto.com.mituo.ui.fragment.OrderUnfinishedFragment;
 import mituo.wshoto.com.mituo.ui.widget.CustomViewPager;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -86,7 +87,7 @@ public class MainActivity extends InitActivity
             if (checkSelfPermission(
                     WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO},
+                requestPermissions(new String[]{Manifest.permission.CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO,READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_CALL_PHONE);
             }
         }

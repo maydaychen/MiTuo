@@ -50,7 +50,7 @@ public class RepairObjsDownAdapter extends RecyclerView.Adapter<RepairObjsDownAd
             if (null == mData.get(position).getPjName() || mData.get(position).getPjName().equals("")) {
                 viewHolder.objs.setText("--");
             } else {
-                viewHolder.objs.setText(mData.get(position).getPjpp() + mData.get(position).getPjName() + "*" + mData.get(position).getPjNum());
+                viewHolder.objs.setText(mData.get(position).getPjName() + "*" + mData.get(position).getPjNum());
             }
         }
 
