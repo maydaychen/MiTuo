@@ -171,6 +171,7 @@ public class MyAffair_check_report extends RelativeLayout {
 
     public void setInfo(int status, ReportBean reportBean, String orderNum) {
         edit.setClickable(true);
+        IS_OK = true;
         mOrderNum = orderNum;
         mReportBean = reportBean;
         if (status == 1) {
@@ -203,7 +204,6 @@ public class MyAffair_check_report extends RelativeLayout {
             }
         }
         if (IS_OK) {
-            IS_OK = true;
             mIvRemind.setVisibility(INVISIBLE);
             mTvRemind.setVisibility(INVISIBLE);
         }

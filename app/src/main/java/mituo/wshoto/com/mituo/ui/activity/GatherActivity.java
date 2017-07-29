@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -75,6 +76,10 @@ public class GatherActivity extends InitActivity {
     TextView mTvGatherMoney;
     @BindView(R.id.ll_sum)
     LinearLayout mLlSum;
+    @BindView(R.id.bt_mobile_pay_1)
+    Button mBtMobilePay1;
+    @BindView(R.id.bt_mobile_pay_2)
+    Button mBtMobilePay2;
 
     private GatherBean.ResultDataBean mResultBean;
     private static final int SHOW_SUBACTIVITY = 1;
@@ -109,24 +114,25 @@ public class GatherActivity extends InitActivity {
 
         checkPayOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
+                mBtMobilePay1.setClickable(true);
+                mBtMobilePay2.setClickable(true);
                 mCodeListBeen = resultBean.getResultData().getCouponCodeList();
+                if (resultBean.getResultData().getCouponCodeList().size() != 0) {
+
+                    for (PayStatusBean.ResultDataBean.CouponCodeListBean couponCodeListBean : resultBean.getResultData().getCouponCodeList()) {
+                        CouponDetailBean couponDetailBean = new CouponDetailBean(couponCodeListBean.getCouponPrice(), couponCodeListBean.getCouponCode());
+                        couponList.add(couponDetailBean);
+                    }
+                    mResultBean.setHj(resultBean.getResultData().getPaySum() + "");
+                    setDate();
+                    mTvGatherMoney.setText(String.format(getResources().getString(R.string.money), mResultBean.getHj()));
+                }
                 if (resultBean.getResultData().getKhqm() != null && !resultBean.getResultData().getKhqm().equals("")) {
                     mImageView2.setImageBitmap(Utils.stringtoBitmap(resultBean.getResultData().getKhqm()));
                     mBitmap = Utils.stringtoBitmap(resultBean.getResultData().getKhqm());
                     mLlMobilePay.setVisibility(View.VISIBLE);
-                    couponList = new ArrayList<>();
-                    mResultBean.setHj(resultBean.getResultData().getPaySum() + "");
-                    coupon = "";
-                    if (resultBean.getResultData().getCouponCodeList().size() != 0) {
-                        for (PayStatusBean.ResultDataBean.CouponCodeListBean couponCodeListBean : resultBean.getResultData().getCouponCodeList()) {
-                            CouponDetailBean couponDetailBean = new CouponDetailBean(couponCodeListBean.getCouponPrice(), couponCodeListBean.getCouponCode());
-                            couponList.add(couponDetailBean);
-
-                        }
-                        mTvGatherMoney.setText(String.format(getResources().getString(R.string.money), mResultBean.getHj()));
-                    }
                     mLlMobilePay.setVisibility(View.VISIBLE);
-                    setDate();
+
                 }
             }
         };
@@ -191,16 +197,11 @@ public class GatherActivity extends InitActivity {
             }
         };
 
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         HttpMethods.getInstance().check_pay(
                 new ProgressSubscriber<>(checkPayOnNext, GatherActivity.this), preferences.getString("token", ""),
                 getIntent().getStringExtra("oid"));
     }
+
 
     @Override
     public void initData() {
@@ -313,11 +314,8 @@ public class GatherActivity extends InitActivity {
                 dialog.dismiss();
                 return;
             }
-
-
             String sum = df.format(Float.valueOf(mResultBean.getHj()) - Float.valueOf(context));
             mResultBean.setHj(sum);
-
             CouponDetailBean couponDetailBean = new CouponDetailBean(Integer.valueOf(context), mEtNum.getText().toString());
             couponList.add(couponDetailBean);
             mTvGatherMoney.setText(String.format(getResources().getString(R.string.money), mResultBean.getHj()));
@@ -484,4 +482,5 @@ public class GatherActivity extends InitActivity {
         gatherAdapter = new GatherAdapter(list);
         mRvGather.setAdapter(gatherAdapter);
     }
+
 }

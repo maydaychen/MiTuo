@@ -37,6 +37,7 @@ import mituo.wshoto.com.mituo.ui.fragment.OrderFinishedFragment;
 import mituo.wshoto.com.mituo.ui.fragment.OrderUnfinishedFragment;
 import mituo.wshoto.com.mituo.ui.widget.CustomViewPager;
 
+import static android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -74,8 +75,8 @@ public class MainActivity extends InitActivity
         View headerView = navigationView.getHeaderView(0);
         TextView textView = (TextView) headerView.findViewById(R.id.name);
         TextView telephone = (TextView) headerView.findViewById(R.id.telephone);
-        textView.setText(preferences.getString("name",""));
-        telephone.setText(preferences.getString("telephone",""));
+        textView.setText(preferences.getString("name", ""));
+        telephone.setText(preferences.getString("telephone", ""));
         mVpContent.setOffscreenPageLimit(2);
         initContent();
         initTab();
@@ -84,12 +85,17 @@ public class MainActivity extends InitActivity
     @Override
     public void initData() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(
-                    WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO,READ_EXTERNAL_STORAGE},
+            if (checkSelfPermission(MOUNT_UNMOUNT_FILESYSTEMS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, READ_EXTERNAL_STORAGE, MOUNT_UNMOUNT_FILESYSTEMS},
                         MY_PERMISSIONS_REQUEST_CALL_PHONE);
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE) {
+
         }
     }
 
@@ -173,13 +179,6 @@ public class MainActivity extends InitActivity
 //        mOrderTab.setTabMode(TabLayout.MODE_FIXED);
 //        mOrderTab.setTabGravity(TabLayout.GRAVITY_FILL);
         mOrderTab.setupWithViewPager(mVpContent);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 
     class ContentPagerAdapter extends FragmentPagerAdapter {

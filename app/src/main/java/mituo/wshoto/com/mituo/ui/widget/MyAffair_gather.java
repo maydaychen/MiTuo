@@ -242,6 +242,7 @@ public class MyAffair_gather extends RelativeLayout {
     }
 
     private void setDate() {
+        edit.setClickable(true);
         List<Map<String, String>> list = new ArrayList<>();
         for (GatherBean.ResultDataBean.TcListBean tcListBean : mResultDataBean.getTcList()) {
             for (GatherBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {

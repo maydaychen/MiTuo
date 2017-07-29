@@ -162,6 +162,7 @@ public class MyAffair_repair_objs extends RelativeLayout {
     }
 
     public void setInfo(RepairObjsBean.ResultDataBean bean, int status, String num) throws NullPointerException {
+        edit.setClickable(true);
         orderNum = num;
         mResultDataBean = bean;
         if (status == 1) {
@@ -188,7 +189,7 @@ public class MyAffair_repair_objs extends RelativeLayout {
         }
     }
 
-    public void Payed(){
+    public void Payed() {
         edit.setVisibility(GONE);
     }
 

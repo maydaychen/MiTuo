@@ -67,7 +67,6 @@ public class ReportStep2Adapter extends RecyclerView.Adapter<ReportStep2Adapter.
                     if (mData.get(position).getBgxmId() == listBean.getBgxmId()) {
 //                        list.remove(listBean);
                         delList = listBean;
-
                         break;
                     }
                 }

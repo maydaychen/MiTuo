@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,10 +36,10 @@ import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static mituo.wshoto.com.mituo.MemorySpaceCheck.getSDAvailableSize;
 import static mituo.wshoto.com.mituo.Utils.LongToDate;
 
 public class RecordActivity extends Activity implements SurfaceHolder.Callback {
@@ -77,9 +78,6 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.activity_record);
         ButterKnife.bind(this);
-        if (getSDAvailableSize() / 1048576 < 150) {
-
-        }
         init();
     }
 
@@ -175,7 +173,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         String path = preferences.getString("path", Config.PATH_MOBILE);
         File destDir = new File(path);
         if (!destDir.exists()) {
-            destDir.mkdirs();
+            Toast.makeText(this, destDir.mkdirs() + "", Toast.LENGTH_SHORT).show();
         }
         mediarecorder.setOutputFile(path + "/" + orderNumm + ".mp4");
         try {
@@ -195,7 +193,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE) {
-            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (permissions[0].equals(Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //用户同意使用write
                 record();
@@ -214,8 +212,8 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                 time += preferences.getLong("sys_time", 1);
                 if (!IS_RECORDING) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (checkSelfPermission(CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO,READ_EXTERNAL_STORAGE},
+                        if (checkSelfPermission(MOUNT_UNMOUNT_FILESYSTEMS) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{MOUNT_UNMOUNT_FILESYSTEMS, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, READ_EXTERNAL_STORAGE, CAMERA},
                                     MY_PERMISSIONS_REQUEST_CALL_PHONE);
                         } else {
                             record();
@@ -227,7 +225,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                 } else {
                     HttpMethods.getInstance().end_record(
                             new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
-                            getIntent().getStringExtra("oid"),  LongToDate(time));
+                            getIntent().getStringExtra("oid"), LongToDate(time));
                     freeCameraResource();
                     mLlResult.setVisibility(View.VISIBLE);
                     mIvStart.setVisibility(View.GONE);

@@ -129,6 +129,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
                             mData.getXmList().get(mPositon).setPjNum(mData.getXmList().get(mPositon).getPjNum());
                             viewHolder.num_del.setVisibility(View.VISIBLE);
                             viewHolder.num_add.setVisibility(View.VISIBLE);
+                            mData.getXmList().get(mPositon).setIsZd("1");
                             if (viewHolder.pj_num.getText().equals("1")) {
                                 viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
                                 viewHolder.num_del.setClickable(false);
@@ -140,6 +141,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
                     } else {
                         mData.getXmList().get(mPositon).setPjName(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjName());
                         mData.getXmList().get(mPositon).setPjNum(mData.getXmList().get(mPositon).getPjNum());
+                        mData.getXmList().get(mPositon).setIsZd("1");
                         mData.getXmList().get(mPositon).setPjpp(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjpp());
                         mData.getXmList().get(mPositon).setPjPrice(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjPrice());
                         mData.getXmList().get(mPositon).setPjCode(peijianList.get(mData.getXmList().get(mPositon).getXmName()).get(0).get(position).getPjCode());
@@ -383,6 +385,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
                             }
                             mData.get(mPositon).setPjName(mlistBeen.get(mPositon).get(position).getPjName());
                             mData.get(mPositon).setPjNum(mData.get(mPositon).getPjNum());
+                            mData.get(mPositon).setIsZd("1");
                             mData.get(mPositon).setPjpp(mlistBeen.get(mPositon).get(position).getPjpp());
                             mData.get(mPositon).setPjPrice(mlistBeen.get(mPositon).get(position).getPjPrice());
                             mData.get(mPositon).setPjCode(mlistBeen.get(mPositon).get(position).getPjCode());
@@ -396,6 +399,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
                         }
                         mData.get(mPositon).setPjName(mlistBeen.get(mPositon).get(position).getPjName());
                         mData.get(mPositon).setPjNum(mData.get(mPositon).getPjNum());
+                        mData.get(mPositon).setIsZd("1");
                         mData.get(mPositon).setPjpp(mlistBeen.get(mPositon).get(position).getPjpp());
                         mData.get(mPositon).setPjPrice(mlistBeen.get(mPositon).get(position).getPjPrice());
                         mData.get(mPositon).setPjCode(mlistBeen.get(mPositon).get(position).getPjCode());

@@ -2,6 +2,7 @@ package mituo.wshoto.com.mituo.ui.widget;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,15 +27,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mituo.wshoto.com.mituo.Config;
 import mituo.wshoto.com.mituo.OrderMessage;
 import mituo.wshoto.com.mituo.R;
+import mituo.wshoto.com.mituo.StorageUtils;
+import mituo.wshoto.com.mituo.bean.StorageBean;
 import mituo.wshoto.com.mituo.ui.activity.RecordActivity;
+import mituo.wshoto.com.mituo.ui.activity.StorageActivity;
 
 import static mituo.wshoto.com.mituo.MemorySpaceCheck.fileIsExists;
+import static mituo.wshoto.com.mituo.MemorySpaceCheck.getSDAvailableSize;
 import static mituo.wshoto.com.mituo.Utils.changeTime;
 
 /**
@@ -101,6 +107,17 @@ public class MyAffair_repair_video extends RelativeLayout {
             }
         });
         edit.setOnClickListener(v -> {
+            ArrayList<StorageBean> storageData = StorageUtils.getStorageData(mContext);
+            if (preferences.getBoolean("is_inner", true)) {
+                if (getSDAvailableSize() / 1048576 < 150) {
+                    show();
+                }
+            } else {
+                if (storageData.get(1).getAvailableSize() / 1048576 < 150) {
+                    show();
+                }
+            }
+
             Intent intent = new Intent(mContext, RecordActivity.class);
             intent.putExtra("oid", orderNum);
             mContext.startActivity(intent);
@@ -314,5 +331,15 @@ public class MyAffair_repair_video extends RelativeLayout {
         return sizeizeString;
     }
 
+    public void show() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage("存储空间不足，是否设置其他存储空间？");
+        builder.setTitle(R.string.app_name);
 
+        builder.setPositiveButton("确认", (dialog, which) -> {
+            mContext.startActivity(new Intent(mContext, StorageActivity.class));
+        });
+        builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
+        builder.create().show();
+    }
 }
