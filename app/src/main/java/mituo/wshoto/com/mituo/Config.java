@@ -11,8 +11,7 @@ import mituo.wshoto.com.mituo.bean.ReportBean;
  */
 
 public class Config {
-    public static final String PATH_MOBILE = Environment.getExternalStorageDirectory().getPath() + "/weiuxiuluxiang";
-    public static final String PATH_MOBILE1 = Environment.getExternalStorageDirectory().getPath();
+    public static final String PATH_MOBILE = Environment.getExternalStorageDirectory().getPath() + "/RepairVideo";
 
     public static List<ReportBean.ResultDataBean.Step2Bean.ListBean> mBean;//有问题step2值
     public static final String PATH_SD = System.getenv("SECONDARY_STORAGE") + "/mituo";

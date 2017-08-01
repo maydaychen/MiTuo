@@ -34,6 +34,8 @@ import mituo.wshoto.com.mituo.bean.GatherBean;
 import mituo.wshoto.com.mituo.bean.PayStatusBean;
 import mituo.wshoto.com.mituo.ui.activity.GatherActivity;
 
+import static android.R.attr.x;
+
 /**
  * Created by Weshine on 2017/6/19.
  */
@@ -248,7 +250,11 @@ public class MyAffair_gather extends RelativeLayout {
             for (GatherBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("name", tcxmListBean.getXmName());
-                map.put("peijian", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjName());
+                if (tcxmListBean.getIsZd().equals("0")) {
+                    map.put("peijian", "用户自带");
+                }else {
+                    map.put("peijian", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjName());
+                }
                 map.put("num", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjNum());
                 if (tcxmListBean.getPjPrice().equals("")) {
                     map.put("price", Float.valueOf(tcxmListBean.getXmprice()) + "");
@@ -270,7 +276,11 @@ public class MyAffair_gather extends RelativeLayout {
         for (GatherBean.ResultDataBean.XmListBean xmListBean : mResultDataBean.getXmList()) {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", xmListBean.getXmName());
-            map.put("peijian", xmListBean.getPjName());
+            if (xmListBean.getIsZd().equals("0")) {
+                map.put("peijian", "用户自带");
+            }else {
+                map.put("peijian", xmListBean.getPjpp() == null ? "--" : xmListBean.getPjName());
+            }
             map.put("num", xmListBean.getPjNum());
             map.put("price", xmListBean.getPjPrice());
             list.add(map);
