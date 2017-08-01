@@ -112,8 +112,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                               int height) {
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         // 将holder，这个holder为开始在oncreat里面取得的holder，将它赋给surfaceHolder
         surfaceHolder = holder;
     }
@@ -193,7 +192,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE) {
-            if (permissions[0].equals(Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
+            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //用户同意使用write
                 record();
@@ -213,7 +212,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                 if (!IS_RECORDING) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (checkSelfPermission(MOUNT_UNMOUNT_FILESYSTEMS) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{MOUNT_UNMOUNT_FILESYSTEMS, WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, READ_EXTERNAL_STORAGE, CAMERA},
+                            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, MOUNT_UNMOUNT_FILESYSTEMS, RECORD_AUDIO, READ_EXTERNAL_STORAGE, CAMERA},
                                     MY_PERMISSIONS_REQUEST_CALL_PHONE);
                         } else {
                             record();

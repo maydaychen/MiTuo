@@ -180,7 +180,6 @@ public class OrderDetailActivity extends InitActivity {
                 mGather.setRemind(resultBean);
                 if (resultBean.getResultData().isPayStatus()) {
                     mRepairObjs.Payed();
-                    mCheckReport.Payed();
                 }
             }
         };

@@ -76,7 +76,12 @@ public class CheckReport3Activity extends AppCompatActivity {
 
         repairObjsDownAdapter = new CheckReportAdapter(listObj);
         mRvCheck.addItemDecoration(new RecycleViewDivider(CheckReport3Activity.this, LinearLayoutManager.VERTICAL));
-        mRvCheck.setLayoutManager(new LinearLayoutManager(this));
+        mRvCheck.setLayoutManager(new LinearLayoutManager(this){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
         mRvCheck.setAdapter(repairObjsDownAdapter);
 
     }

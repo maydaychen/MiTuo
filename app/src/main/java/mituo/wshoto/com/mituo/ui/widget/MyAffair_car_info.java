@@ -194,53 +194,53 @@ public class MyAffair_car_info extends RelativeLayout {
         tv_remind.setVisibility(GONE);
         IS_OK = true;
         ForegroundColorSpan redSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_99));
-        if (!(null == resultBean.getContactName())) {
+        if (!(resultBean.getContactName().equals(""))) {
             mOwnerName.setText(String.format(getResources().getString(R.string.car_onwer_edit), resultBean.getContactName()));
             SpannableStringBuilder builder1 = new SpannableStringBuilder(mOwnerName.getText().toString());
             builder1.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mOwnerName.setText(builder1);
         } else
             setRemind();
-        if (!(null == resultBean.getContactPhone())) {
+        if (!(resultBean.getContactPhone().equals(""))) {
             mOwnerTelephone.setText(String.format(getResources().getString(R.string.telephone_edit), resultBean.getContactPhone()));
             SpannableStringBuilder builder2 = new SpannableStringBuilder(mOwnerTelephone.getText().toString());
             builder2.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mOwnerTelephone.setText(builder2);
         } else
             setRemind();
-        if (!(null == resultBean.getCarNo())) {
+        if (!(resultBean.getCarNo().equals(""))) {
             mText2.setText(String.format(getResources().getString(R.string.card_num_edit), resultBean.getCarNo()));
             SpannableStringBuilder builder3 = new SpannableStringBuilder(mText2.getText().toString());
             builder3.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mText2.setText(builder3);
         } else setRemind();
-        if (!(null == resultBean.getCarXh())) {
+        if (!(resultBean.getCarXh().equals(""))) {
             car_type.setText(String.format(getResources().getString(R.string.car_type_edit), resultBean.getCarXh()));
             SpannableStringBuilder builder4 = new SpannableStringBuilder(car_type.getText().toString());
             builder4.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             car_type.setText(builder4);
         } else setRemind();
-        if (!(null == resultBean.getCarXslc())) {
+        if (!("".equals(resultBean.getCarXslc()))) {
             ForegroundColorSpan specialSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_33));
             mTotalMileage.setText(String.format(getResources().getString(R.string.mileage_edit), resultBean.getCarXslc()));
             SpannableStringBuilder builder6 = new SpannableStringBuilder(mTotalMileage.getText().toString());
             builder6.setSpan(specialSpan, 5, 5 + resultBean.getCarXslc().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mTotalMileage.setText(builder6);
         } else setRemind();
-        if (!(null == resultBean.getXcbyDate())) {
+        if (!(resultBean.getXcbyDate().equals(""))) {
             mNextCareTime.setText(String.format(getResources().getString(R.string.next_care_time_edit), resultBean.getXcbyDate()));
             SpannableStringBuilder builder7 = new SpannableStringBuilder(mNextCareTime.getText().toString());
             builder7.setSpan(redSpan, 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mNextCareTime.setText(builder7);
         } else setRemind();
-        if (!(null == resultBean.getXcbylc())) {
+        if (!(resultBean.getXcbylc().equals(""))) {
             ForegroundColorSpan specialSpan = new ForegroundColorSpan(getResources().getColor(R.color.font_33));
             mNextCareMileage.setText(String.format(getResources().getString(R.string.next_care_km_edit), resultBean.getXcbylc()));
             SpannableStringBuilder builder8 = new SpannableStringBuilder(mNextCareMileage.getText().toString());
             builder8.setSpan(specialSpan, 7, 7 + resultBean.getXcbylc().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mNextCareMileage.setText(builder8);
         } else setRemind();
-        if (!(null == resultBean.getCarCjh())) {
+        if (!(resultBean.getCarCjh().equals(""))) {
             mTvCarModelNum.setText(String.format(getResources().getString(R.string.car_num_edit), resultBean.getCarCjh()));
             SpannableStringBuilder builder9 = new SpannableStringBuilder(mTvCarModelNum.getText().toString());
             builder9.setSpan(redSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

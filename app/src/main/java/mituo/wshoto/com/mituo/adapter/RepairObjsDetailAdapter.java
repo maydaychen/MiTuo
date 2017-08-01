@@ -273,10 +273,14 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             } else {
                 mData.get(position).setPjNum("1");
             }
-            if (null == mData.get(position).getPjpp()) {
-                viewHolder.mSpinner.setText("--");
+            if (mData.get(position).getIsZd().equals("0")) {
+                viewHolder.mSpinner.setText("用户自带");
             } else {
-                viewHolder.mSpinner.setText(mData.get(position).getPjName());
+                if (null == mData.get(position).getPjName()) {
+                    viewHolder.mSpinner.setText("--");
+                } else {
+                    viewHolder.mSpinner.setText(mData.get(position).getPjName());
+                }
             }
             viewHolder.pj_num.setText(mData.get(position).getPjNum() + "");
             viewHolder.itemView.setTag(position);

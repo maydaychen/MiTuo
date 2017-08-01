@@ -212,8 +212,4 @@ public class MyAffair_check_report extends RelativeLayout {
         mLvReport.setAdapter(reportAdapter);
 
     }
-
-    public void Payed() {
-        edit.setVisibility(GONE);
-    }
 }

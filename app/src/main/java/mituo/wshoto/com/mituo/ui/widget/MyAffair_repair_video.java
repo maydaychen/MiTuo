@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -37,7 +38,6 @@ import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.StorageUtils;
 import mituo.wshoto.com.mituo.bean.StorageBean;
 import mituo.wshoto.com.mituo.ui.activity.RecordActivity;
-import mituo.wshoto.com.mituo.ui.activity.StorageActivity;
 
 import static mituo.wshoto.com.mituo.MemorySpaceCheck.fileIsExists;
 import static mituo.wshoto.com.mituo.MemorySpaceCheck.getSDAvailableSize;
@@ -69,7 +69,7 @@ public class MyAffair_repair_video extends RelativeLayout {
     private boolean isFileExist = false;
     private boolean animatorLock = false;
     public boolean IS_OK = true;
-    private String path;
+    //    private String path;
     private SharedPreferences preferences;
 
     public MyAffair_repair_video(Context context, AttributeSet attrs, int defStyle) {
@@ -90,7 +90,7 @@ public class MyAffair_repair_video extends RelativeLayout {
         baseV = LayoutInflater.from(mContext).inflate(R.layout.affair_repair_video, this);
         ButterKnife.bind(this);
         preferences = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
-        path = preferences.getString("path", Config.PATH_MOBILE);
+//        path = preferences.getString("path", Config.PATH_MOBILE);
         titleRl = (RelativeLayout) baseV.findViewById(R.id.title);
         infoRl = (LinearLayout) baseV.findViewById(R.id.affair_info_rl);
         iv_remind = (ImageView) baseV.findViewById(R.id.iv_remind);
@@ -123,7 +123,7 @@ public class MyAffair_repair_video extends RelativeLayout {
             mContext.startActivity(intent);
         });
         mTextView2.setOnClickListener(v -> {
-            Uri uri = Uri.parse(path + "/" + orderNum + ".mp4");
+            Uri uri = Uri.parse(Config.PATH_MOBILE + "/" + orderNum + ".mp4");
             //调用系统自带的播放器
             Intent intent = new Intent(Intent.ACTION_VIEW);
             Log.v("URI:::::::::", uri.toString());
@@ -245,7 +245,7 @@ public class MyAffair_repair_video extends RelativeLayout {
         if (status == 1) {
             edit.setVisibility(GONE);
         }
-        if (isFileExist = fileIsExists(path + "/" + orderNum + ".mp4")) {
+        if (isFileExist = fileIsExists(Config.PATH_MOBILE + "/" + orderNum + ".mp4")) {
             edit.setVisibility(GONE);
             mTextView2.setText(String.format(getResources().getString(R.string.video_name), orderNum + ".mp4"));
             SpannableStringBuilder builder1 = new SpannableStringBuilder(mTextView2.getText().toString());
@@ -260,7 +260,7 @@ public class MyAffair_repair_video extends RelativeLayout {
                 builder2.setSpan(fontSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 mTextView3.setText(builder2);
 
-                mTextView4.setText(String.format(getResources().getString(R.string.video_size), getsizeize(path + "/" + orderNum + ".mp4")));
+                mTextView4.setText(String.format(getResources().getString(R.string.video_size), getsizeize(Config.PATH_MOBILE + "/" + orderNum + ".mp4")));
                 SpannableStringBuilder builder3 = new SpannableStringBuilder(mTextView4.getText().toString());
                 builder3.setSpan(fontSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 mTextView4.setText(builder3);
@@ -285,7 +285,7 @@ public class MyAffair_repair_video extends RelativeLayout {
 
 
     private int test() throws IOException {
-        String url = path + "/" + orderNum + ".mp4";
+        String url = Config.PATH_MOBILE + "/" + orderNum + ".mp4";
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setDataSource(url);
         mediaPlayer.prepare();
@@ -294,7 +294,7 @@ public class MyAffair_repair_video extends RelativeLayout {
     }
 
     private double test2() {
-        String url = path + "/" + orderNum + ".mp4";
+        String url = Config.PATH_MOBILE + "/" + orderNum + ".mp4";
         MediaPlayer player = new MediaPlayer();
         try {
             player.setDataSource(url);  //recordingFilePath（）为音频文件的路径
@@ -318,7 +318,7 @@ public class MyAffair_repair_video extends RelativeLayout {
         fis = new FileInputStream(file);
         size = fis.available();
         DecimalFormat df = new DecimalFormat("#.00");
-        String sizeizeString = "";
+        String sizeizeString;
         if (size < 1024) {
             sizeizeString = df.format((double) size) + "B";
         } else if (size < 1048576) {
@@ -333,11 +333,13 @@ public class MyAffair_repair_video extends RelativeLayout {
 
     public void show() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("存储空间不足，是否设置其他存储空间？");
+        builder.setMessage("存储空间不足，是否设置存储空间？");
         builder.setTitle(R.string.app_name);
 
         builder.setPositiveButton("确认", (dialog, which) -> {
-            mContext.startActivity(new Intent(mContext, StorageActivity.class));
+//            mContext.startActivity(new Intent(mContext, StorageActivity.class));
+            Intent intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+            mContext.startActivity(intent);
         });
         builder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
         builder.create().show();

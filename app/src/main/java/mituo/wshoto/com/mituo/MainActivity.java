@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -32,7 +33,6 @@ import mituo.wshoto.com.mituo.ui.activity.ChangePassActivity;
 import mituo.wshoto.com.mituo.ui.activity.InitActivity;
 import mituo.wshoto.com.mituo.ui.activity.LoginActivity;
 import mituo.wshoto.com.mituo.ui.activity.SearchActivity;
-import mituo.wshoto.com.mituo.ui.activity.StorageActivity;
 import mituo.wshoto.com.mituo.ui.fragment.OrderFinishedFragment;
 import mituo.wshoto.com.mituo.ui.fragment.OrderUnfinishedFragment;
 import mituo.wshoto.com.mituo.ui.widget.CustomViewPager;
@@ -152,7 +152,8 @@ public class MainActivity extends InitActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            startActivity(new Intent(MainActivity.this, StorageActivity.class));
+            Intent intent =  new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(MainActivity.this, ChangePassActivity.class));
         } else if (id == R.id.nav_slideshow) {
@@ -207,7 +208,6 @@ public class MainActivity extends InitActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("确定要退出么？");
         builder.setTitle(R.string.app_name);
-
         builder.setPositiveButton("确认", (dialog, which) -> {
             SharedPreferences mySharedPreferences = getSharedPreferences("user",
                     Activity.MODE_PRIVATE);

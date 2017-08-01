@@ -54,14 +54,25 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             viewHolder.enterprise_name.setText(mData.get(position).getOrderCode());
             ForegroundColorSpan redSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.font_red));
             SpannableStringBuilder builder1 = new SpannableStringBuilder(viewHolder.enterprise_name.getText().toString());
-            builder1.setSpan(redSpan, mData.get(position).getOrderCode().indexOf(mKey), mData.get(position).getOrderCode().indexOf(mKey) + mKey.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (mData.get(position).getOrderCode().indexOf(mKey) == -1) {
+                String lowerCase = mKey.toLowerCase();
+                builder1.setSpan(redSpan, mData.get(position).getOrderCode().indexOf(lowerCase), mData.get(position).getCarNo().indexOf(lowerCase) + lowerCase.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }else {
+                builder1.setSpan(redSpan, mData.get(position).getOrderCode().indexOf(mKey), mData.get(position).getOrderCode().indexOf(mKey) + mKey.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            }
             viewHolder.enterprise_name.setText(builder1);
             viewHolder.type.setText("订单编号");
         } else {
             viewHolder.enterprise_name.setText(mData.get(position).getCarNo());
             ForegroundColorSpan redSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.font_red));
             SpannableStringBuilder builder1 = new SpannableStringBuilder(viewHolder.enterprise_name.getText().toString());
-            builder1.setSpan(redSpan, mData.get(position).getCarNo().indexOf(mKey), mData.get(position).getCarNo().indexOf(mKey) + mKey.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (mData.get(position).getCarNo().indexOf(mKey) == -1) {
+                String lowerCase = mKey.toLowerCase();
+                builder1.setSpan(redSpan, mData.get(position).getCarNo().indexOf(lowerCase), mData.get(position).getCarNo().indexOf(lowerCase) + lowerCase.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }else {
+                builder1.setSpan(redSpan, mData.get(position).getCarNo().indexOf(mKey), mData.get(position).getCarNo().indexOf(mKey) + mKey.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
             viewHolder.enterprise_name.setText(builder1);
             viewHolder.type.setText("车牌号码");
         }

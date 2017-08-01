@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -44,7 +45,7 @@ public class ReportStep2Adapter extends RecyclerView.Adapter<ReportStep2Adapter.
 
     //将数据与界面进行绑定的操作
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) throws ConcurrentModificationException {
         viewHolder.name.setText(mData.get(position).getBgxmName());
         Iterator<ReportBean.ResultDataBean.Step2Bean.ListBean> it = list.iterator();
         while (it.hasNext()) {

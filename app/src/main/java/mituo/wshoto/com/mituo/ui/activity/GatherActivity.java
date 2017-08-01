@@ -269,7 +269,6 @@ public class GatherActivity extends InitActivity {
                                 new ProgressSubscriber<>(CheckCounOnNext, this), preferences.getString("token", ""),
                                 getIntent().getStringExtra("oid"), mEtNum.getText().toString());
                     }
-                    mEtNum.setText("");
                 }
                 break;
             case R.id.iv_gather_saoyisao:
@@ -277,18 +276,19 @@ public class GatherActivity extends InitActivity {
                 startActivityForResult(intent10, SHOW_SUBACTIVITY);
                 break;
             case R.id.bt_mobile_pay_1:
+                coupon = "";
                 if (couponList.size() != 0) {
                     for (CouponDetailBean couponDetailBean : couponList) {
                         coupon = coupon + couponDetailBean.getNum() + ",";
                     }
                     coupon = coupon.substring(0, coupon.length() - 1);
                 }
-
                 HttpMethods.getInstance().save_pay(
                         new ProgressSubscriber<>(SavePayOnNext, this), preferences.getString("token", ""),
                         getIntent().getStringExtra("oid"), mResultBean.getHj(), coupon, payType, Utils.bitmaptoString(mBitmap));
                 break;
             case R.id.bt_mobile_pay_2:
+                coupon = "";
                 if (couponList.size() != 0) {
                     for (CouponDetailBean couponDetailBean : couponList) {
                         coupon = coupon + couponDetailBean.getNum() + ",";
@@ -399,17 +399,17 @@ public class GatherActivity extends InitActivity {
 
     private void save() {
         try {
-            String path = preferences.getString("path", Config.PATH_MOBILE);
+//            String path = preferences.getString("path", Config.PATH_MOBILE);
             popupWindow.dismiss();
-            File destDir = new File(path);
+            File destDir = new File(Config.PATH_MOBILE);
             if (!destDir.exists()) {
                 destDir.mkdirs();
             }
 //            mPathView.save("/sdcard/qm.png", true, 10);
-            mPathView.save(path + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
+            mPathView.save( Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 2;
-            Bitmap bm = BitmapFactory.decodeFile(path + "/" + getIntent().getStringExtra("oid") + ".png", options);
+            Bitmap bm = BitmapFactory.decodeFile( Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", options);
             mBitmap = bm;
             mImageView2.setImageBitmap(bm);
             mLlMobilePay.setVisibility(View.VISIBLE);

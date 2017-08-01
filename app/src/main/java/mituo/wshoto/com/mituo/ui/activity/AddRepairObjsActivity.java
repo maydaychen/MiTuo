@@ -99,7 +99,6 @@ public class AddRepairObjsActivity extends InitActivity {
                 finish();
             });
 
-
             mRvAddRepairObjProject.setAdapter(new ArrayAdapter<>(this, R.layout.item_taocan_text, list1));
             mRvAddRepairObjProject.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent();

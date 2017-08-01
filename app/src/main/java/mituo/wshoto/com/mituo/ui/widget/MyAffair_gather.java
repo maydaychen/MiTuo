@@ -250,7 +250,14 @@ public class MyAffair_gather extends RelativeLayout {
                 map.put("name", tcxmListBean.getXmName());
                 map.put("peijian", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjName());
                 map.put("num", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjNum());
-                map.put("price", tcxmListBean.getPjPrice());
+                if (tcxmListBean.getPjPrice().equals("")) {
+                    map.put("price", Float.valueOf(tcxmListBean.getXmprice()) + "");
+                } else if (tcxmListBean.getXmprice().equals("")) {
+                    map.put("price", Float.valueOf(tcxmListBean.getPjPrice()) + "");
+                } else {
+                    map.put("price", Float.valueOf(tcxmListBean.getPjPrice()) + Float.valueOf(tcxmListBean.getXmprice()) + "");
+                }
+
                 list.add(map);
             }
             HashMap<String, String> map = new HashMap<>();
@@ -295,7 +302,7 @@ public class MyAffair_gather extends RelativeLayout {
             }
         }
         GatherAdapter gatherAdapter;
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext){
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext) {
             @Override
             public boolean canScrollVertically() {
                 return false;
