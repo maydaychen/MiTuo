@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -271,6 +272,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
             viewHolder.name.setText(mData.get(position).getXmName());
+            Log.i("chenyi", "onBindViewHolder: "+mData.get(position).getXmName());
             if (null != mData.get(position).getPjName() && !mData.get(position).getPjName().equals("")) {
                 viewHolder.mSpinner.setText(mData.get(position).getPjName());
             } else {

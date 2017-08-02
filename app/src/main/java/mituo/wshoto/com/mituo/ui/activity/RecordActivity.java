@@ -57,9 +57,11 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
     private boolean IS_RECORDING = false;
     private Camera mCamera;
     private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     private MediaRecorder mediarecorder;// 录制视频的类
     private SurfaceView surfaceview;// 显示视频的控件
-    private String time;
+    private String start_time;
+    private String end_time;
     private boolean HAVA_TIME = false;
     // 用来显示视频的一个接口，我靠不用还不行，也就是说用mediarecorder录制视频还得给个界面看
     // 想偷偷录视频的同学可以考虑别的办法。。嗯需要实现这个接口的Callback接口
@@ -78,6 +80,8 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.activity_record);
         ButterKnife.bind(this);
+        preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        editor = preferences.edit();
         init();
     }
 
@@ -101,12 +105,24 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
 
         startOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
-
+                editor.putBoolean(orderNumm + "start", true);
+                editor.putString(orderNumm + "startTime", start_time);
+                editor.apply();
+            } else {
+                editor.putBoolean(orderNumm + "start", false);
+                editor.putString(orderNumm + "startTime", start_time);
+                editor.apply();
             }
         };
         endOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
-
+                editor.putBoolean(orderNumm + "end", true);
+                editor.putString(orderNumm + "startTime", end_time);
+                editor.apply();
+            } else {
+                editor.putBoolean(orderNumm + "end", false);
+                editor.putString(orderNumm + "startTime", end_time);
+                editor.apply();
             }
         };
     }
@@ -218,10 +234,12 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                             record();
                         }
                     } else record();
+                    start_time = LongToDate(time);
                     HttpMethods.getInstance().start_record(
                             new ProgressSubscriber<>(startOnNext, this), preferences.getString("token", ""),
                             getIntent().getStringExtra("oid"), LongToDate(time));
                 } else {
+                    end_time = LongToDate(time);
                     HttpMethods.getInstance().end_record(
                             new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
                             getIntent().getStringExtra("oid"), LongToDate(time));

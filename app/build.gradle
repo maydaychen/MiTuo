@@ -2,6 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'me.tatarka.retrolambda'
 android {
+
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword 'android'
+            storeFile file('D:/mituo.jks')
+            storePassword 'android'
+        }
+    }
+
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
@@ -13,11 +23,18 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            versionNameSuffix ".dev"
+        }
+
         release {
+            debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
+
 
     compileOptions {
         targetCompatibility 1.8

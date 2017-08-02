@@ -61,10 +61,13 @@ public class OrderDetailActivity extends InitActivity {
     private SubscriberOnNextListener<ResultBean> UploadPicOnNext;
     private SubscriberOnNextListener<PayStatusBean> checkPayOnNext;
     private SubscriberOnNextListener<TimeBean> timeOnNext;
+    private SubscriberOnNextListener<ResultBean> startOnNext;
+    private SubscriberOnNextListener<ResultBean> endOnNext;
 
     private int num = 1;
     private int status;
     private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     private Bitmap mBitmap;
     private String path;
 
@@ -106,6 +109,7 @@ public class OrderDetailActivity extends InitActivity {
     @Override
     public void initData() {
         preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        editor = preferences.edit();
         path = preferences.getString("path", Config.PATH_MOBILE);
         mTbOrder.setNavigationIcon(R.drawable.nav_back);
         mTbOrder.setNavigationOnClickListener(v -> finish());
@@ -200,6 +204,33 @@ public class OrderDetailActivity extends InitActivity {
             } else if (resultBean.getCode().equals("401")) {
                 logout(OrderDetailActivity.this);
             } else {
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+            }
+        };
+        startOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
+                editor.putBoolean(getIntent().getStringExtra("oid") + "start", true);
+                if (editor.commit()) {
+                    HttpMethods.getInstance().end_record(
+                            new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
+                            getIntent().getStringExtra("oid"), preferences.getString("", ""));
+                }
+            } else {
+                editor.putBoolean(getIntent().getStringExtra("oid") + "start", false);
+                editor.apply();
+                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+            }
+        };
+        endOnNext = resultBean -> {
+            if (resultBean.getCode().equals("200")) {
+                editor.putBoolean(getIntent().getStringExtra("oid") + "end", true);
+                if (editor.commit()) {
+                    HttpMethods.getInstance().finish_order(
+                            new ProgressSubscriber<>(finishOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
+                }
+            } else {
+                editor.putBoolean(getIntent().getStringExtra("oid") + "end", false);
+                editor.apply();
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
@@ -325,6 +356,20 @@ public class OrderDetailActivity extends InitActivity {
             if (mRepairVideo.IS_OK) {
                 if (mCheckReport.IS_OK) {
                     if (mGather.IS_OK) {
+                        if (!preferences.getBoolean(getIntent().getStringExtra("oid") + "start", false)) {
+                            HttpMethods.getInstance().start_record(
+                                    new ProgressSubscriber<>(startOnNext, this), preferences.getString("token", ""),
+                                    getIntent().getStringExtra("oid"), preferences.getString(getIntent().getStringExtra("oid") + "startTime", ""));
+                        } else {
+                            if (!preferences.getBoolean(getIntent().getStringExtra("oid") + "end", false)) {
+                                HttpMethods.getInstance().end_record(
+                                        new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
+                                        getIntent().getStringExtra("oid"), preferences.getString(getIntent().getStringExtra("oid") + "endTime", ""));
+                            } else {
+                                HttpMethods.getInstance().finish_order(
+                                        new ProgressSubscriber<>(finishOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
+                            }
+                        }
                     } else {
                         Toast.makeText(this, "尚未付款", Toast.LENGTH_SHORT).show();
                         return;
@@ -341,8 +386,7 @@ public class OrderDetailActivity extends InitActivity {
             Toast.makeText(this, "请补完车辆信息", Toast.LENGTH_SHORT).show();
             return;
         }
-        HttpMethods.getInstance().finish_order(
-                new ProgressSubscriber<>(finishOnNext, this), preferences.getString("token", ""), getIntent().getStringExtra("oid"));
+
 
     }
 }

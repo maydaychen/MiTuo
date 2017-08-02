@@ -78,7 +78,7 @@ public class Utils {
     }
 
     public static String bitmaptoString(Bitmap bitmap) {
-//将Bitmap转换成字符串
+        //将Bitmap转换成字符串
         String string = null;
         ByteArrayOutputStream bStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
