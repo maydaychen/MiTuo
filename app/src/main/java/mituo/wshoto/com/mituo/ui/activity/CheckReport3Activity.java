@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import mituo.wshoto.com.mituo.NullStringToEmptyAdapterFactory;
 import mituo.wshoto.com.mituo.R;
-import mituo.wshoto.com.mituo.Utils;
 import mituo.wshoto.com.mituo.adapter.CheckReportAdapter;
 import mituo.wshoto.com.mituo.bean.ReportBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
@@ -76,7 +74,7 @@ public class CheckReport3Activity extends AppCompatActivity {
 
         repairObjsDownAdapter = new CheckReportAdapter(listObj);
         mRvCheck.addItemDecoration(new RecycleViewDivider(CheckReport3Activity.this, LinearLayoutManager.VERTICAL));
-        mRvCheck.setLayoutManager(new LinearLayoutManager(this){
+        mRvCheck.setLayoutManager(new LinearLayoutManager(this) {
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -102,37 +100,42 @@ public class CheckReport3Activity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             JsonObject jsonObject = new JsonObject();
-            try {
-                listBeen = repairObjsDownAdapter.getList();
-                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : listBeen) {
-                    if (!listBean.getBgxmValue().equals("1") && !listBean.getBgxmValue().equals("2")) {
-                        Toast.makeText(this, "异常项未填写完整！", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
+//            try {
+            listBeen = repairObjsDownAdapter.getList();
+            for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : listBeen) {
+                if (!listBean.getBgxmValue().equals("1") && !listBean.getBgxmValue().equals("2")) {
+                    Toast.makeText(this, "异常项未填写完整！", Toast.LENGTH_SHORT).show();
+                    return false;
                 }
-                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
-                    listBean.setBgxmValue("0");
-                }
-                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
-                    for (ReportBean.ResultDataBean.Step2Bean.ListBean bean : listBeen) {
-                        if (listBean.getBgxmId() == bean.getBgxmId()) {
-                            listBean.setBgxmValue(bean.getBgxmValue());
-                        }
-                    }
-                }
-                listBeen = step2List;
-                for (ReportBean.ResultDataBean.Step1Bean.ListBeanX listBeanX : step1List) {
-                    ReportBean.ResultDataBean.Step2Bean.ListBean step2Bean = new ReportBean.ResultDataBean.Step2Bean.ListBean();
-                    Utils.copy(listBeanX, step2Bean);
-                    listBeen.add(step2Bean);
-                }
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
             }
+            for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
+                listBean.setBgxmValue("0");
+            }
+            for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
+                for (ReportBean.ResultDataBean.Step2Bean.ListBean bean : listBeen) {
+                    if (listBean.getBgxmId() == bean.getBgxmId()) {
+                        listBean.setBgxmValue(bean.getBgxmValue());
+                    }
+                }
+            }
+            listBeen = step2List;
+            for (ReportBean.ResultDataBean.Step1Bean.ListBeanX listBeanX : step1List) {
+                ReportBean.ResultDataBean.Step2Bean.ListBean step2Bean = new ReportBean.ResultDataBean.Step2Bean.ListBean();
+                step2Bean.setBgxmValue(listBeanX.getBgxmValue());
+                step2Bean.setBgxmId(listBeanX.getBgxmId());
+                step2Bean.setBgxmName(listBeanX.getBgxmName());
+                step2Bean.setInputType(listBeanX.getInputType());
+//                    Utils.copy(listBeanX, step2Bean);
+                listBeen.add(step2Bean);
+            }
+//            }
+//            } catch (NoSuchMethodException e) {
+//                e.printStackTrace();
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            } catch (InvocationTargetException e) {
+//                e.printStackTrace();
+//            }
 
             Gson gson = new GsonBuilder()
                     .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
