@@ -102,51 +102,52 @@ public class RepairObjectsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        try {
-        if (data.getBooleanExtra("isTaocan", true)) {
-            AllRepairBean.ResultDataBean.TcListBean tcListBean1 = (AllRepairBean.ResultDataBean.TcListBean) data.getSerializableExtra("objs");
-            List<RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean> list = new ArrayList<>();
-            for (AllRepairBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean1.getTcxmList()) {
-                RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean1 = new RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean();
-                tcxmListBean1.setIsZd(tcxmListBean.getIsZd());
-                tcxmListBean1.setPjName(tcxmListBean.getPjName());
-                tcxmListBean1.setPjNum(tcxmListBean.getPjNum());
-                tcxmListBean1.setPjlb(tcxmListBean.getPjlb());
-                tcxmListBean1.setPjpp(tcxmListBean.getPjpp());
-                tcxmListBean1.setPjCode(tcxmListBean.getPjCode());
-                tcxmListBean1.setPjPrice(tcxmListBean.getPjPrice());
-                tcxmListBean1.setXmName(tcxmListBean.getXmName());
-                tcxmListBean1.setXmprice(tcxmListBean.getXmprice());
+        if (data != null) {
+            if (data.getBooleanExtra("isTaocan", true)) {
+                AllRepairBean.ResultDataBean.TcListBean tcListBean1 = (AllRepairBean.ResultDataBean.TcListBean) data.getSerializableExtra("objs");
+                List<RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean> list = new ArrayList<>();
+                for (AllRepairBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean1.getTcxmList()) {
+                    RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean1 = new RepairObjsBean.ResultDataBean.TcListBean.TcxmListBean();
+                    tcxmListBean1.setIsZd(tcxmListBean.getIsZd());
+                    tcxmListBean1.setPjName(tcxmListBean.getPjName());
+                    tcxmListBean1.setPjNum(tcxmListBean.getPjNum());
+                    tcxmListBean1.setPjlb(tcxmListBean.getPjlb());
+                    tcxmListBean1.setPjpp(tcxmListBean.getPjpp());
+                    tcxmListBean1.setPjCode(tcxmListBean.getPjCode());
+                    tcxmListBean1.setPjPrice(tcxmListBean.getPjPrice());
+                    tcxmListBean1.setXmName(tcxmListBean.getXmName());
+                    tcxmListBean1.setXmprice(tcxmListBean.getXmprice());
 //                    Utils.copy(tcxmListBean, tcxmListBean1);
-                list.add(tcxmListBean1);
-            }
-            RepairObjsBean.ResultDataBean.TcListBean tcListBean = new RepairObjsBean.ResultDataBean.TcListBean();
-            AllRepairBean.ResultDataBean.TcListBean tcListBean2 = (AllRepairBean.ResultDataBean.TcListBean) data.getSerializableExtra("objs");
-            tcListBean.setIsBzdjm(tcListBean2.getIsBzdjm());
-            tcListBean.setTcJmfy(tcListBean2.getTcJmfy());
-            tcListBean.setTcName(tcListBean2.getTcName());
-            tcListBean.setTcPrice(tcListBean2.getTcPrice());
+                    list.add(tcxmListBean1);
+                }
+                RepairObjsBean.ResultDataBean.TcListBean tcListBean = new RepairObjsBean.ResultDataBean.TcListBean();
+                AllRepairBean.ResultDataBean.TcListBean tcListBean2 = (AllRepairBean.ResultDataBean.TcListBean) data.getSerializableExtra("objs");
+                tcListBean.setIsBzdjm(tcListBean2.getIsBzdjm());
+                tcListBean.setTcJmfy(tcListBean2.getTcJmfy());
+                tcListBean.setTcName(tcListBean2.getTcName());
+                tcListBean.setTcPrice(tcListBean2.getTcPrice());
 //                Utils.copy(data.getSerializableExtra("objs"), tcListBean);
-            tcListBean.setTcxmList(list);
-            mResultDataBean.getTcList().add(tcListBean);
-            refresh();
+                tcListBean.setTcxmList(list);
+                mResultDataBean.getTcList().add(tcListBean);
+                refresh();
 //                repairObjsDetailAdapter = new RepairObjsDetailAdapter(mResultDataBean, map, this);
 //                mRecyclerView.setAdapter(repairObjsDetailAdapter);
-        } else {
-            AllRepairBean.ResultDataBean.XmListBean xmListBean = (AllRepairBean.ResultDataBean.XmListBean) data.getSerializableExtra("objs");
-            peijian.put(xmListBean.getXmName(), (ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>>) data.getSerializableExtra("peijian"));
-            RepairObjsBean.ResultDataBean.XmListBean xmListBean1 = new RepairObjsBean.ResultDataBean.XmListBean();
-            xmListBean1.setPjlb(xmListBean.getPjlb());
-            xmListBean1.setIsZd("1");
-            xmListBean1.setIsCanZidai(xmListBean.getIsZd());
-            xmListBean1.setXmName(xmListBean.getXmName());
-            xmListBean1.setXmprice(xmListBean.getXmprice());
-            xmListBean1.setPjNum("1");
+            } else {
+                AllRepairBean.ResultDataBean.XmListBean xmListBean = (AllRepairBean.ResultDataBean.XmListBean) data.getSerializableExtra("objs");
+                peijian.put(xmListBean.getXmName(), (ArrayList<ArrayList<AllRepairBean.ResultDataBean.PjListBean>>) data.getSerializableExtra("peijian"));
+                RepairObjsBean.ResultDataBean.XmListBean xmListBean1 = new RepairObjsBean.ResultDataBean.XmListBean();
+                xmListBean1.setPjlb(xmListBean.getPjlb());
+                xmListBean1.setIsZd("1");
+                xmListBean1.setIsCanZidai(xmListBean.getIsZd());
+                xmListBean1.setXmName(xmListBean.getXmName());
+                xmListBean1.setXmprice(xmListBean.getXmprice());
+                xmListBean1.setPjNum("1");
 
-            mResultDataBean.getXmList().add(xmListBean1);
-            refresh();
+                mResultDataBean.getXmList().add(xmListBean1);
+                refresh();
 //                repairObjsDetailAdapter = new RepairObjsDetailAdapter(mResultDataBean, peijian, this);
 //                mRecyclerView.setAdapter(repairObjsDetailAdapter);
-        }
+            }
 //        } catch (NoSuchMethodException e) {
 //            e.printStackTrace();
 //        } catch (IllegalAccessException e) {
@@ -155,6 +156,8 @@ public class RepairObjectsActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        } catch (NullPointerException ignored) {
 //        }
+        }
+
     }
 
     @Override

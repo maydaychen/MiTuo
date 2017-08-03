@@ -36,7 +36,6 @@ import mituo.wshoto.com.mituo.http.ProgressSubscriber;
 import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
 
 import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -106,22 +105,18 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         startOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 editor.putBoolean(orderNumm + "start", true);
-                editor.putString(orderNumm + "startTime", start_time);
                 editor.apply();
             } else {
                 editor.putBoolean(orderNumm + "start", false);
-                editor.putString(orderNumm + "startTime", start_time);
                 editor.apply();
             }
         };
         endOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 editor.putBoolean(orderNumm + "end", true);
-                editor.putString(orderNumm + "startTime", end_time);
                 editor.apply();
             } else {
                 editor.putBoolean(orderNumm + "end", false);
-                editor.putString(orderNumm + "startTime", end_time);
                 editor.apply();
             }
         };
@@ -227,22 +222,30 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                 time += preferences.getLong("sys_time", 1);
                 if (!IS_RECORDING) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (checkSelfPermission(MOUNT_UNMOUNT_FILESYSTEMS) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, MOUNT_UNMOUNT_FILESYSTEMS, RECORD_AUDIO, READ_EXTERNAL_STORAGE, CAMERA},
+                        if (checkSelfPermission(WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, READ_EXTERNAL_STORAGE, CAMERA},
                                     MY_PERMISSIONS_REQUEST_CALL_PHONE);
                         } else {
                             record();
                         }
                     } else record();
                     start_time = LongToDate(time);
-                    HttpMethods.getInstance().start_record(
-                            new ProgressSubscriber<>(startOnNext, this), preferences.getString("token", ""),
-                            getIntent().getStringExtra("oid"), LongToDate(time));
+                    editor.putString(orderNumm + "startTime", start_time);
+                    editor.putBoolean(orderNumm + "start", false);
+                    if (editor.commit()) {
+                        HttpMethods.getInstance().start_record(
+                                new ProgressSubscriber<>(startOnNext, this), preferences.getString("token", ""),
+                                getIntent().getStringExtra("oid"), LongToDate(time));
+                    }
                 } else {
                     end_time = LongToDate(time);
-                    HttpMethods.getInstance().end_record(
-                            new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
-                            getIntent().getStringExtra("oid"), LongToDate(time));
+                    editor.putString(orderNumm + "endTime", end_time);
+                    editor.putBoolean(orderNumm + "end", false);
+                    if (editor.commit()) {
+                        HttpMethods.getInstance().end_record(
+                                new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
+                                getIntent().getStringExtra("oid"), LongToDate(time));
+                    }
                     freeCameraResource();
                     mLlResult.setVisibility(View.VISIBLE);
                     mIvStart.setVisibility(View.GONE);
@@ -280,9 +283,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         }
         if (mCamera == null)
             return;
-
         // setCameraParams();
-
         mCamera.setPreviewDisplay(surfaceHolder);
         mCamera.startPreview();
         mCamera.unlock();

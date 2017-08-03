@@ -27,8 +27,8 @@ import mituo.wshoto.com.mituo.adapter.CheckReportAdapter;
 import mituo.wshoto.com.mituo.bean.ReportBean;
 import mituo.wshoto.com.mituo.bean.ResultBean;
 import mituo.wshoto.com.mituo.http.HttpMethods;
-import mituo.wshoto.com.mituo.http.ProgressSubscriber;
-import mituo.wshoto.com.mituo.http.SubscriberOnNextListener;
+import mituo.wshoto.com.mituo.http.ProgressErrorSubscriber;
+import mituo.wshoto.com.mituo.http.SubscriberOnNextAndErrorListener;
 import mituo.wshoto.com.mituo.ui.widget.RecycleViewDivider;
 
 import static mituo.wshoto.com.mituo.Utils.logout;
@@ -40,12 +40,13 @@ public class CheckReport3Activity extends AppCompatActivity {
     @BindView(R.id.rv_check)
     RecyclerView mRvCheck;
 
-    private SubscriberOnNextListener<ResultBean> gatherOnNext;
+    private SubscriberOnNextAndErrorListener<ResultBean> gatherOnNext;
     private String jsonElements;
     private CheckReportAdapter repairObjsDownAdapter;
     private ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX> step1List;
     private ArrayList<ReportBean.ResultDataBean.Step2Bean.ListBean> step2List;
     private List<ReportBean.ResultDataBean.Step2Bean.ListBean> listBeen;
+    private boolean IS_CLICKABLE = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +59,13 @@ public class CheckReport3Activity extends AppCompatActivity {
         ArrayList<ReportBean.ResultDataBean.Step2Bean.ListBean> listObj = (ArrayList<ReportBean.ResultDataBean.Step2Bean.ListBean>) getIntent().getSerializableExtra("objs");
         step1List = (ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX>) getIntent().getSerializableExtra("step1");
         step2List = (ArrayList<ReportBean.ResultDataBean.Step2Bean.ListBean>) getIntent().getSerializableExtra("step2");
-        gatherOnNext = resultBean -> {
+
+        gatherOnNext = new SubscriberOnNextAndErrorListener<ResultBean>() {
+            @Override
+            public void onNext(ResultBean resultBean) {
+                IS_CLICKABLE = true;
             if (resultBean.getCode().equals("200")) {
-                Toast.makeText(this, "修改成功！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckReport3Activity.this, "修改成功！", Toast.LENGTH_SHORT).show();
                 Intent mainIntent = new Intent(CheckReport3Activity.this, OrderDetailActivity.class);
                 mainIntent.putExtra("oid", getIntent().getStringExtra("oid"));
                 mainIntent.putExtra("status", 0);
@@ -68,10 +73,15 @@ public class CheckReport3Activity extends AppCompatActivity {
             } else if (resultBean.getCode().equals("401")) {
                 logout(CheckReport3Activity.this);
             } else {
-                Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckReport3Activity.this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
+            }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                IS_CLICKABLE = true;
             }
         };
-
         repairObjsDownAdapter = new CheckReportAdapter(listObj);
         mRvCheck.addItemDecoration(new RecycleViewDivider(CheckReport3Activity.this, LinearLayoutManager.VERTICAL));
         mRvCheck.setLayoutManager(new LinearLayoutManager(this) {
@@ -99,35 +109,37 @@ public class CheckReport3Activity extends AppCompatActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            JsonObject jsonObject = new JsonObject();
+            if (IS_CLICKABLE) {
+                IS_CLICKABLE = false;
+                JsonObject jsonObject = new JsonObject();
 //            try {
-            listBeen = repairObjsDownAdapter.getList();
-            for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : listBeen) {
-                if (!listBean.getBgxmValue().equals("1") && !listBean.getBgxmValue().equals("2")) {
-                    Toast.makeText(this, "异常项未填写完整！", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            }
-            for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
-                listBean.setBgxmValue("0");
-            }
-            for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
-                for (ReportBean.ResultDataBean.Step2Bean.ListBean bean : listBeen) {
-                    if (listBean.getBgxmId() == bean.getBgxmId()) {
-                        listBean.setBgxmValue(bean.getBgxmValue());
+                listBeen = repairObjsDownAdapter.getList();
+                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : listBeen) {
+                    if (!listBean.getBgxmValue().equals("1") && !listBean.getBgxmValue().equals("2")) {
+                        Toast.makeText(this, "异常项未填写完整！", Toast.LENGTH_SHORT).show();
+                        return false;
                     }
                 }
-            }
-            listBeen = step2List;
-            for (ReportBean.ResultDataBean.Step1Bean.ListBeanX listBeanX : step1List) {
-                ReportBean.ResultDataBean.Step2Bean.ListBean step2Bean = new ReportBean.ResultDataBean.Step2Bean.ListBean();
-                step2Bean.setBgxmValue(listBeanX.getBgxmValue());
-                step2Bean.setBgxmId(listBeanX.getBgxmId());
-                step2Bean.setBgxmName(listBeanX.getBgxmName());
-                step2Bean.setInputType(listBeanX.getInputType());
+                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
+                    listBean.setBgxmValue("0");
+                }
+                for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2List) {
+                    for (ReportBean.ResultDataBean.Step2Bean.ListBean bean : listBeen) {
+                        if (listBean.getBgxmId() == bean.getBgxmId()) {
+                            listBean.setBgxmValue(bean.getBgxmValue());
+                        }
+                    }
+                }
+                listBeen = step2List;
+                for (ReportBean.ResultDataBean.Step1Bean.ListBeanX listBeanX : step1List) {
+                    ReportBean.ResultDataBean.Step2Bean.ListBean step2Bean = new ReportBean.ResultDataBean.Step2Bean.ListBean();
+                    step2Bean.setBgxmValue(listBeanX.getBgxmValue());
+                    step2Bean.setBgxmId(listBeanX.getBgxmId());
+                    step2Bean.setBgxmName(listBeanX.getBgxmName());
+                    step2Bean.setInputType(listBeanX.getInputType());
 //                    Utils.copy(listBeanX, step2Bean);
-                listBeen.add(step2Bean);
-            }
+                    listBeen.add(step2Bean);
+                }
 //            }
 //            } catch (NoSuchMethodException e) {
 //                e.printStackTrace();
@@ -137,16 +149,17 @@ public class CheckReport3Activity extends AppCompatActivity {
 //                e.printStackTrace();
 //            }
 
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
-                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                    .create();
-            jsonObject.add("list", gson.toJsonTree(listBeen));
-            jsonElements = gson.toJson(jsonObject);
-            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-            HttpMethods.getInstance().save_report(
-                    new ProgressSubscriber<>(gatherOnNext, this), preferences.getString("token", ""),
-                    getIntent().getStringExtra("oid"), jsonElements);
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
+                        .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                        .create();
+                jsonObject.add("list", gson.toJsonTree(listBeen));
+                jsonElements = gson.toJson(jsonObject);
+                SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                HttpMethods.getInstance().save_report(
+                        new ProgressErrorSubscriber<>(gatherOnNext, this), preferences.getString("token", ""),
+                        getIntent().getStringExtra("oid"), jsonElements);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

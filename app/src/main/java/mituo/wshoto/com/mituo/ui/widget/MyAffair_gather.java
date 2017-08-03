@@ -34,8 +34,6 @@ import mituo.wshoto.com.mituo.bean.GatherBean;
 import mituo.wshoto.com.mituo.bean.PayStatusBean;
 import mituo.wshoto.com.mituo.ui.activity.GatherActivity;
 
-import static android.R.attr.x;
-
 /**
  * Created by Weshine on 2017/6/19.
  */
@@ -75,6 +73,8 @@ public class MyAffair_gather extends RelativeLayout {
     private Button edit;
     private View baseV;
 
+    private boolean CHECK_OK = false;
+    private boolean INFO_OK = false;
     private boolean isOpened = true;
     private boolean animatorLock = false;
     private GatherBean.ResultDataBean mResultDataBean;
@@ -196,6 +196,10 @@ public class MyAffair_gather extends RelativeLayout {
     }
 
     public void setInfo(GatherBean.ResultDataBean mResultBean, int status, String oid) {
+        INFO_OK = true;
+        if (CHECK_OK){
+            edit.setClickable(true);
+        }
         orderNum = oid;
         mResultDataBean = mResultBean;
         if (status == 1) {
@@ -213,6 +217,10 @@ public class MyAffair_gather extends RelativeLayout {
                 couponList.add(couponDetailBean);
             }
             tvGatherMoney.setText(String.format(getResources().getString(R.string.money), payStatusBean.getResultData().getPaySum() + ""));
+        }
+        CHECK_OK = true;
+        if (INFO_OK){
+            edit.setClickable(true);
         }
         setDate();
         if (payStatusBean.getResultData().isPayStatus()) {
@@ -244,7 +252,6 @@ public class MyAffair_gather extends RelativeLayout {
     }
 
     private void setDate() {
-        edit.setClickable(true);
         List<Map<String, String>> list = new ArrayList<>();
         for (GatherBean.ResultDataBean.TcListBean tcListBean : mResultDataBean.getTcList()) {
             for (GatherBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {
@@ -252,7 +259,7 @@ public class MyAffair_gather extends RelativeLayout {
                 map.put("name", tcxmListBean.getXmName());
                 if (tcxmListBean.getIsZd().equals("0")) {
                     map.put("peijian", "用户自带");
-                }else {
+                } else {
                     map.put("peijian", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjName());
                 }
                 map.put("num", tcxmListBean.getPjpp() == null ? "--" : tcxmListBean.getPjNum());
@@ -278,11 +285,23 @@ public class MyAffair_gather extends RelativeLayout {
             map.put("name", xmListBean.getXmName());
             if (xmListBean.getIsZd().equals("0")) {
                 map.put("peijian", "用户自带");
-            }else {
+            } else {
                 map.put("peijian", xmListBean.getPjpp() == null ? "--" : xmListBean.getPjName());
             }
             map.put("num", xmListBean.getPjNum());
-            map.put("price", xmListBean.getPjPrice());
+            if (xmListBean.getPjPrice().equals("")) {
+                if (xmListBean.getXmprice().equals("")) {
+                    map.put("price", "-");
+                } else {
+                    map.put("price", xmListBean.getXmprice());
+                }
+            } else {
+                if (xmListBean.getXmprice().equals("")) {
+                    map.put("price", xmListBean.getPjPrice());
+                } else {
+                    map.put("price", Float.valueOf(xmListBean.getPjPrice()) + Float.valueOf(xmListBean.getXmprice()) + "");
+                }
+            }
             list.add(map);
         }
         if (null != mResultDataBean.getSmfwf() && !mResultDataBean.getSmfwf().equals("")) {
@@ -299,6 +318,14 @@ public class MyAffair_gather extends RelativeLayout {
             map.put("peijian", "--");
             map.put("num", "--");
             map.put("price", mResultDataBean.getGsf());
+            list.add(map);
+        }
+        if (null != mResultDataBean.getFzdjmf() && !mResultDataBean.getFzdjmf().equals("")) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "上门费减免");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", "-" + mResultDataBean.getFzdjmf());
             list.add(map);
         }
         if (couponList.size() != 0) {

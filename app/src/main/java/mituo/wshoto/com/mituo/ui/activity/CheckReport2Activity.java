@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.jakewharton.rxbinding.view.RxView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,16 +72,17 @@ public class CheckReport2Activity extends AppCompatActivity {
         mReportBean = (ReportBean) getIntent().getSerializableExtra("objs");
         step1List = (ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX>) getIntent().getSerializableExtra("step1");
         listX = new ArrayList<>();
+        mBean = new ArrayList<>();
         for (ReportBean.ResultDataBean.Step2Bean step2Bean : mReportBean.getResultData().getStep2()) {
             mOrderTab.addTab(mOrderTab.newTab().setText(step2Bean.getTypeName()));
             for (ReportBean.ResultDataBean.Step2Bean.ListBean listBean : step2Bean.getList()) {
-                try{
-                    if (listBean.getBgxmValue().equals("1")||listBean.getBgxmValue().equals("2")) {
+                try {
+                    if (listBean.getBgxmValue().equals("1") || listBean.getBgxmValue().equals("2")) {
                         mBean.add(listBean);
-                    }else {
+                    } else {
                         listBean.setBgxmValue("0");
                     }
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     listBean.setBgxmValue("0");
                 }
                 listX.add(listBean);
@@ -111,22 +114,26 @@ public class CheckReport2Activity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        if (mBean.size()==0) {
-            mButton2.setOnClickListener(v -> finishCheck());
-        }else {
+        if (mBean.size() == 0) {
+            RxView.clicks(mButton2)
+                    .throttleFirst(3, TimeUnit.SECONDS)
+                    .subscribe(o -> finishCheck());
+        } else {
             mButton2.setText("下一步");
-            mButton2.setOnClickListener(v -> {
-                mBean = reportAdapter.getSelected();
-                ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX> listObj = (ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX>) getIntent().getSerializableExtra("step1");
-                Intent intent = new Intent(CheckReport2Activity.this, CheckReport3Activity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("objs", (Serializable) mBean);
-                intent.putExtras(bundle);
-                intent.putExtra("oid", getIntent().getStringExtra("oid"));
-                intent.putExtra("step1", listObj);
-                intent.putExtra("step2", (Serializable)listX);
-                startActivity(intent);
-            });
+            RxView.clicks(mButton2)
+                    .throttleFirst(3, TimeUnit.SECONDS)
+                    .subscribe(o -> {
+                        mBean = reportAdapter.getSelected();
+                        ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX> listObj = (ArrayList<ReportBean.ResultDataBean.Step1Bean.ListBeanX>) getIntent().getSerializableExtra("step1");
+                        Intent intent = new Intent(CheckReport2Activity.this, CheckReport3Activity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("objs", (Serializable) mBean);
+                        intent.putExtras(bundle);
+                        intent.putExtra("oid", getIntent().getStringExtra("oid"));
+                        intent.putExtra("step1", listObj);
+                        intent.putExtra("step2", (Serializable) listX);
+                        startActivity(intent);
+                    });
         }
         gatherOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
@@ -162,7 +169,7 @@ public class CheckReport2Activity extends AppCompatActivity {
                 intent.putExtras(bundle);
                 intent.putExtra("oid", getIntent().getStringExtra("oid"));
                 intent.putExtra("step1", listObj);
-                intent.putExtra("step2", (Serializable)listX);
+                intent.putExtra("step2", (Serializable) listX);
                 startActivity(intent);
             });
         }

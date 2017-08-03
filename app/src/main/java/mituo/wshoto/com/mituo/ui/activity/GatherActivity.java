@@ -262,8 +262,9 @@ public class GatherActivity extends InitActivity {
                 if (mEtNum.getText().length() == 0) {
                     Toast.makeText(this, "请填写代金券券码！", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (couponList.contains(mEtNum.getText().toString())) {
+                    if (check(couponList, mEtNum.getText().toString())) {
                         Toast.makeText(this, "该券已使用", Toast.LENGTH_SHORT).show();
+                        mEtNum.setText("");
                     } else {
                         HttpMethods.getInstance().check_coupon(
                                 new ProgressSubscriber<>(CheckCounOnNext, this), preferences.getString("token", ""),
@@ -300,6 +301,18 @@ public class GatherActivity extends InitActivity {
                         getIntent().getStringExtra("oid"), mResultBean.getHj(), coupon, payType, Utils.bitmaptoString(mBitmap));
                 break;
         }
+
+    }
+
+    private boolean check(List<CouponDetailBean> list, String num) {
+        for (CouponDetailBean couponDetailBean : list) {
+            if (couponDetailBean.getNum().equals(num)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     public void show(String context) {
@@ -311,6 +324,7 @@ public class GatherActivity extends InitActivity {
         builder.setPositiveButton("确认", (dialog, which) -> {
             if (Double.valueOf(mResultBean.getHj()) - Double.valueOf(context) < 0.00) {
                 Toast.makeText(this, "优惠金额不能大于支付金额！", Toast.LENGTH_SHORT).show();
+                mEtNum.setText("");
                 dialog.dismiss();
                 return;
             }
@@ -406,10 +420,10 @@ public class GatherActivity extends InitActivity {
                 destDir.mkdirs();
             }
 //            mPathView.save("/sdcard/qm.png", true, 10);
-            mPathView.save( Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
+            mPathView.save(Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", true, 10);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 2;
-            Bitmap bm = BitmapFactory.decodeFile( Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", options);
+            Bitmap bm = BitmapFactory.decodeFile(Config.PATH_MOBILE + "/" + getIntent().getStringExtra("oid") + ".png", options);
             mBitmap = bm;
             mImageView2.setImageBitmap(bm);
             mLlMobilePay.setVisibility(View.VISIBLE);
@@ -440,9 +454,25 @@ public class GatherActivity extends InitActivity {
         for (GatherBean.ResultDataBean.XmListBean xmListBean : mResultBean.getXmList()) {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", xmListBean.getXmName());
-            map.put("peijian", xmListBean.getPjName());
+            if (xmListBean.getIsZd().equals("0")) {
+                map.put("peijian", "用户自带");
+            } else {
+                map.put("peijian", xmListBean.getPjpp() == null ? "--" : xmListBean.getPjName());
+            }
             map.put("num", xmListBean.getPjNum());
-            map.put("price", xmListBean.getPjPrice());
+            if (xmListBean.getPjPrice().equals("")) {
+                if (xmListBean.getXmprice().equals("")) {
+                    map.put("price", "-");
+                } else {
+                    map.put("price", xmListBean.getXmprice());
+                }
+            } else {
+                if (xmListBean.getXmprice().equals("")) {
+                    map.put("price", xmListBean.getPjPrice());
+                } else {
+                    map.put("price", Float.valueOf(xmListBean.getPjPrice()) + Float.valueOf(xmListBean.getXmprice()) + "");
+                }
+            }
             list.add(map);
         }
         if (null != mResultBean.getSmfwf() && !mResultBean.getSmfwf().equals("")) {
@@ -459,6 +489,14 @@ public class GatherActivity extends InitActivity {
             map.put("peijian", "--");
             map.put("num", "--");
             map.put("price", mResultBean.getGsf());
+            list.add(map);
+        }
+        if (null != mResultBean.getFzdjmf() && !mResultBean.getFzdjmf().equals("")) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", "上门费减免");
+            map.put("peijian", "--");
+            map.put("num", "--");
+            map.put("price", "-" + mResultBean.getFzdjmf());
             list.add(map);
         }
         if (couponList.size() != 0) {

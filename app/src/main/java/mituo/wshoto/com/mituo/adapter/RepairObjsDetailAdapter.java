@@ -164,9 +164,11 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             });
             viewHolder.mSpinner.setPrompt("ceshi");
             viewHolder.itemView.setTag(position);
-            if (Integer.valueOf(mData.getXmList().get(mPositon).getPjNum()) == 1) {
-                viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
-                viewHolder.num_del.setClickable(false);
+            if (null != mData.getXmList().get(mPositon).getPjNum() && !mData.getXmList().get(mPositon).getPjNum().equals("")) {
+                if (Integer.valueOf(mData.getXmList().get(mPositon).getPjNum()) == 1) {
+                    viewHolder.num_del.setImageResource(R.drawable.maintenance_project_icon_minus);
+                    viewHolder.num_del.setClickable(false);
+                }
             }
             viewHolder.num_add.setOnClickListener(v -> {
                 int a = Integer.valueOf(mData.getXmList().get(mPositon).getPjNum());
@@ -272,29 +274,32 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
             viewHolder.name.setText(mData.get(position).getXmName());
-            Log.i("chenyi", "onBindViewHolder: "+mData.get(position).getXmName());
+            Log.i("chenyi", "onBindViewHolder: " + mData.get(position).getXmName());
             if (null != mData.get(position).getPjName() && !mData.get(position).getPjName().equals("")) {
                 viewHolder.mSpinner.setText(mData.get(position).getPjName());
             } else {
                 if (mlistBeen.get(position).size() != 0) {
                     mData.get(position).setPjpp(mlistBeen.get(position).get(0).getPjpp());
+                    mData.get(position).setIsZd("1");
                     mData.get(position).setPjNum("1");
                     mData.get(position).setPjCode(mlistBeen.get(position).get(0).getPjCode());
                     mData.get(position).setPjPrice(mlistBeen.get(position).get(0).getPjPrice());
                     mData.get(position).setPjName(mlistBeen.get(position).get(0).getPjName());
+                    viewHolder.mSpinner.setText(mlistBeen.get(position).get(0).getPjName());
                 } else {
                     mData.get(position).setPjNum("1");
                 }
             }
-            if (mData.get(position).getIsZd().equals("0")) {
-                viewHolder.mSpinner.setText("用户自带");
-            } else {
-                if (null == mData.get(position).getPjName()) {
-                    viewHolder.mSpinner.setText("--");
-                } else {
-                    viewHolder.mSpinner.setText(mData.get(position).getPjName());
-                }
-            }
+
+//            if (mData.get(position).getIsZd().equals("0")) {
+//                viewHolder.mSpinner.setText("用户自带");
+//            } else {
+//                if (null == mData.get(position).getPjName()) {
+//                    viewHolder.mSpinner.setText("--");
+//                } else {
+//                    viewHolder.mSpinner.setText(mData.get(position).getPjName());
+//                }
+//            }
             viewHolder.pj_num.setText(mData.get(position).getPjNum() + "");
             viewHolder.itemView.setTag(position);
         }
