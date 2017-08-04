@@ -102,22 +102,6 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.item_text, R.id.tv_item_text, list);
             viewHolder.mSpinner.setAdapter(adapter);
-            for (int i = 0; i < adapter.getCount(); i++) {
-                if (null != mData.getXmList().get(mPositon).getIsZd() && mData.getXmList().get(mPositon).getIsZd().equals("0")) {
-                    if ("用户自带".equals(adapter.getItem(i).toString())) {
-                        viewHolder.mSpinner.setSelection(i, true);
-                        break;
-                    }
-                } else {
-                    if (mData.getXmList().get(mPositon).getPjName() != null) {
-                        if ((mData.getXmList().get(mPositon).getPjName()).equals(adapter.getItem(i).toString())) {
-                            viewHolder.mSpinner.setSelection(i, true);
-                            break;
-                        }
-                    }
-                }
-            }
-
             viewHolder.mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -163,6 +147,23 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
                 }
             });
             viewHolder.mSpinner.setPrompt("ceshi");
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if (null != mData.getXmList().get(mPositon).getIsZd() && mData.getXmList().get(mPositon).getIsZd().equals("0")) {
+                    if ("用户自带".equals(adapter.getItem(i).toString())) {
+                        viewHolder.mSpinner.setSelection(i, true);
+                        break;
+                    }
+                } else {
+                    if (mData.getXmList().get(mPositon).getPjName() != null) {
+                        if ((mData.getXmList().get(mPositon).getPjName()).equals(adapter.getItem(i).toString())) {
+                            viewHolder.mSpinner.setSelection(i, true);
+                            break;
+                        }
+                    }
+                }
+            }
+
+
             viewHolder.itemView.setTag(position);
             if (null != mData.getXmList().get(mPositon).getPjNum() && !mData.getXmList().get(mPositon).getPjNum().equals("")) {
                 if (Integer.valueOf(mData.getXmList().get(mPositon).getPjNum()) == 1) {
@@ -375,22 +376,6 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.item_text, R.id.tv_item_text, list);
             viewHolder.mSpinner.setAdapter(adapter);
-            for (int i = 0; i < adapter.getCount(); i++) {
-                if (null != mData.get(position).getIsZd() && mData.get(position).getIsZd().equals("0")) {
-                    if ("用户自带".equals(adapter.getItem(i).toString())) {
-                        viewHolder.mSpinner.setSelection(i, true);
-                        break;
-                    }
-                } else {
-                    if (null != mData.get(position).getPjName()) {
-                        if ((mData.get(position).getPjName()).equals(adapter.getItem(i).toString())) {
-                            viewHolder.mSpinner.setSelection(i, true);
-                            break;
-                        }
-                    }
-                }
-            }
-            viewHolder.pj_num.setText(mData.get(position).getPjNum());
             viewHolder.mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -441,6 +426,23 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
                 }
             });
             viewHolder.mSpinner.setPrompt("ceshi");
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if (null != mData.get(position).getIsZd() && mData.get(position).getIsZd().equals("0")) {
+                    if ("用户自带".equals(adapter.getItem(i).toString())) {
+                        viewHolder.mSpinner.setSelection(i, true);
+                        break;
+                    }
+                } else {
+                    if (null != mData.get(position).getPjName()) {
+                        if ((mData.get(position).getPjName()).equals(adapter.getItem(i).toString())) {
+                            viewHolder.mSpinner.setSelection(i, true);
+                            break;
+                        }
+                    }
+                }
+            }
+            viewHolder.pj_num.setText(mData.get(position).getPjNum());
+
             viewHolder.num_add.setOnClickListener(v -> {
                 int a = Integer.valueOf(mData.get(position).getPjNum());
                 a++;

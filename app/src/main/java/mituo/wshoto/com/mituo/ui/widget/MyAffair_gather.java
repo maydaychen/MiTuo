@@ -73,8 +73,8 @@ public class MyAffair_gather extends RelativeLayout {
     private Button edit;
     private View baseV;
 
-    private boolean CHECK_OK = false;
-    private boolean INFO_OK = false;
+    public boolean CHECK_OK = false;
+    public boolean INFO_OK = false;
     private boolean isOpened = true;
     private boolean animatorLock = false;
     private GatherBean.ResultDataBean mResultDataBean;
@@ -120,7 +120,9 @@ public class MyAffair_gather extends RelativeLayout {
             intent.putExtras(bundle);
             intent.putExtra("oid", orderNum);
             mContext.startActivity(intent);
+            edit.setClickable(false);
         });
+        edit.setClickable(false);
     }
 
     private ObjectAnimator getObjectAnimator() {
@@ -197,9 +199,6 @@ public class MyAffair_gather extends RelativeLayout {
 
     public void setInfo(GatherBean.ResultDataBean mResultBean, int status, String oid) {
         INFO_OK = true;
-        if (CHECK_OK){
-            edit.setClickable(true);
-        }
         orderNum = oid;
         mResultDataBean = mResultBean;
         if (status == 1) {
@@ -219,9 +218,6 @@ public class MyAffair_gather extends RelativeLayout {
             tvGatherMoney.setText(String.format(getResources().getString(R.string.money), payStatusBean.getResultData().getPaySum() + ""));
         }
         CHECK_OK = true;
-        if (INFO_OK){
-            edit.setClickable(true);
-        }
         setDate();
         if (payStatusBean.getResultData().isPayStatus()) {
             setPayInfo(payStatusBean.getResultData());
@@ -235,7 +231,7 @@ public class MyAffair_gather extends RelativeLayout {
         }
     }
 
-    public void setPayInfo(PayStatusBean.ResultDataBean mResultBean) {
+    private void setPayInfo(PayStatusBean.ResultDataBean mResultBean) {
         mTvGatherReal.setText(String.format(getResources().getString(R.string.money), mResultBean.getPaySum() + ""));
         mTvGatherCoupon.setText(mResultBean.getCouponPrice() + "");
         mTvPayKind.setText(mResultBean.getPayType().equals("1") ? "支付宝支付" : "微信支付");
@@ -252,6 +248,9 @@ public class MyAffair_gather extends RelativeLayout {
     }
 
     private void setDate() {
+        if (INFO_OK&&CHECK_OK) {
+            edit.setClickable(true);
+        }
         List<Map<String, String>> list = new ArrayList<>();
         for (GatherBean.ResultDataBean.TcListBean tcListBean : mResultDataBean.getTcList()) {
             for (GatherBean.ResultDataBean.TcListBean.TcxmListBean tcxmListBean : tcListBean.getTcxmList()) {

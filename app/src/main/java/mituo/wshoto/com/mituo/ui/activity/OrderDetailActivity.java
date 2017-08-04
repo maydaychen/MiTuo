@@ -213,7 +213,7 @@ public class OrderDetailActivity extends InitActivity {
                 if (editor.commit()) {
                     HttpMethods.getInstance().end_record(
                             new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
-                            getIntent().getStringExtra("oid"), preferences.getString("", ""));
+                            getIntent().getStringExtra("oid"), preferences.getString(getIntent().getStringExtra("oid") + "endTime", ""));
                 }
             } else {
                 editor.putBoolean(getIntent().getStringExtra("oid") + "start", false);
@@ -328,6 +328,8 @@ public class OrderDetailActivity extends InitActivity {
 
     @Override
     protected void onResume() {
+        mGather.INFO_OK = false;
+        mGather.CHECK_OK = false;
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
@@ -347,6 +349,7 @@ public class OrderDetailActivity extends InitActivity {
 //                "BY20170622000");
         HttpMethods.getInstance().get_time(
                 new ProgressSubscriber<>(timeOnNext, this), preferences.getString("token", ""));
+
     }
 
 

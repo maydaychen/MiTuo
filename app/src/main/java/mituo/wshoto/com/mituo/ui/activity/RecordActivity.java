@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -242,6 +243,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                     editor.putString(orderNumm + "endTime", end_time);
                     editor.putBoolean(orderNumm + "end", false);
                     if (editor.commit()) {
+
                         HttpMethods.getInstance().end_record(
                                 new ProgressSubscriber<>(endOnNext, this), preferences.getString("token", ""),
                                 getIntent().getStringExtra("oid"), LongToDate(time));
@@ -297,6 +299,17 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
             mCamera.release();
             mCamera = null;
         }
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            if (IS_RECORDING) {
+                return true;
+            }else {
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

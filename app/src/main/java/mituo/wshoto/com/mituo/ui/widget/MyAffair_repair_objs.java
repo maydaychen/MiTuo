@@ -87,6 +87,7 @@ public class MyAffair_repair_objs extends RelativeLayout {
             intent.putExtras(bundle);
             intent.putExtra("oid", orderNum);
             mContext.startActivity(intent);
+            edit.setClickable(false);
         });
     }
 
