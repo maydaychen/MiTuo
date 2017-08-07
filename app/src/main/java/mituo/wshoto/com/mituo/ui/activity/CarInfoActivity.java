@@ -9,10 +9,12 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.suru.myp.MonthYearPicker;
 
 import butterknife.BindView;
@@ -47,6 +49,14 @@ public class CarInfoActivity extends InitActivity {
     AutoCompleteTextView etMile;
     @BindView(R.id.et_next_care_mile)
     AutoCompleteTextView etNextCareMile;
+    @BindView(R.id.tip1)
+    TextView mTip1;
+    @BindView(R.id.tip2)
+    TextView mTip2;
+    @BindView(R.id.tip3)
+    TextView mTip3;
+    @BindView(R.id.tip4)
+    TextView mTip4;
 
     private MonthYearPicker myp;
     private CarInfoBean.ResultDataBean mResultDataBean;
@@ -63,6 +73,27 @@ public class CarInfoActivity extends InitActivity {
         mResultDataBean = (CarInfoBean.ResultDataBean) getIntent().getSerializableExtra("objs");
         myp = new MonthYearPicker(this);
         myp.build((dialog, which) -> mTvCareNextTime.setText(myp.getSelectedYear() + " - " + myp.getSelectedMonthName()), null);
+
+        RxTextView.textChanges(etCarModelNum).subscribe(charSequence -> {
+            if (charSequence.length() == 17) {
+                mTip1.setVisibility(View.GONE);
+            }
+        });
+        RxTextView.textChanges(etMile).subscribe(charSequence -> {
+            if (charSequence.length() != 0) {
+                mTip2.setVisibility(View.GONE);
+            }
+        });
+        RxTextView.textChanges(etNextCareMile).subscribe(charSequence -> {
+            if (charSequence.length() != 0) {
+                mTip4.setVisibility(View.GONE);
+            }
+        });
+        RxTextView.textChanges(mTvCareNextTime).subscribe(charSequence -> {
+            if (!charSequence.toString().equals("")) {
+                mTip3.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -90,16 +121,16 @@ public class CarInfoActivity extends InitActivity {
 
         etMile.setText(mResultDataBean.getCarXslc());
         mTvCareNextTime.setText(mResultDataBean.getXcbyDate());
-        etNextCareMile.setText( mResultDataBean.getXcbylc());
-        etCarModelNum.setText( mResultDataBean.getCarCjh());
+        etNextCareMile.setText(mResultDataBean.getXcbylc());
+        etCarModelNum.setText(mResultDataBean.getCarCjh());
 
         gatherOnNext = resultBean -> {
             if (resultBean.getCode().equals("200")) {
                 Toast.makeText(this, "修改成功！", Toast.LENGTH_SHORT).show();
                 finish();
-            } else if (resultBean.getCode().equals("401")){
+            } else if (resultBean.getCode().equals("401")) {
                 logout(CarInfoActivity.this);
-            } else{
+            } else {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
@@ -125,13 +156,24 @@ public class CarInfoActivity extends InitActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-            HttpMethods.getInstance().save_car_info(
-                    new ProgressSubscriber<>(gatherOnNext, this), getIntent().getStringExtra("oid"),
-                    preferences.getString("token", ""), etCarModelNum.getText().toString(), etMile.getText().toString(),
-                    etNextCareMile.getText().toString(), mTvCareNextTime.getText().toString());
+            if (etCarModelNum.getText().toString().equals("")) {
+                mTip1.setVisibility(View.VISIBLE);
+            } else if (etMile.getText().toString().equals("")) {
+                mTip2.setVisibility(View.VISIBLE);
+            } else if (mTvCareNextTime.getText().toString().equals("")) {
+                mTip3.setVisibility(View.VISIBLE);
+            } else if (etNextCareMile.getText().toString().equals("")) {
+                mTip4.setVisibility(View.VISIBLE);
+            } else {
+                SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                HttpMethods.getInstance().save_car_info(
+                        new ProgressSubscriber<>(gatherOnNext, this), getIntent().getStringExtra("oid"),
+                        preferences.getString("token", ""), etCarModelNum.getText().toString(), etMile.getText().toString(),
+                        etNextCareMile.getText().toString(), mTvCareNextTime.getText().toString());
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

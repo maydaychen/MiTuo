@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/white"
@@ -16,373 +17,672 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_1"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_1"
             android:layout_width="0dp"
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_2"
+            <AutoCompleteTextView
+                android:id="@+id/et_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_2"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_3"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_3"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_4"
+            <AutoCompleteTextView
+                android:id="@+id/et_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_4"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_5"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_5"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_6"
+            <AutoCompleteTextView
+                android:id="@+id/et_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_6"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_7"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_7"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_8"
+            <AutoCompleteTextView
+                android:id="@+id/et_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_8"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_9"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_9"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_10"
+            <AutoCompleteTextView
+                android:id="@+id/et_9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_10"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_11"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_11"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_12"
+            <AutoCompleteTextView
+                android:id="@+id/et_11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_12"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_13"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_13"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_14"
+            <AutoCompleteTextView
+                android:id="@+id/et_13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_14"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_15"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_15"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_16"
+            <AutoCompleteTextView
+                android:id="@+id/et_15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_16"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_17"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_17"
             android:layout_width="0dp"
+            android:layout_height="72px"
+
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_weight="1"
+            android:textColorHint="@color/font_99"
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_18"
+            android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_18"
-            android:layout_width="0dp"
-            android:layout_height="72px"
-            android:layout_marginLeft="20px"
-            android:layout_marginRight="20px"
-            android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
-            android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            <AutoCompleteTextView
+                android:id="@+id/et_18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_19"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_19"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_20"
+            <AutoCompleteTextView
+                android:id="@+id/et_19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_20"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_21"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_21"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_22"
+            <AutoCompleteTextView
+                android:id="@+id/et_21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_22"
             android:layout_width="0dp"
+
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_23"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_23"
+            android:layout_width="0dp"
+
+            android:layout_height="72px"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_weight="1"
+            android:textColorHint="@color/font_99"
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/head_24"
             android:layout_width="0dp"
             android:layout_height="72px"
             android:layout_marginLeft="20px"
             android:layout_marginRight="20px"
             android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:textColor="@color/font_33"
             android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:hintTextAppearance="@style/MyStyle">
 
-        <EditText
-            android:id="@+id/et_24"
-            android:layout_width="0dp"
-            android:layout_height="72px"
-            android:layout_weight="1"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
-            android:maxLength="17"
-            android:padding="8dp"
-            android:textColor="@color/font_33"
-            android:textColorHint="@color/font_99"
-            android:visibility="gone"/>
+            <AutoCompleteTextView
+                android:id="@+id/et_24"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ."
+                android:inputType="number"
+                android:maxLength="17"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/font_33"
+                android:textColorHint="@color/font_99"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
 </LinearLayout>

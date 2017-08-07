@@ -544,10 +544,4 @@ public class GatherActivity extends InitActivity {
         mRvGather.setAdapter(gatherAdapter);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

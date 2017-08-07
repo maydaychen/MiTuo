@@ -185,7 +185,12 @@ public class MyAffair_repair_objs extends RelativeLayout {
 
             RepairObjsDownAdapter repairObjsDownAdapter = new RepairObjsDownAdapter(bean.getXmList());
 //            mRvRepairObjs.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL));
-            mRvRepairObjs.setLayoutManager(new LinearLayoutManager(mContext));
+            mRvRepairObjs.setLayoutManager(new LinearLayoutManager(mContext){
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            });
             mRvRepairObjs.setAdapter(repairObjsDownAdapter);
         }
     }

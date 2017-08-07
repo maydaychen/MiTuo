@@ -64,7 +64,6 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             if (position == mData.size()) {
                 OrderMessage msg = new OrderMessage(10,false);
                 EventBus.getDefault().post(msg);
-
             }
         });
         viewHolder.itemView.setTag(position);

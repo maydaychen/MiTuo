@@ -21,7 +21,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -184,7 +183,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         String path = preferences.getString("path", Config.PATH_MOBILE);
         File destDir = new File(path);
         if (!destDir.exists()) {
-            Toast.makeText(this, destDir.mkdirs() + "", Toast.LENGTH_SHORT).show();
+            destDir.mkdirs();
         }
         mediarecorder.setOutputFile(path + "/" + orderNumm + ".mp4");
         try {
@@ -305,7 +304,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             if (IS_RECORDING) {
                 return true;
-            }else {
+            } else {
                 finish();
             }
         }

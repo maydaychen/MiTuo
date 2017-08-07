@@ -28,6 +28,7 @@
     <string name="next_care_km">下次保养里程（km）</string>
     <string name="hint_next_care_km">请输入下次保养里程</string>
     <string name="next_care_time">下次保养时间</string>
+    <string name="hint_next_care_time">请输入下次保养时间</string>
     <string name="storage">%1$sG可用,共%2$sG</string>
     <string name="back">返回</string>
 

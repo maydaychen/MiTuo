@@ -13,6 +13,7 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import mituo.wshoto.com.mituo.AllCapTransformationMethod;
 import mituo.wshoto.com.mituo.R;
 import mituo.wshoto.com.mituo.adapter.SearchAdapter;
@@ -69,4 +70,8 @@ public class SearchActivity extends InitActivity {
         });
     }
 
+    @OnClick(R.id.iv_search_back)
+    public void onViewClicked() {
+        finish();
+    }
 }

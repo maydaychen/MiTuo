@@ -233,7 +233,7 @@ public class MyAffair_gather extends RelativeLayout {
 
     private void setPayInfo(PayStatusBean.ResultDataBean mResultBean) {
         mTvGatherReal.setText(String.format(getResources().getString(R.string.money), mResultBean.getPaySum() + ""));
-        mTvGatherCoupon.setText(mResultBean.getCouponPrice() + "");
+        mTvGatherCoupon.setText("-" + mResultBean.getCouponPrice() + "");
         mTvPayKind.setText(mResultBean.getPayType().equals("1") ? "支付宝支付" : "微信支付");
         mTvPayOrder.setText(mResultBean.getPayCode());
         if (mResultBean.isPayStatus()) {
@@ -248,7 +248,7 @@ public class MyAffair_gather extends RelativeLayout {
     }
 
     private void setDate() {
-        if (INFO_OK&&CHECK_OK) {
+        if (INFO_OK && CHECK_OK) {
             edit.setClickable(true);
         }
         List<Map<String, String>> list = new ArrayList<>();

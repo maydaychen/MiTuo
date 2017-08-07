@@ -49,6 +49,7 @@ public class RepairObjsDetailAdapter extends RecyclerView.Adapter<RepairObjsDeta
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_repair_objs_setting, viewGroup, false);
         ViewHolder vh = new ViewHolder(view);
+        vh.setIsRecyclable(false);
         return vh;
     }
 

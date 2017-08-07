@@ -51,6 +51,8 @@ public class CheckReportAdapter extends RecyclerView.Adapter<CheckReportAdapter.
                     if (aBoolean) {
                         mData.get(position).setBgxmValue("1");
                         viewHolder.repair.setChecked(false);
+                    } else {
+                        mData.get(position).setBgxmValue("0");
                     }
                 });
 
@@ -59,6 +61,8 @@ public class CheckReportAdapter extends RecyclerView.Adapter<CheckReportAdapter.
                     if (aBoolean) {
                         mData.get(position).setBgxmValue("2");
                         viewHolder.check.setChecked(false);
+                    } else {
+                        mData.get(position).setBgxmValue("0");
                     }
                 });
 

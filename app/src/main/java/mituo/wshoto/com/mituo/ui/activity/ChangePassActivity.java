@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,11 +28,17 @@ public class ChangePassActivity extends AppCompatActivity {
     @BindView(R.id.toolbar2)
     Toolbar mToolbar;
     @BindView(R.id.et_old_pass)
-    EditText mOldPass;
+    AutoCompleteTextView mOldPass;
     @BindView(R.id.et_new_pass)
-    EditText mNewPass;
+    AutoCompleteTextView mNewPass;
     @BindView(R.id.et_new_pass_again)
-    EditText mNewPass2;
+    AutoCompleteTextView mNewPass2;
+    @BindView(R.id.textView)
+    TextView mTextView;
+    @BindView(R.id.textView2)
+    TextView mTextView2;
+    @BindView(R.id.textView3)
+    TextView mTextView3;
 
     private SubscriberOnNextListener<ResultBean> ChangePassOnNext;
 
@@ -51,6 +60,9 @@ public class ChangePassActivity extends AppCompatActivity {
                 Toast.makeText(this, resultBean.getResultMsg(), Toast.LENGTH_SHORT).show();
             }
         };
+        RxTextView.textChanges(mOldPass).subscribe(charSequence -> mTextView.setText(""));
+        RxTextView.textChanges(mNewPass).subscribe(charSequence -> mTextView2.setText(""));
+        RxTextView.textChanges(mNewPass2).subscribe(charSequence -> mTextView3.setText(""));
     }
 
     @OnClick({R.id.bt_next})
@@ -58,14 +70,21 @@ public class ChangePassActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         switch (view.getId()) {
             case R.id.bt_next:
-                if (mNewPass.getText().toString().equals("") || mNewPass2.getText().toString().equals("")) {
-                    Toast.makeText(this, "请填写新密码！", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (mNewPass.getText().toString().equals(mNewPass2.getText().toString())) {
-                        HttpMethods.getInstance().change_pass(
-                                new ProgressSubscriber<>(ChangePassOnNext, this), preferences.getString("token", ""), mOldPass.getText().toString(), mNewPass.getText().toString());
+                if (mOldPass.getText().toString().equals("")) {
+                    Toast.makeText(this, "请输入旧密码！", Toast.LENGTH_SHORT).show();
+                    mTextView.setText("请输入旧密码");
+                }else {
+                    if (mNewPass.getText().toString().equals("") || mNewPass2.getText().toString().equals("")) {
+                        Toast.makeText(this, "请填写新密码！", Toast.LENGTH_SHORT).show();
+                        mTextView2.setText("请输入新密码");
                     } else {
-                        Toast.makeText(this, "两次密码请输入一致！", Toast.LENGTH_SHORT).show();
+                        if (mNewPass.getText().toString().equals(mNewPass2.getText().toString())) {
+                            HttpMethods.getInstance().change_pass(
+                                    new ProgressSubscriber<>(ChangePassOnNext, this), preferences.getString("token", ""), mOldPass.getText().toString(), mNewPass.getText().toString());
+                        } else {
+                            mTextView3.setText("两次密码输入不一致");
+                            Toast.makeText(this, "两次密码请输入一致！", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
                 break;

@@ -126,7 +126,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:padding="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             app:hintTextAppearance="@style/MyStyle">
 
             <AutoCompleteTextView
@@ -142,38 +143,60 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:id="@+id/tip1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="请输入正确的车架号"
+            android:textColor="@color/font_red"
+            android:visibility="gone"/>
+
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:padding="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             app:hintTextAppearance="@style/MyStyle">
 
             <AutoCompleteTextView
                 android:id="@+id/et_mile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="0123456789"
                 android:hint="@string/hint_mileage"
                 android:inputType="number"
-                android:maxLines="1"
                 android:maxLength="8"
+                android:maxLines="1"
                 android:singleLine="true"/>
 
         </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tip2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="请输入行驶里程"
+            android:textColor="@color/font_red"
+            android:visibility="gone"/>
         <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="8dp"-->
-            <!--android:text="@string/mileage"/>-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="8dp"-->
+        <!--android:text="@string/mileage"/>-->
 
         <!--<EditText-->
-            <!--android:id="@+id/et_mile"-->
-            <!--style="@style/edittext"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="@string/hint_mileage"-->
-            <!--android:inputType="number"/>-->
+        <!--android:id="@+id/et_mile"-->
+        <!--style="@style/edittext"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/hint_mileage"-->
+        <!--android:inputType="number"/>-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -186,40 +209,61 @@
             style="@style/edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_next_care_km"/>
+            android:hint="@string/hint_next_care_time"/>
 
+        <TextView
+            android:id="@+id/tip3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="请输入下次保养时间"
+            android:textColor="@color/font_red"
+            android:visibility="gone"/>
         <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="8dp"-->
-            <!--android:text="@string/next_care_km"/>-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="8dp"-->
+        <!--android:text="@string/next_care_km"/>-->
 
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:padding="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             app:hintTextAppearance="@style/MyStyle">
 
             <AutoCompleteTextView
                 android:id="@+id/et_next_care_mile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="0123456789"
                 android:hint="@string/hint_next_care_km"
-                android:maxLength="8"
                 android:inputType="number"
+                android:maxLength="8"
                 android:maxLines="1"
                 android:singleLine="true"/>
 
         </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tip4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="请输入下次保养里程"
+            android:textColor="@color/font_red"
+            android:visibility="gone"/>
         <!--<EditText-->
-            <!--android:id="@+id/et_next_care_mile"-->
-            <!--style="@style/edittext"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="@string/hint_next_care_km"-->
-            <!--android:inputType="number"/>-->
+        <!--android:id="@+id/et_next_care_mile"-->
+        <!--style="@style/edittext"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/hint_next_care_km"-->
+        <!--android:inputType="number"/>-->
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
